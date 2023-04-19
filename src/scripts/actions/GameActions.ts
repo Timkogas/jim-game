@@ -14,14 +14,16 @@ class GameActions {
 
   public build(): void {
     const { width, height } = this._scene.cameras.main;
-    console.log(width)
-    const platform = this._scene.physics.add.staticSprite(0, height - 15, 'platform');
-    platform.setBodySize(width*2, 30)
-    platform.scaleX = 15
+    this._scene.platform = this._scene.add.tileSprite(0, height - 15, width * 2, 32, 'platform');
+    this._scene.platform.body = new Phaser.Physics.Arcade.StaticBody(this._scene.physics.world, this._scene.platform);
 
     this._scene.player = new Player(this._scene);
 
-    this._scene.physics.add.collider(this._scene.player, platform);
+
+    console.log(this._scene.platform.getBounds())
+    console.log(this._scene.platform.originX)
+
+    this._scene.physics.add.collider(this._scene.player, this._scene.platform);
     this._collisions();
     this._controls();
   }
@@ -34,19 +36,10 @@ class GameActions {
     const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
     cursors.space.on('down', (): void => {
-      this._scene.player.up();
-    });
-    cursors.right.on('down', (): void => {
-      this._scene.player.right();
-    });
-    cursors.left.on('down', (): void => {
-      this._scene.player.left();
+      this._scene.player.jump();
     });
     cursors.down.on('down', (): void => {
       this._scene.player.down();
-    });
-    cursors.up.on('down', (): void => {
-      this._scene.player.up();
     });
 
   }

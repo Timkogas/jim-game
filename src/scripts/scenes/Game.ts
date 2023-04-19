@@ -11,6 +11,7 @@ class Game extends Phaser.Scene {
 
   public actions: GameActions = new GameActions(this);
   public player: Player;
+  public platform: Phaser.GameObjects.TileSprite;
 
   public init(): void {
     // Session.clear();
