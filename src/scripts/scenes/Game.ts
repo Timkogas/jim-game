@@ -12,6 +12,7 @@ class Game extends Phaser.Scene {
   public actions: GameActions = new GameActions(this);
   public player: Player;
   public platform: Phaser.GameObjects.TileSprite;
+  public puppies: Phaser.Physics.Arcade.Group
 
   public init(): void {
     // Session.clear();
@@ -19,6 +20,7 @@ class Game extends Phaser.Scene {
 
   public create(): void {
     this.actions.build();
+    this.puppies = this.physics.add.group()
   }
   
 }

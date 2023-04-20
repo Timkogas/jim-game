@@ -24,16 +24,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   private _build(): void {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
-    this.body.setSize(50, 50)
+    this.body.setSize(200, 50)
     this.setGravityY(600);
     this.setBounce(0.2);
-    this.setCollideWorldBounds(true);
     this._controls = this._scene.input.keyboard.createCursorKeys();
-    this._scene.cameras.main.startFollow(this, false, 1, 1, -1000, 500);
+    this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 400);
   }
 
   public right():void {
-    this.setVelocityX(160);
+    this.setVelocityX(200);
   }
 
   public jump():void {
@@ -48,7 +47,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public left():void {
-    this.setVelocityX(-160);
+    this.setVelocityX(-200);
   }
 
   public down():void {

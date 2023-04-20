@@ -1,6 +1,6 @@
 import platform from '../../assets/images/platform.png';
 import player from '../../assets/images/player.png';
-// import sound from '../../assets/images/sound.mp3';
+import puppy from '../../assets/images/puppy.png';
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -41,6 +41,7 @@ class Loading {
   private _loadImages(): void {
     this._scene.load.image('platform', platform);
     this._scene.load.image('player', player);
+    this._scene.load.image('puppy', puppy);
   }
 
   private _loadSounds(): void {

@@ -4,9 +4,9 @@ import { screen } from '../types/enums';
 class Settings {
 
   public readonly sizes = {
-    width: 2500,
-    minHeight: 1000,
-    maxHeight: 1300
+    minWidth: 1920,
+    maxWidth: 2500,
+    height: 1080,
   }
   private _screen: screen = screen.MAIN;
   private _mobile: boolean = false;

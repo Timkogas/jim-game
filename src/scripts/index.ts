@@ -12,16 +12,15 @@ window.onload = (): void => {
     const root: HTMLElement = document.querySelector('#root');
     const clientHeight = Math.round(document.body.clientHeight);
     const clientWidth = Math.round(document.body.clientWidth);
-    const canvasWidth = Settings.sizes.width;
-    let canvasHeight = Math.round((Settings.sizes.width * clientHeight) / clientWidth);
+    const canvasHeight = clientHeight;
+    let canvasWidth = clientWidth;
     let width = 0, height = 0;
-    
-    if (canvasHeight > Settings.sizes.maxHeight) canvasHeight = Settings.sizes.maxHeight;
-    else if (canvasHeight < Settings.sizes.minHeight) canvasHeight = Settings.sizes.minHeight;
+
+    if (canvasWidth > Settings.sizes.maxWidth) canvasWidth = Settings.sizes.maxWidth;
+    else if (canvasWidth < Settings.sizes.minWidth) canvasWidth = Settings.sizes.minWidth;
  
     const x = canvasWidth / Utils.gcd(canvasHeight, canvasWidth);
     const y = canvasHeight / Utils.gcd(canvasHeight, canvasWidth);
-    canvasHeight >= 1920 && Settings.setMobile(true);
   
     if (clientHeight / y > clientWidth / x) {
       width = clientWidth;
@@ -47,6 +46,22 @@ window.onload = (): void => {
       render: { transparent: true },
       scene: [ Boot, UI, Game ]
     }
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
+
+    window.addEventListener('resize', (): void => {
+      const clientHeight = Math.round(document.body.clientHeight);
+      const clientWidth = Math.round(document.body.clientWidth);
+
+      if (clientHeight / y > clientWidth / x) {
+        width = clientWidth;
+        height = clientWidth / x * y;
+      } else {
+        width = clientHeight / y * x;
+        height = clientHeight;
+      }
+      root.style.height = height + 'px';
+      root.style.width = width + 'px';
+      game.scale.resize(canvasWidth, canvasHeight);
+    }, false);
   }, 100);
 }
