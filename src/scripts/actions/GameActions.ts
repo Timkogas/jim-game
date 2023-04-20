@@ -54,7 +54,7 @@ class GameActions {
       //   });
       // }
     // });
-
+    let isCollision: boolean = false
     let animationPuppyFirstConfig = (x: number): Phaser.Types.Tweens.TweenBuilderConfig => {
       return ({
         targets: puppy,
