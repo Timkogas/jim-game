@@ -3,7 +3,7 @@ import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 
 const JUMP_POINTS = 200;
-
+const SPEED = 300;
 
 enum side {
   LEFT,
@@ -12,7 +12,7 @@ enum side {
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, 200, scene.platform.getBounds().top - 25, 'player');
+    super(scene, 0, scene.platform.getBounds().top - Player.getSizes(scene).height / 2, 'player');
     this._scene = scene;
     this._build();
   }
@@ -24,15 +24,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   private _build(): void {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
-    this.body.setSize(200, 50)
+    this.body.setSize(this.width - 100, this.height);
     this.setGravityY(600);
     this.setBounce(0.2);
+    // const y = this._scene.platform.getBounds().top - this.height / 2;
+    // this.setPosition(200, y);
     this._controls = this._scene.input.keyboard.createCursorKeys();
-    this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 400);
+    this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
+
+    console.log(this.height, this.displayHeight);
+    this.setScale(0.5);
+    console.log(this.height, this.displayHeight);
   }
 
   public right():void {
-    this.setVelocityX(200);
+    this.setVelocityX(SPEED);
   }
 
   public jump():void {
@@ -47,7 +53,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public left():void {
-    this.setVelocityX(-200);
+    this.setVelocityX(-SPEED);
   }
 
   public down():void {
@@ -66,6 +72,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.reset(this.x, this.y);
       }
     }
+  }
+
+  private static getSizes(scene: Phaser.Scene): Phaser.Geom.Rectangle {
+    return scene.textures.list['player'].frames.__BASE;
   }
 }
 

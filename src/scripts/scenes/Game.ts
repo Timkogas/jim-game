@@ -3,6 +3,7 @@ import Player from '../components/Player';
 import Session from '../data/Session';
 import User from '../data/User';
 import GameActions from '../actions/GameActions';
+import Puppy from '../components/Puppy';
 
 class Game extends Phaser.Scene {
   constructor() {
@@ -19,10 +20,17 @@ class Game extends Phaser.Scene {
   }
 
   public create(): void {
+    this.puppies = this.physics.add.group();
     this.actions.build();
-    this.puppies = this.physics.add.group()
+    this._spaceButton();
   }
   
+  private _spaceButton(): void {
+    const cursors = this.input.keyboard.createCursorKeys();
+    cursors.space.on('down', (): void => {
+      new Puppy(this);
+    });
+  }
 }
 
 export default Game;

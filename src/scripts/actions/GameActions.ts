@@ -1,4 +1,5 @@
 import Player from '../components/Player';
+import Puppy from '../components/Puppy';
 import Zone from '../components/Zone';
 import Session from '../data/Session';
 import Settings from '../data/Settings';
@@ -16,8 +17,6 @@ class GameActions {
     const { width, height } = this._scene.cameras.main;
     this._scene.platform = this._scene.add.tileSprite(0, height - 32, width * 2, 32, 'platform');
     this._scene.platform.body = new Phaser.Physics.Arcade.StaticBody(this._scene.physics.world, this._scene.platform);
-    const puppy = this._scene.add.sprite(0, 0, 'puppy')
-    this._scene.physics.add.existing(puppy)
 
     this._scene.player = new Player(this._scene);
 
@@ -54,42 +53,28 @@ class GameActions {
       //   });
       // }
     // });
-    let isCollision: boolean = false
-    let animationPuppyFirstConfig = (x: number): Phaser.Types.Tweens.TweenBuilderConfig => {
-      return ({
-        targets: puppy,
-          x: { value: x + 400, },
-          y: { value: 890, ease: 'Circ.in' },
-          duration: 2000,
-      })
-    }
-
-    let animationPuppyContinueConfig = (x: number): Phaser.Types.Tweens.TweenBuilderConfig => {
-      return ({
-        targets: puppy,
-        x: { value: x + 400, ease: 'Quad.in' },
-        y: { value: 200, ease: 'Quad.out' },
-        duration: 2500,
-        onComplete: () => {
-          animationPuppyFirst = this._scene.tweens.add(animationPuppyFirstConfig(x + 400))
-        }
-      })
-    }
-
-    let animationPuppyFirst: Phaser.Tweens.Tween = this._scene.tweens.add(animationPuppyFirstConfig(0))
     
-    this._scene.physics.add.overlap(this._scene.player, puppy, () => {
-      animationPuppyFirst.stop()
-      console.log('overlap')
-      const { x } = this._scene.player.getBounds()
-      this._scene.tweens.add(animationPuppyContinueConfig(x))
+
+
+    new Puppy(this._scene);
+    // const sss = Puppy.create(this._scene);
+
+
+
+    
+    this._scene.physics.add.overlap(this._scene.player, this._scene.puppies, (player, puppy: Puppy) => {
+      if (puppy.getMarkBound() === false) {
+        puppy.markBound();
+        puppy.startStepAnimation();
+      }
     });
 
-    this._scene.physics.add.collider(this._scene.platform, puppy, () => {
-      puppy.destroy()
+    this._scene.physics.add.collider(this._scene.platform, this._scene.puppies, (platform, puppy: Puppy) => {
+      if (puppy.getMarkBound() === false && puppy?.scene) {
+        console.log('Упал на платформу', puppy.getType());
+        puppy.destroy()
+      }
     });
-
-
     this._scene.physics.add.collider(this._scene.player, this._scene.platform);
     this._collisions();
     this._controls();
@@ -102,9 +87,9 @@ class GameActions {
   private _controls(): void {
     const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
-    cursors.space.on('down', (): void => {
-      this._scene.player.jump();
-    });
+    // cursors.space.on('down', (): void => {
+    //   this._scene.player.jump();
+    // });
     cursors.down.on('down', (): void => {
       this._scene.player.down();
     });
