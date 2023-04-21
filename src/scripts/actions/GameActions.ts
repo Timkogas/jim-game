@@ -1,5 +1,7 @@
+import EndTower from '../components/EndTower';
 import Player from '../components/Player';
 import Puppy from '../components/Puppy';
+import StartTower from '../components/StartTower';
 import Zone from '../components/Zone';
 import Session from '../data/Session';
 import Settings from '../data/Settings';
@@ -14,74 +16,66 @@ class GameActions {
   private _scene: Game;
 
   public build(): void {
-    const { width, height } = this._scene.cameras.main;
+    const { width, height, centerX } = this._scene.cameras.main;
+
     this._scene.platform = this._scene.add.tileSprite(0, height - 32, width * 2, 32, 'platform');
     this._scene.platform.body = new Phaser.Physics.Arcade.StaticBody(this._scene.physics.world, this._scene.platform);
 
+    const bg = this._scene.add.sprite(this._scene.platform.body.x, -100, 'bg').setOrigin(0, 0);
+    bg.setDisplaySize(this._scene.platform.body.width + 200, height + 280)
+
+    this._scene.startTower = StartTower.create(this._scene)
+    this._scene.endTower = EndTower.create(this._scene)
+
+    this._scene.physics.world.setBounds(this._scene.startTower.getBounds().x + 200, 0, this._scene.endTower.getBounds().x - 200 - this._scene.startTower.getBounds().x, bg.height)
+
+
     this._scene.player = new Player(this._scene);
-
-    let repeat = 1
-    // const animationPuppyFirst = this._scene.tweens.add({
-    //   targets: puppy,
-    //   x: { from: 0, to: 400, },
-    //   y: { from: 0, to: 900, ease: 'Circ.in' },
-    //   duration: 1700,
-      // onComplete: () => {
-      //   this._scene.tweens.add({
-      //     targets: puppy,
-      //     x: { value: 800, ease: 'Quad.in' },
-      //     y: { value: 200, ease: 'Quad.out' },
-      //     duration: 1800,
-      //     onComplete: () => {
-      //       this._scene.tweens.add({
-      //         targets: puppy,
-      //         x: { value: 1200 },
-      //         y: { value: 900, ease: 'Circ.in' },
-      //         duration: 1500,
-      //         onComplete: () => {
-      //           this._scene.tweens.add({
-      //             targets: puppy,
-      //             x: { value: 1600, ease: 'Quad.in' },
-      //             y: { value: 200, ease: 'Quad.out' },
-      //             duration: 1800,
-      //             onComplete: () => {
-      //             }
-      //           });
-      //         }
-      //       });
-      //     }
-      //   });
-      // }
-    // });
-    
-
 
     new Puppy(this._scene);
     // const sss = Puppy.create(this._scene);
-
-
-
-    
-    this._scene.physics.add.overlap(this._scene.player, this._scene.puppies, (player, puppy: Puppy) => {
-      if (puppy.getMarkBound() === false) {
-        puppy.markBound();
-        puppy.startStepAnimation();
-      }
-    });
-
-    this._scene.physics.add.collider(this._scene.platform, this._scene.puppies, (platform, puppy: Puppy) => {
-      if (puppy.getMarkBound() === false && puppy?.scene) {
-        console.log('Упал на платформу', puppy.getType());
-        puppy.destroy()
-      }
-    });
-    this._scene.physics.add.collider(this._scene.player, this._scene.platform);
     this._collisions();
     this._controls();
   }
 
   private _collisions(): void {
+    this._scene.physics.add.collider(
+      this._scene.platform,
+      this._scene.puppies,
+      this._platformPuppies.bind(this)
+    );
+    this._scene.physics.add.overlap(
+      this._scene.player,
+      this._scene.puppies,
+      this._playerPuppies.bind(this)
+    );
+    this._scene.physics.add.overlap(
+      this._scene.endTower,
+      this._scene.puppies,
+      this._puppiesEndTower.bind(this)
+    );
+    this._scene.physics.add.collider(
+      this._scene.player,
+      this._scene.platform
+    );
+  }
 
+  private _platformPuppies(platform, puppy: Puppy): void {
+    if (puppy.getMarkBound() === false && puppy?.scene) {
+      console.log('Упал на платформу', puppy.getType());
+      puppy.destroy()
+    }
+  }
+
+  private _playerPuppies(player: Player, puppy: Puppy): void {
+    if (puppy.getMarkBound() === false) {
+      puppy.markBound();
+      puppy.startStepAnimation();
+    }
+  }
+
+  private _puppiesEndTower(tower: EndTower, puppy: Puppy): void {
+    puppy.destroy()
   }
 
   private _controls(): void {

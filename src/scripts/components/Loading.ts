@@ -1,6 +1,9 @@
 import platform from '../../assets/images/platform.png';
 import player from '../../assets/images/player.png';
 import puppy from '../../assets/images/puppy.png';
+import bg from '../../assets/images/bg.jpg';
+import startTower from '../../assets/images/start-tower.png';
+import endTower from '../../assets/images/end-tower.png';
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -42,6 +45,9 @@ class Loading {
     this._scene.load.image('platform', platform);
     this._scene.load.image('player', player);
     this._scene.load.image('puppy', puppy);
+    this._scene.load.image('bg', bg);
+    this._scene.load.image('start-tower', startTower);
+    this._scene.load.image('end-tower', endTower);
   }
 
   private _loadSounds(): void {

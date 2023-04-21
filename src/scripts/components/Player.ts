@@ -12,7 +12,7 @@ enum side {
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, 0, scene.platform.getBounds().top - Player.getSizes(scene).height / 2, 'player');
+    super(scene, scene.startTower.getBounds().x + 400, scene.platform.getBounds().top - Player.getSizes(scene).height / 2, 'player');
     this._scene = scene;
     this._build();
   }
@@ -24,14 +24,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   private _build(): void {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
-    this.body.setSize(this.width - 100, this.height);
+    this.body.setSize(this.width, this.height);
     this.setGravityY(600);
     this.setBounce(0.2);
     // const y = this._scene.platform.getBounds().top - this.height / 2;
     // this.setPosition(200, y);
     this._controls = this._scene.input.keyboard.createCursorKeys();
     this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
-
+    this.setCollideWorldBounds(true);
     console.log(this.height, this.displayHeight);
     this.setScale(0.5);
     console.log(this.height, this.displayHeight);

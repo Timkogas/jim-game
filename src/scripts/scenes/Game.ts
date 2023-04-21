@@ -4,6 +4,8 @@ import Session from '../data/Session';
 import User from '../data/User';
 import GameActions from '../actions/GameActions';
 import Puppy from '../components/Puppy';
+import EndTower from '../components/EndTower';
+import StartTower from '../components/StartTower';
 
 class Game extends Phaser.Scene {
   constructor() {
@@ -12,6 +14,8 @@ class Game extends Phaser.Scene {
 
   public actions: GameActions = new GameActions(this);
   public player: Player;
+  public endTower: EndTower;
+  public startTower: StartTower;
   public platform: Phaser.GameObjects.TileSprite;
   public puppies: Phaser.Physics.Arcade.Group
 

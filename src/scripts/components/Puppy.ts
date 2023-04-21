@@ -2,7 +2,7 @@ import Game from "../scenes/Game";
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game, type: number = 1) {
-    super(scene, 0, 0, 'puppy');
+    super(scene, scene.startTower.getBounds().x + 250, scene.startTower.getBounds().top, 'puppy');
     this._scene = scene;
     this._type = type;
     this._build();
@@ -21,22 +21,31 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this.startStepAnimation();
   }
 
-  private animationPuppyFirstConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    const { x } = this._scene.player;
+  private animationPuppyDownStartConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
     return ({
       targets: this,
-        x: { value: x + 400, },
-        y: { value: 890, ease: 'Circ.in' },
-        duration: 2000,
+      x: { value: this._scene.startTower.x + 200 + 360, },
+      y: { value: 910, ease: 'Quad.in' },
+      duration: 2000,
     });
   }
-  
-  private animationPuppyContinueConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
+
+  private animationPuppyDownConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
+    let { x } = this._scene.player;
+    return ({
+      targets: this,
+      x: { value: x + 360, },
+      y: { value: 910, ease: 'Quad.in' },
+      duration: 2000,
+    });
+  }
+
+  private animationPuppyUpConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
     const { x } = this._scene.player;
     return ({
       targets: this,
-      x: { value: x + 400, ease: 'Quad.in' },
-      y: { value: 200, ease: 'Quad.out' },
+      x: { value: x + 360, ease: 'Quad.in' },
+      y: { value: 220, ease: 'Quad.out' },
       duration: 2500,
       onComplete: () => {
         this._bound = false;
@@ -51,11 +60,17 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._tween?.destroy();
 
     if (this._step === 1) {
-      this._tween = this._scene.tweens.add(this.animationPuppyFirstConfig());
+      this._tween = this._scene.tweens.add(this.animationPuppyDownStartConfig());
     } else if (this._step === 2) {
-      this._tween = this._scene.tweens.add(this.animationPuppyContinueConfig());
+      this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
     } else if (this._step === 3) {
-      this._tween = this._scene.tweens.add(this.animationPuppyFirstConfig());
+      this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
+    } else if (this._step === 4) {
+      this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
+    } else if (this._step === 5) {
+      this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
+    } else if (this._step === 6) {
+      this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
     }
   }
 
