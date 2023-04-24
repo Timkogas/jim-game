@@ -10,12 +10,19 @@ import Game from '../scenes/Game';
 import UI from '../scenes/UI';
 import { screen } from '../types/enums';
 
+
+const PUPPY_CREATE_DELAY = 180
+const PUPPY_NEW_GROUP_CREATE_DELAY = 1000
+const MIN_GROUP_LENGTH = 3
+const MAX_GROUP_LENGTH = 5
+
 class GameActions {
   constructor(scene: Game) {
     this._scene = scene;
   }
 
   private _scene: Game;
+  private _groupLength: number = 0
 
   public build(): void {
     const { width, height, centerX } = this._scene.cameras.main;
@@ -26,17 +33,17 @@ class GameActions {
     const bg = this._scene.add.sprite(this._scene.platform.body.x, -100, 'bg').setOrigin(0, 0);
     bg.setDisplaySize(this._scene.platform.body.width + 200, height + 280)
 
-    this._scene.startTower = StartTower.create(this._scene)
-    this._scene.endTower = EndTower.create(this._scene)
+    this._scene.startTower = StartTower.create(this._scene);
+    this._scene.endTower = EndTower.create(this._scene);
 
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().x + 200, 0, this._scene.endTower.getBounds().x - 200 - this._scene.startTower.getBounds().x, bg.height)
 
-
     this._scene.player = new Player(this._scene);
 
-    new Puppy(this._scene);
     this._collisions();
     this._controls();
+
+    this.createNewPuppyGroup()
   }
 
   private _collisions(): void {
@@ -60,6 +67,9 @@ class GameActions {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
       puppy.destroy()
+      if (this._scene.puppies.getLength() === 0) {
+        this.createNewPuppyGroup()
+      }
     }
   }
 
@@ -70,17 +80,39 @@ class GameActions {
     }
   }
 
+  private _createPuppy(i: number): void {
+    setTimeout(() => {
+      Puppy.create(this._scene)
+    }, PUPPY_CREATE_DELAY * i)
+  }
+
+  private _createPuppyGroup(): void {
+    for (let i = 1; i <= this._groupLength; i++) {
+      this._createPuppy(i)
+    }
+  }
+
+  private _randomizeLengthGroup(): void {
+    this._groupLength = Phaser.Math.Between(MIN_GROUP_LENGTH, MAX_GROUP_LENGTH);
+  }
+
+  public createNewPuppyGroup(): void {
+    setTimeout(() => {
+      this._randomizeLengthGroup()
+      this._createPuppyGroup()
+    }, PUPPY_NEW_GROUP_CREATE_DELAY)
+  }
+
 
   private _controls(): void {
     const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
-    // cursors.space.on('down', (): void => {
-    //   this._scene.player.jump();
-    // });
-    cursors.down.on('down', (): void => {
-      this._scene.player.down();
+    cursors.space.on('down', (): void => {
+      this._scene.player.jump();
     });
-
+    // cursors.down.on('down', (): void => {
+    //   this._scene.player.down();
+    // });
   }
 }
 

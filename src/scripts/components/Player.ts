@@ -2,7 +2,7 @@ import Session from '../data/Session';
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 
-const JUMP_POINTS = 200;
+const JUMP_POINTS = 280;
 const SPEED = 550;
 
 enum side {
@@ -54,7 +54,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this._scene.add.tween({
       targets: this,
       x: this.x + (JUMP_POINTS * sign),
-      duration: 100,
+      duration: 200,
 
       ease: ''
     });

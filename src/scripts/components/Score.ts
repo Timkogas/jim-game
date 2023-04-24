@@ -16,16 +16,6 @@ class Score extends Phaser.GameObjects.Text {
   private _build(): void {
     this._scene.add.existing(this);
     this.setOrigin(1, 0);
-
-    // this._scene.events.on('update', () => {
-    //   // console.log('sss');
-    // });
-  }
-
-  protected preUpdate(): void {
-    if (this.text !== Session.getScore().toString()) {
-      this.setText(Session.getScore().toString());
-    }
   }
 }
 

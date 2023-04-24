@@ -17,7 +17,7 @@ class Interval {
   }
 
   private _game(): void {
-
+    
   }
 }
 

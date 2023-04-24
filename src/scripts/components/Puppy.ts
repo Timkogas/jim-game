@@ -35,7 +35,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._xStep = this._scene.startTower.x + 320 + STEP
     return ({
       targets: this,
-      x: { value: this._xStep, ease: 'Quad.out'  },
+      x: { value: this._xStep, ease: 'Quad.out' },
       y: { value: Y_DOWN, ease: 'Quad.in' },
       duration: DURATION_DOWN,
     });
@@ -55,7 +55,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._xStep = this._xStep + STEP
     return ({
       targets: this,
-      x: { value:  this._xStep, ease: 'Quad.in' },
+      x: { value: this._xStep, ease: 'Quad.in' },
       y: { value: Y_UP, ease: 'Quad.out' },
       duration: DURATION_UP,
       onComplete: () => {
@@ -69,7 +69,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._xStep = this._xStep + STEP
     return ({
       targets: this,
-      x: { value:  this._xStep, ease: 'Quad.in' },
+      x: { value: this._xStep, ease: 'Quad.in' },
       y: { value: Y_UP, ease: 'Quad.out' },
       duration: DURATION_UP,
       onComplete: () => {
@@ -77,6 +77,9 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
         Session.plusScore(1);
         const UI = this._scene.game.scene.getScene('UI') as UI;
         UI.score.setText(Session.getScore().toString());
+        if (this._scene.puppies.getLength() === 0) {
+          this._scene.actions.createNewPuppyGroup()
+        }
       }
     })
   }

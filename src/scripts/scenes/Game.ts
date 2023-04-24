@@ -44,8 +44,9 @@ class Game extends Phaser.Scene {
   
   private _spaceButton(): void {
     const cursors = this.input.keyboard.createCursorKeys();
-    cursors.space.on('down', (): void => {
-      new Puppy(this);
+    cursors.up.on('down', (): void => {
+      new Puppy(this)
+      console.log(this.puppies.getLength())
     });
   }
 }
