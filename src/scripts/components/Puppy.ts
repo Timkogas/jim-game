@@ -13,6 +13,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _bound: boolean = false;
   private _tween: Phaser.Tweens.Tween;
   private _step: number = 0;
+  private _xStep: number = 0;
 
   private _build(): void {
     this._scene.add.existing(this);
@@ -22,29 +23,30 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyDownStartConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
+    this._xStep = this._scene.startTower.x + 200 + 300
     return ({
       targets: this,
-      x: { value: this._scene.startTower.x + 200 + 360, },
+      x: { value: this._xStep, ease: 'Quad.out'  },
       y: { value: 910, ease: 'Quad.in' },
       duration: 2000,
     });
   }
 
   private animationPuppyDownConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    let { x } = this._scene.player;
+    this._xStep = this._xStep + 300
     return ({
       targets: this,
-      x: { value: x + 360, },
+      x: { value: this._xStep, ease: 'Quad.out' },
       y: { value: 910, ease: 'Quad.in' },
       duration: 2000,
     });
   }
 
   private animationPuppyUpConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    const { x } = this._scene.player;
+    this._xStep = this._xStep + 300
     return ({
       targets: this,
-      x: { value: x + 360, ease: 'Quad.in' },
+      x: { value:  this._xStep, ease: 'Quad.in' },
       y: { value: 220, ease: 'Quad.out' },
       duration: 2500,
       onComplete: () => {
@@ -70,6 +72,10 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     } else if (this._step === 5) {
       this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
     } else if (this._step === 6) {
+      this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
+    } else if (this._step === 7) {
+      this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
+    } else if (this._step === 8) {
       this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
     }
   }

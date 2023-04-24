@@ -4,6 +4,8 @@ import puppy from '../../assets/images/puppy.png';
 import bg from '../../assets/images/bg.jpg';
 import startTower from '../../assets/images/start-tower.png';
 import endTower from '../../assets/images/end-tower.png';
+import capybaraWalk from '../../assets/images/capybara-walk.png';
+import capybaraStand from '../../assets/images/capybara-stand.png';
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -44,6 +46,8 @@ class Loading {
   private _loadImages(): void {
     this._scene.load.image('platform', platform);
     this._scene.load.image('player', player);
+    this._scene.load.spritesheet('capybara-walk', capybaraWalk, { frameWidth: 64, frameHeight: 64 });
+    this._scene.load.spritesheet('capybara-stand', capybaraStand, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.image('puppy', puppy);
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);

@@ -12,7 +12,7 @@ enum side {
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, scene.startTower.getBounds().x + 400, scene.platform.getBounds().top - Player.getSizes(scene).height / 2, 'player');
+    super(scene, scene.startTower.getBounds().x + 400, scene.platform.getBounds().top - Player.getSizes(scene).height / 2, 'capybara-stand');
     this._scene = scene;
     this._build();
   }
@@ -22,9 +22,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   private _side: side = side.RIGHT;
 
   private _build(): void {
+    this.scene.anims.create({
+      key: 'walk',
+      frames: this.scene.anims.generateFrameNumbers('capybara-walk', { start: 0, end: 7 }),
+      frameRate: 10,
+    });
+    this.scene.anims.create({
+      key: 'stand',
+      frames: this.scene.anims.generateFrameNumbers('capybara-stand', { start: 0, end: 7 }),
+      frameRate: 7,
+    });
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
-    this.body.setSize(this.width, this.height);
+    this.body.setSize(this.width, this.height - 40);
     this.setGravityY(600);
     this.setBounce(0.2);
     // const y = this._scene.platform.getBounds().top - this.height / 2;
@@ -32,9 +42,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this._controls = this._scene.input.keyboard.createCursorKeys();
     this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
     this.setCollideWorldBounds(true);
-    console.log(this.height, this.displayHeight);
-    this.setScale(0.5);
-    console.log(this.height, this.displayHeight);
+    this.setScale(2, 2)
   }
 
   public right():void {
@@ -61,15 +69,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
   
   protected preUpdate(time: number, delta: number): void {
+    super.preUpdate(time, delta);
+    this.flipX = false
     if (this._controls.left.isDown) {
       this._side = side.LEFT;
+      this.flipX = true
       this.left();
+      this.anims.play('walk', true)
     } else if (this._controls.right.isDown) {
       this._side = side.RIGHT;
       this.right();
+      this.anims.play('walk', true)
     } else {
       if (this.body.touching.down) {
         this.body.reset(this.x, this.y);
+        if (this._side === side.RIGHT) {
+          this.flipX = false
+        } else {
+          this.flipX = true
+        }
+        this.anims.play('stand', true)
       }
     }
   }
