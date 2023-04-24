@@ -50,11 +50,6 @@ class GameActions {
       this._scene.puppies,
       this._playerPuppies.bind(this)
     );
-    this._scene.physics.add.overlap(
-      this._scene.endTower,
-      this._scene.puppies,
-      this._puppiesEndTower.bind(this)
-    );
     this._scene.physics.add.collider(
       this._scene.player,
       this._scene.platform
@@ -75,14 +70,6 @@ class GameActions {
     }
   }
 
-  private _puppiesEndTower(tower: EndTower, puppy: Puppy): void {
-    puppy.destroy()
-    Session.plusScore(1);
-    // this._score.setText(Session.getScore().toString());
-
-    const UI = this._scene.game.scene.getScene('UI') as UI;
-    UI.score.setText(Session.getScore().toString());
-  }
 
   private _controls(): void {
     const { centerX, centerY, width, height } = this._scene.cameras.main;

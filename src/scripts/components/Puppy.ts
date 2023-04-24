@@ -1,4 +1,13 @@
+import Session from "../data/Session";
 import Game from "../scenes/Game";
+import UI from "../scenes/UI";
+
+
+const STEP = 290
+const DURATION_UP = 1400
+const DURATION_DOWN = 1100
+const Y_UP = 220
+const Y_DOWN = 910
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game, type: number = 1) {
@@ -23,35 +32,51 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyDownStartConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._scene.startTower.x + 200 + 300
+    this._xStep = this._scene.startTower.x + 320 + STEP
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.out'  },
-      y: { value: 910, ease: 'Quad.in' },
-      duration: 2000,
+      y: { value: Y_DOWN, ease: 'Quad.in' },
+      duration: DURATION_DOWN,
     });
   }
 
   private animationPuppyDownConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + 300
+    this._xStep = this._xStep + STEP
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.out' },
-      y: { value: 910, ease: 'Quad.in' },
-      duration: 2000,
+      y: { value: Y_DOWN, ease: 'Quad.in' },
+      duration: DURATION_DOWN,
     });
   }
 
   private animationPuppyUpConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + 300
+    this._xStep = this._xStep + STEP
     return ({
       targets: this,
       x: { value:  this._xStep, ease: 'Quad.in' },
-      y: { value: 220, ease: 'Quad.out' },
-      duration: 2500,
+      y: { value: Y_UP, ease: 'Quad.out' },
+      duration: DURATION_UP,
       onComplete: () => {
         this._bound = false;
         this.startStepAnimation();
+      }
+    })
+  }
+
+  private animationPuppyUpEndConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
+    this._xStep = this._xStep + STEP
+    return ({
+      targets: this,
+      x: { value:  this._xStep, ease: 'Quad.in' },
+      y: { value: Y_UP, ease: 'Quad.out' },
+      duration: DURATION_UP,
+      onComplete: () => {
+        this.destroy()
+        Session.plusScore(1);
+        const UI = this._scene.game.scene.getScene('UI') as UI;
+        UI.score.setText(Session.getScore().toString());
       }
     })
   }
@@ -72,11 +97,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     } else if (this._step === 5) {
       this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
     } else if (this._step === 6) {
-      this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
-    } else if (this._step === 7) {
-      this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
-    } else if (this._step === 8) {
-      this._tween = this._scene.tweens.add(this.animationPuppyUpConfig());
+      this._tween = this._scene.tweens.add(this.animationPuppyUpEndConfig());
     }
   }
 
