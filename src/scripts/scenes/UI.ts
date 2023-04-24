@@ -1,6 +1,6 @@
+import PlayerHelath from '../components/PlayerHelath';
+import PuppyLives from '../components/PuppyLives';
 import Score from '../components/Score';
-import Settings from '../data/Settings';
-import { screen } from '../types/enums';
 
 class UI extends Phaser.Scene {
   constructor() {
@@ -8,9 +8,13 @@ class UI extends Phaser.Scene {
   }
 
   public score: Score;
+  public puppyLives: PuppyLives
+  public playerHealth: PlayerHelath
 
   public create(): void {
     this.score = new Score(this);
+    this.puppyLives = new PuppyLives(this)
+    this.playerHealth = new PlayerHelath(this)
   }
 
   public setGradient(text: Phaser.GameObjects.Text): void {

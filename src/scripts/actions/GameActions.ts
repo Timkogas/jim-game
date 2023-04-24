@@ -1,14 +1,10 @@
 import EndTower from '../components/EndTower';
 import Player from '../components/Player';
 import Puppy from '../components/Puppy';
-import Score from '../components/Score';
 import StartTower from '../components/StartTower';
-import Zone from '../components/Zone';
 import Session from '../data/Session';
-import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 import UI from '../scenes/UI';
-import { screen } from '../types/enums';
 
 
 const PUPPY_CREATE_DELAY = 180
@@ -67,8 +63,20 @@ class GameActions {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
       puppy.destroy()
+      Session.minusPuppyLives()
+      const UI = this._scene.game.scene.getScene('UI') as UI;
+      UI.puppyLives.setText(Session.getPuppyLives().toString());
       if (this._scene.puppies.getLength() === 0) {
         this.createNewPuppyGroup()
+        // if (Session.getPuppyLives() === 0) {
+        //   this._scene.isDamageAnimation = true
+        //   Session.minusPlayerHealth(20)
+        //   UI.playerHealth.setText(Session.getPlayerHealth().toString());
+        //   setTimeout(()=>{
+        //     this._scene.isDamageAnimation = false
+        //     this.createNewPuppyGroup()
+        //   },3000)
+        // }
       }
     }
   }
