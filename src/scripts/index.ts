@@ -44,7 +44,7 @@ window.onload = (): void => {
         }
       },
       render: { transparent: true },
-      scene: [ Boot, UI, Game ]
+      scene: [ Boot, Game, UI ]
     }
     const game = new Phaser.Game(config);
 

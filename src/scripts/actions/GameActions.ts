@@ -1,11 +1,13 @@
 import EndTower from '../components/EndTower';
 import Player from '../components/Player';
 import Puppy from '../components/Puppy';
+import Score from '../components/Score';
 import StartTower from '../components/StartTower';
 import Zone from '../components/Zone';
 import Session from '../data/Session';
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
+import UI from '../scenes/UI';
 import { screen } from '../types/enums';
 
 class GameActions {
@@ -14,7 +16,6 @@ class GameActions {
   }
 
   private _scene: Game;
-  private _score: Phaser.GameObjects.Text;
 
   public build(): void {
     const { width, height, centerX } = this._scene.cameras.main;
@@ -34,8 +35,6 @@ class GameActions {
     this._scene.player = new Player(this._scene);
 
     new Puppy(this._scene);
-    // const sss = Puppy.create(this._scene);
-    this._createScore();
     this._collisions();
     this._controls();
   }
@@ -79,7 +78,10 @@ class GameActions {
   private _puppiesEndTower(tower: EndTower, puppy: Puppy): void {
     puppy.destroy()
     Session.plusScore(1);
-    this._score.setText(Session.getScore().toString());
+    // this._score.setText(Session.getScore().toString());
+
+    const UI = this._scene.game.scene.getScene('UI') as UI;
+    UI.score.setText(Session.getScore().toString());
   }
 
   private _controls(): void {
@@ -93,15 +95,6 @@ class GameActions {
     });
 
   }
-
-  private _createScore(): void {
-    const { x, y } = this._scene.cameras.main;
-    this._score = this._scene.add.text(this._scene.endTower.x - 50, this._scene.endTower.getBounds().top, Session.getScore().toString(), {
-      fontSize: '70px',
-      color: '#000000'
-    }).setOrigin(1, 0);
-  }
-
 }
 
 export default GameActions;

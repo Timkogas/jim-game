@@ -3,7 +3,7 @@ import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 
 const JUMP_POINTS = 200;
-const SPEED = 300;
+const SPEED = 500;
 
 enum side {
   LEFT,

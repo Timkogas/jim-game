@@ -7,12 +7,17 @@ class Interval {
   }
 
   private _scene: Boot;
-  private _loop: Phaser.Time.TimerEvent;
 
   private init(): void {
-    this._loop = this._scene.time.addEvent({ delay: 1000, callback: (): void => {
-
+    this._scene.time.addEvent({ delay: 1000, callback: (): void => {
+      if (this._scene.scene.isActive('Game')) {
+        this._game();
+      }
     }, loop: true });
+  }
+
+  private _game(): void {
+
   }
 }
 

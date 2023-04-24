@@ -1,4 +1,4 @@
-import Loading from '../components/Loading';
+import Score from '../components/Score';
 import Settings from '../data/Settings';
 import { screen } from '../types/enums';
 
@@ -7,17 +7,10 @@ class UI extends Phaser.Scene {
     super('UI');
   }
 
-  private _loading: boolean = false;
-
-  public preload(): void {
-    if (this._loading === false) {
-      this._loading = true;
-      new Loading(this);
-    }
-  }
+  public score: Score;
 
   public create(): void {
-    this.scene.start('Game');
+    this.score = new Score(this);
   }
 
   public setGradient(text: Phaser.GameObjects.Text): void {
