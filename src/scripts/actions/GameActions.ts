@@ -118,26 +118,27 @@ class GameActions {
     }
   }
 
-  private _createPuppy(i: number, step: number): void {
+  private _createPuppy(i: number, step: number, type: number): void {
     this._scene.time.addEvent({
       delay: Settings.GAMEACTIONS_PUPPY_CREATE_DELAY * i, callback: (): void => {
-        new Puppy(this._scene, 1, step)
+        new Puppy(this._scene, type, step)
       }
     });
   }
 
   private _createPuppyGroup(): void {
     // тут какая то логика
-
+    let type: number
     for (let i = 1; i <= this._groupLength; i++) {
       const positions = [0, 2, 4];
       const random = Phaser.Math.Between(0, positions.length - 1);
       const step = positions[random];
+      type = 1
       if (i === this._groupLength) {
-        console.log('Пусть будет бомба');
+        type = 2
       }
 
-      this._createPuppy(i, step)
+      this._createPuppy(i, step, type)
     }
   }
 

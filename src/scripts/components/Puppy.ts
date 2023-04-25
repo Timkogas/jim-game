@@ -5,7 +5,7 @@ import UI from "../scenes/UI";
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game, type: number = 1, step: number = 0,  ) {
-    super(scene, scene.startTower.getBounds().x + 320, scene.startTower.getBounds().top, 'puppy');
+    super(scene, scene.startTower.getBounds().x + 320, scene.startTower.getBounds().top, type === 1 ? 'puppy' : 'bomb');
     this._step = step
     this._calculateIncreaseDuration()
     this._scene = scene;
@@ -22,10 +22,17 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _increaseDuration: number = 0
 
   private _build(): void {
+    this.scene.anims.create({
+      key: 'fall',
+      frames: this.scene.anims.generateFrameNumbers('puppy', { start: 3, end: 0 }),
+      frameRate: 8,
+      repeat: -1
+    });
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
     this._scene.puppies.add(this);
     this._firstStepX = this._scene.startTower.x + 320 + Settings.PUPPY_STEP
+    if (this._type === 1) this.anims.play('fall', true)
     this.startStepAnimation();
   }
 
@@ -127,6 +134,10 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
 
   public getMarkBound(): boolean {
     return this._bound;
+  }
+
+  protected preUpdate(time: number, delta: number): void {
+    super.preUpdate(time, delta);
   }
 
   public static create(scene: Game): Puppy {
