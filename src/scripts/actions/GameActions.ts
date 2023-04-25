@@ -98,12 +98,25 @@ class GameActions {
       this._scene.player,
       this._scene.platform
     );
+    this._scene.physics.add.collider(
+      this._scene.platform,
+      this._scene.puppies
+    );
   }
 
   private _platformPuppies(platform, puppy: Puppy): void {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
-      puppy.destroy()
+      if (puppy.getType() === 2) {
+        puppy.anims.play('explosion', true)
+        this._scene.time.addEvent({
+          delay: 1500, callback: (): void => {
+            puppy.destroy()
+          }
+        });
+      } else {
+        puppy.destroy()
+      }
       Session.minusPuppyLives()
       const UI = this._scene.game.scene.getScene('UI') as UI;
       UI.puppyLives.setText(Session.getPuppyLives().toString());
@@ -137,7 +150,6 @@ class GameActions {
       if (i === this._groupLength) {
         type = 2
       }
-
       this._createPuppy(i, step, type)
     }
   }

@@ -8,6 +8,7 @@ import capybaraWalk from '../../assets/images/capybara-walk.png';
 import capybaraStand from '../../assets/images/capybara-stand.png';
 import redPixel from '../../assets/images/red-pixel.png';
 import bomb from '../../assets/images/bomb.png';
+import explosion from '../../assets/images/explosion.png';
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -51,6 +52,7 @@ class Loading {
     this._scene.load.spritesheet('capybara-walk', capybaraWalk, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('capybara-stand', capybaraStand, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('puppy', puppy, { frameWidth: 80, frameHeight: 80 });
+    this._scene.load.spritesheet('explosion', explosion, { frameWidth: 128, frameHeight: 128 });
     this._scene.load.image('bomb', bomb);
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);
