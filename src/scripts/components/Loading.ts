@@ -6,6 +6,7 @@ import startTower from '../../assets/images/start-tower.png';
 import endTower from '../../assets/images/end-tower.png';
 import capybaraWalk from '../../assets/images/capybara-walk.png';
 import capybaraStand from '../../assets/images/capybara-stand.png';
+import redPixel from '../../assets/images/red-pixel.png';
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -52,6 +53,7 @@ class Loading {
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);
     this._scene.load.image('end-tower', endTower);
+    this._scene.load.image('red-pixel', redPixel);
   }
 
   private _loadSounds(): void {

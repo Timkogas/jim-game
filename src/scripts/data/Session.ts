@@ -2,11 +2,13 @@ class Session {
   private _score: number = 0;
   private _puppyLives: number = 4;
   private _playerHealth: number = 100;
+  private _over: boolean = false;
 
   public clear(): void {
     this._score = 0;
     this._puppyLives = 4
     this._playerHealth = 100
+    this._over = false;
   }
 
   public plusScore(score: number): void {
@@ -19,6 +21,7 @@ class Session {
 
   public minusPlayerHealth(health: number): void {
     this._playerHealth -= health;
+    if (this._playerHealth < 0) this._playerHealth = 0
   }
 
   public getPlayerHealth(): number {
@@ -42,6 +45,14 @@ class Session {
 
   public resetPuppyLives(): void {
      this._puppyLives = 4
+  }
+
+  public setOver(over: boolean): void {
+    this._over = over;
+  }
+
+  public getOver(): boolean {
+    return this._over;
   }
 }
 

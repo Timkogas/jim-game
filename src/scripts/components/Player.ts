@@ -42,7 +42,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this._controls = this._scene.input.keyboard.createCursorKeys();
     this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
     this.setCollideWorldBounds(true);
-    this.setScale(2, 2)
+    this.setScale(3.5, 3.5)
   }
 
   public right():void {

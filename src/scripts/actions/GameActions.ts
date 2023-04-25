@@ -8,7 +8,8 @@ import UI from '../scenes/UI';
 
 
 const PUPPY_CREATE_DELAY = 180
-const PUPPY_NEW_GROUP_CREATE_DELAY = 1000
+const PUPPY_NEW_GROUP_CREATE_DELAY = 1500
+const DAMAGE_ANIMATION_DELAY = 6000
 const MIN_GROUP_LENGTH = 3
 const MAX_GROUP_LENGTH = 5
 
@@ -39,7 +40,37 @@ class GameActions {
     this._collisions();
     this._controls();
 
-    this.createNewPuppyGroup()
+    this._createNewPuppyGroup()
+  }
+
+  public checkPuppyLivesAndPlayerHealth(): void {
+    if (Session.getOver()) return;
+    const UI = this._scene.game.scene.getScene('UI') as UI;
+    if (this._scene.puppies.getLength() === 0) {
+      if (Session.getPuppyLives() > 0) this._createNewPuppyGroup()
+      if (Session.getPuppyLives() === 0) {
+        Session.minusPlayerHealth(20)
+        UI.playerHealth.setText(Session.getPlayerHealth().toString());
+        Session.resetPuppyLives()
+        UI.puppyLives.setText(Session.getPuppyLives().toString());
+        if (Session.getPlayerHealth() === 0) {
+          this.gameOver()
+        }
+        if (Session.getOver()) return;
+        setTimeout(() => {
+          this._createNewPuppyGroup()
+        }, DAMAGE_ANIMATION_DELAY)
+      }
+    }
+  }
+
+  public gameOver(): void {
+    if (Session.getOver()) return;
+    const UI = this._scene.game.scene.getScene('UI') as UI;
+    const { width, height } = UI.cameras.main;
+    Session.setOver(true);
+    UI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
+    this._scene.player.destroy()
   }
 
   private _collisions(): void {
@@ -66,18 +97,7 @@ class GameActions {
       Session.minusPuppyLives()
       const UI = this._scene.game.scene.getScene('UI') as UI;
       UI.puppyLives.setText(Session.getPuppyLives().toString());
-      if (this._scene.puppies.getLength() === 0) {
-        this.createNewPuppyGroup()
-        // if (Session.getPuppyLives() === 0) {
-        //   this._scene.isDamageAnimation = true
-        //   Session.minusPlayerHealth(20)
-        //   UI.playerHealth.setText(Session.getPlayerHealth().toString());
-        //   setTimeout(()=>{
-        //     this._scene.isDamageAnimation = false
-        //     this.createNewPuppyGroup()
-        //   },3000)
-        // }
-      }
+      this.checkPuppyLivesAndPlayerHealth()
     }
   }
 
@@ -104,18 +124,18 @@ class GameActions {
     this._groupLength = Phaser.Math.Between(MIN_GROUP_LENGTH, MAX_GROUP_LENGTH);
   }
 
-  public createNewPuppyGroup(): void {
+  private _createNewPuppyGroup(): void {
     setTimeout(() => {
       this._randomizeLengthGroup()
       this._createPuppyGroup()
     }, PUPPY_NEW_GROUP_CREATE_DELAY)
   }
 
-
   private _controls(): void {
     const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
     cursors.space.on('down', (): void => {
+      if (Session.getOver()) return;
       this._scene.player.jump();
     });
     // cursors.down.on('down', (): void => {

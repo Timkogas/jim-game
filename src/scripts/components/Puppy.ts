@@ -77,9 +77,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
         Session.plusScore(1);
         const UI = this._scene.game.scene.getScene('UI') as UI;
         UI.score.setText(Session.getScore().toString());
-        if (this._scene.puppies.getLength() === 0) {
-          this._scene.actions.createNewPuppyGroup()
-        }
+        this._scene.actions.checkPuppyLivesAndPlayerHealth()
       }
     })
   }
