@@ -3,13 +3,6 @@ import Settings from "../data/Settings";
 import Game from "../scenes/Game";
 import UI from "../scenes/UI";
 
-
-const STEP = 290
-const DURATION_UP = 1400
-const DURATION_DOWN = 1100
-const Y_UP = 220
-const Y_DOWN = 910
-
 class Puppy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game, type: number = 1) {
     super(scene, scene.startTower.getBounds().x + 250, scene.startTower.getBounds().top, 'puppy');
@@ -37,28 +30,28 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.out' },
-      y: { value: Y_DOWN, ease: 'Quad.in' },
-      duration: DURATION_DOWN,
+      y: { value: Settings.PUPPY_DOWN_Y, ease: 'Quad.in' },
+      duration: Settings.PUPPY_DOWN_DURATION,
     });
   }
 
   private animationPuppyDownConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + STEP
+    this._xStep = this._xStep + Settings.PUPPY_STEP
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.out' },
-      y: { value: Y_DOWN, ease: 'Quad.in' },
-      duration: DURATION_DOWN,
+      y: { value: Settings.PUPPY_DOWN_Y, ease: 'Quad.in' },
+      duration: Settings.PUPPY_DOWN_DURATION,
     });
   }
 
   private animationPuppyUpConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + STEP
+    this._xStep = this._xStep + Settings.PUPPY_STEP
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.in' },
-      y: { value: Y_UP, ease: 'Quad.out' },
-      duration: DURATION_UP,
+      y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
+      duration: Settings.PUPPY_DOWN_DURATION,
       onComplete: () => {
         this._bound = false;
         this.startStepAnimation();
@@ -67,12 +60,12 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyUpEndConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + STEP
+    this._xStep = this._xStep + Settings.PUPPY_STEP
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.in' },
-      y: { value: Y_UP, ease: 'Quad.out' },
-      duration: DURATION_UP,
+      y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
+      duration: Settings.PUPPY_UP_DURATION,
       onComplete: () => {
         this.destroy()
         Session.plusScore(1);

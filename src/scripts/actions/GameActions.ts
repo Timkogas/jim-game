@@ -5,15 +5,9 @@ import Puppy from '../components/Puppy';
 import StartTower from '../components/StartTower';
 import Text from '../components/Text';
 import Session from '../data/Session';
+import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 import UI from '../scenes/UI';
-
-
-const PUPPY_CREATE_DELAY = 180
-const PUPPY_NEW_GROUP_CREATE_DELAY = 1500
-const DAMAGE_ANIMATION_DELAY = 6000
-const MIN_GROUP_LENGTH = 3
-const MAX_GROUP_LENGTH = 5
 
 class GameActions {
   constructor(scene: Game) {
@@ -58,10 +52,11 @@ class GameActions {
         if (Session.getPlayerHealth() === 0) {
           this.gameOver()
         }
-        if (Session.getOver()) return;
-        setTimeout(() => {
-          this._createNewPuppyGroup()
-        }, DAMAGE_ANIMATION_DELAY)
+        this._scene.time.addEvent({
+          delay: Settings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION, callback: (): void => {
+            this._createNewPuppyGroup()
+          }
+        });
       }
     }
   }
@@ -81,7 +76,7 @@ class GameActions {
 
     this._scene.scene.pause()
 
-    btn.callback = (): void => { 
+    btn.callback = (): void => {
       UI.scene.restart()
       this._scene.scene.restart()
     };
@@ -124,9 +119,11 @@ class GameActions {
   }
 
   private _createPuppy(i: number, step: number): void {
-    setTimeout(() => {
-      Puppy.create(this._scene)
-    }, PUPPY_CREATE_DELAY * i)
+    this._scene.time.addEvent({
+      delay: Settings.GAMEACTIONS_PUPPY_CREATE_DELAY * i, callback: (): void => {
+        Puppy.create(this._scene)
+      }
+    });
   }
 
   private _createPuppyGroup(): void {
@@ -145,14 +142,16 @@ class GameActions {
   }
 
   private _randomizeLengthGroup(): void {
-    this._groupLength = Phaser.Math.Between(MIN_GROUP_LENGTH, MAX_GROUP_LENGTH);
+    this._groupLength = Phaser.Math.Between(Settings.GAMEACTIONS_MIN_GROUP_LENGTH, Settings.GAMEACTIONS_MAX_GROUP_LENGTH);
   }
 
   private _createNewPuppyGroup(): void {
-    setTimeout(() => {
-      this._randomizeLengthGroup()
-      this._createPuppyGroup()
-    }, PUPPY_NEW_GROUP_CREATE_DELAY)
+    this._scene.time.addEvent({
+      delay: Settings.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY, callback: (): void => {
+        this._randomizeLengthGroup()
+        this._createPuppyGroup()
+      }
+    });
   }
 
   private _controls(): void {
