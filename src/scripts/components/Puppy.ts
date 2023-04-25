@@ -1,4 +1,5 @@
 import Session from "../data/Session";
+import Settings from "../data/Settings";
 import Game from "../scenes/Game";
 import UI from "../scenes/UI";
 
@@ -32,7 +33,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyDownStartConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._scene.startTower.x + 320 + STEP
+    this._xStep = this._scene.startTower.x + 320 + Settings.PUPPY_STEP // ТУТА ТУТА ТУТА
     return ({
       targets: this,
       x: { value: this._xStep, ease: 'Quad.out' },

@@ -4,7 +4,7 @@ const PADDING = 850
 
 class StartTower extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, scene.platform.getBounds().x + PADDING, scene.platform.getBounds().top, 'start-tower');
+    super(scene, scene.platform.getBounds().x + PADDING, scene.platform.getBounds().top - 350, 'start-tower');
     this._scene = scene;
     this._build();
   }
@@ -13,7 +13,7 @@ class StartTower extends Phaser.Physics.Arcade.Sprite {
   private _build(): void {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
-    this.setOrigin(0, 1)
+    this.setBodySize(200, 700);
   }
 
   public static create(scene: Game): StartTower {

@@ -3,6 +3,8 @@ import { screen } from '../types/enums';
 
 class Settings {
 
+  public readonly PUPPY_STEP = 300; // dasd asd asd asd
+
   public readonly sizes = {
     minWidth: 1920,
     maxWidth: 2500,

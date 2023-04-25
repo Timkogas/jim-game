@@ -35,7 +35,7 @@ class GameActions {
     this._scene.startTower = StartTower.create(this._scene);
     this._scene.endTower = EndTower.create(this._scene);
 
-    this._scene.physics.world.setBounds(this._scene.startTower.getBounds().x + 200, 0, this._scene.endTower.getBounds().x - 200 - this._scene.startTower.getBounds().x, bg.height)
+    this._scene.physics.world.setBounds(this._scene.startTower.getBounds().right, 0, this._scene.endTower.getBounds().left - this._scene.startTower.getBounds().x, bg.height)
 
     this._scene.player = new Player(this._scene);
 
@@ -123,15 +123,24 @@ class GameActions {
     }
   }
 
-  private _createPuppy(i: number): void {
+  private _createPuppy(i: number, step: number): void {
     setTimeout(() => {
       Puppy.create(this._scene)
     }, PUPPY_CREATE_DELAY * i)
   }
 
   private _createPuppyGroup(): void {
+    // тут какая то логика
+
     for (let i = 1; i <= this._groupLength; i++) {
-      this._createPuppy(i)
+      const positions = [1, 3, 5];
+      const random = Phaser.Math.Between(0, positions.length - 1);
+      const step = positions[random];
+
+      if (i === this._groupLength) {
+        console.log('Пусть будет бомба');
+      }
+      this._createPuppy(i, step)
     }
   }
 
