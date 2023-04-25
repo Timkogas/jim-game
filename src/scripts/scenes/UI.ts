@@ -1,6 +1,7 @@
 import PlayerHelath from '../components/PlayerHelath';
 import PuppyLives from '../components/PuppyLives';
 import Score from '../components/Score';
+import Session from '../data/Session';
 
 class UI extends Phaser.Scene {
   constructor() {
@@ -12,6 +13,7 @@ class UI extends Phaser.Scene {
   public playerHealth: PlayerHelath
 
   public create(): void {
+    Session.clear()
     this.score = new Score(this);
     this.puppyLives = new PuppyLives(this)
     this.playerHealth = new PlayerHelath(this)

@@ -12,7 +12,7 @@ enum side {
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, scene.startTower.getBounds().x + 400, scene.platform.getBounds().top - Player.getSizes(scene).height / 2, 'capybara-stand');
+    super(scene, scene.startTower.getBounds().x + 400, scene.platform.getBounds().top - Player.getSizes(scene).height , 'capybara-stand');
     this._scene = scene;
     this._build();
   }
@@ -94,7 +94,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   private static getSizes(scene: Phaser.Scene): Phaser.Geom.Rectangle {
-    return scene.textures.list['player'].frames.__BASE;
+    return scene.textures.list['capybara-stand'].frames.__BASE;
   }
 }
 

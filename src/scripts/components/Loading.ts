@@ -1,5 +1,5 @@
 import platform from '../../assets/images/platform.png';
-import player from '../../assets/images/player.png';
+import button from '../../assets/images/button.png';
 import puppy from '../../assets/images/puppy.png';
 import bg from '../../assets/images/bg.jpg';
 import startTower from '../../assets/images/start-tower.png';
@@ -46,7 +46,7 @@ class Loading {
 
   private _loadImages(): void {
     this._scene.load.image('platform', platform);
-    this._scene.load.image('player', player);
+    this._scene.load.image('button', button);
     this._scene.load.spritesheet('capybara-walk', capybaraWalk, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('capybara-stand', capybaraStand, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.image('puppy', puppy);

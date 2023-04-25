@@ -1,7 +1,9 @@
+import Button from '../components/Button';
 import EndTower from '../components/EndTower';
 import Player from '../components/Player';
 import Puppy from '../components/Puppy';
 import StartTower from '../components/StartTower';
+import Text from '../components/Text';
 import Session from '../data/Session';
 import Game from '../scenes/Game';
 import UI from '../scenes/UI';
@@ -67,9 +69,22 @@ class GameActions {
   public gameOver(): void {
     if (Session.getOver()) return;
     const UI = this._scene.game.scene.getScene('UI') as UI;
-    const { width, height } = UI.cameras.main;
+    const { width, height, centerX, centerY } = UI.cameras.main;
     Session.setOver(true);
     UI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
+    new Text(UI, 'Game over', { x: centerX, y: centerY - 200, fontSize: 44 })
+    const btn = new Button(UI, centerX, centerY - 100, 'button')
+    btn.text = UI.add.text(btn.x, btn.y, ('restart').toUpperCase(), {
+      color: '#000000',
+      fontSize: 32,
+    }).setOrigin(.5, .5)
+
+    this._scene.scene.pause()
+
+    btn.callback = (): void => { 
+      UI.scene.restart()
+      this._scene.scene.restart()
+    };
     this._scene.player.destroy()
   }
 
@@ -135,7 +150,6 @@ class GameActions {
     const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
     cursors.space.on('down', (): void => {
-      if (Session.getOver()) return;
       this._scene.player.jump();
     });
     // cursors.down.on('down', (): void => {
