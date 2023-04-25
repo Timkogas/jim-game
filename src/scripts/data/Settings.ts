@@ -3,6 +3,10 @@ import { screen } from '../types/enums';
 
 class Settings {
 
+
+  public readonly PLAYER_JUMP_POINTS = 560;
+  public readonly PLAYER_SPEED = 500;
+
   public readonly PUPPY_STEP = 280; // следующий шаг анимации по Х для щенков
   public readonly PUPPY_UP_DURATION = 1600; // длительность анимации щенка в верхнюю точку
   public readonly PUPPY_DOWN_DURATION = 1300; // длительность анимации щенка в нижнюю точку
@@ -10,12 +14,12 @@ class Settings {
   public readonly PUPPY_DOWN_Y = 910; // нижняя позиция по Y для анимации щенка
   public readonly PUPPY_INCREASE_ANIMATION_DURATION = 800; // шаг добавления времени если step больше 0
 
-  public readonly GAMEACTIONS_PUPPY_CREATE_DELAY = 480; // задержка между выпуском щенков в группе
+  public readonly GAMEACTIONS_PUPPY_CREATE_DELAY = 880; // задержка между выпуском щенков в группе
   public readonly GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY = 2000; // задержка перед созданием новой группы щенков
   public readonly GAMEACTIONS_DAMAGE_ANIMATION_DURATION = 6000; // длительность анимации урона
   public readonly GAMEACTIONS_MIN_GROUP_LENGTH = 3; // минимальное количество щенков в группе запуска
   public readonly GAMEACTIONS_MAX_GROUP_LENGTH = 5; // максимальное количество щенков в группе запуска
-  
+
 
   public readonly TOWER_PADDING = 850; // Расстояние для башен от края карты
   public readonly ZONE_SWIPE_OFFSET = 100; // что-то с зоной

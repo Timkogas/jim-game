@@ -29,7 +29,7 @@ class GameActions {
     this._scene.startTower = StartTower.create(this._scene);
     this._scene.endTower = EndTower.create(this._scene);
 
-    this._scene.physics.world.setBounds(this._scene.startTower.getBounds().right, 0, this._scene.endTower.getBounds().left - this._scene.startTower.getBounds().x, bg.height)
+    this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
     this._scene.player = new Player(this._scene);
 

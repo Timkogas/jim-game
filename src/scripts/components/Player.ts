@@ -1,9 +1,5 @@
-import Session from '../data/Session';
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
-
-const JUMP_POINTS = 280;
-const SPEED = 550;
 
 enum side {
   LEFT,
@@ -46,14 +42,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public right():void {
-    this.setVelocityX(SPEED);
+    this.setVelocityX(Settings.PLAYER_SPEED);
   }
 
   public jump():void {
     const sign = this._side === side.RIGHT ? 1 : -1;
     this._scene.add.tween({
       targets: this,
-      x: this.x + (JUMP_POINTS * sign),
+      x: this.x + (Settings.PLAYER_JUMP_POINTS * sign),
       duration: 200,
 
       ease: ''
@@ -61,7 +57,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public left():void {
-    this.setVelocityX(-SPEED);
+    this.setVelocityX(-Settings.PLAYER_SPEED);
   }
 
   public down():void {
