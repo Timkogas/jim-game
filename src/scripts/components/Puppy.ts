@@ -4,8 +4,10 @@ import Game from "../scenes/Game";
 import UI from "../scenes/UI";
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene: Game, type: number = 1) {
+  constructor(scene: Game, type: number = 1, step: number = 0,  ) {
     super(scene, scene.startTower.getBounds().x + 250, scene.startTower.getBounds().top, 'puppy');
+    this._step = step
+    this._calculateIncreaseDuration()
     this._scene = scene;
     this._type = type;
     this._build();
@@ -16,40 +18,44 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _bound: boolean = false;
   private _tween: Phaser.Tweens.Tween;
   private _step: number = 0;
-  private _xStep: number = 0;
+  private _firstStepX: number = 0;
+  private _increaseDuration: number = 0
 
   private _build(): void {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
     this._scene.puppies.add(this);
+    this._firstStepX = this._scene.startTower.x + 320 + Settings.PUPPY_STEP
     this.startStepAnimation();
   }
 
   private animationPuppyDownStartConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._scene.startTower.x + 320 + Settings.PUPPY_STEP // ТУТА ТУТА ТУТА
     return ({
       targets: this,
-      x: { value: this._xStep, ease: 'Quad.out' },
+      x: { value: this._firstStepX, ease: 'Quad.out' },
       y: { value: Settings.PUPPY_DOWN_Y, ease: 'Quad.in' },
       duration: Settings.PUPPY_DOWN_DURATION,
     });
   }
 
   private animationPuppyDownConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + Settings.PUPPY_STEP
+    const x = (this._step - 1) * Settings.PUPPY_STEP + this._firstStepX
     return ({
       targets: this,
-      x: { value: this._xStep, ease: 'Quad.out' },
+      x: { value: x, ease: 'Quad.out' },
       y: { value: Settings.PUPPY_DOWN_Y, ease: 'Quad.in' },
-      duration: Settings.PUPPY_DOWN_DURATION,
+      duration: Settings.PUPPY_DOWN_DURATION + this._increaseDuration,
+      onComplete: () => {
+        this._increaseDuration = 0;
+      }
     });
   }
 
   private animationPuppyUpConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + Settings.PUPPY_STEP
+    const x = (this._step - 1) * Settings.PUPPY_STEP + this._firstStepX
     return ({
       targets: this,
-      x: { value: this._xStep, ease: 'Quad.in' },
+      x: { value: x, ease: 'Quad.in' },
       y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
       duration: Settings.PUPPY_DOWN_DURATION,
       onComplete: () => {
@@ -60,10 +66,10 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyUpEndConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    this._xStep = this._xStep + Settings.PUPPY_STEP
+    const x = (this._step - 1) * Settings.PUPPY_STEP + this._firstStepX
     return ({
       targets: this,
-      x: { value: this._xStep, ease: 'Quad.in' },
+      x: { value: x, ease: 'Quad.in' },
       y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
       duration: Settings.PUPPY_UP_DURATION,
       onComplete: () => {
@@ -93,6 +99,20 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
       this._tween = this._scene.tweens.add(this.animationPuppyDownConfig());
     } else if (this._step === 6) {
       this._tween = this._scene.tweens.add(this.animationPuppyUpEndConfig());
+    }
+  }
+
+  private _calculateIncreaseDuration(): void {
+    switch(this._step) {
+      case 0:
+        this._increaseDuration = 0
+        break;
+      case 2:
+        this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 1
+        break;
+      case 4:
+        this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 2
+        break;
     }
   }
 
