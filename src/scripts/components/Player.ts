@@ -18,6 +18,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   private _scene: Game;
   private _controls: Phaser.Types.Input.Keyboard.CursorKeys;
   private _side: side = side.RIGHT;
+  public _left: boolean = false;
+  public _right: boolean = false;
 
   private _build(): void {
     this.scene.anims.create({
@@ -42,10 +44,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
     this.setCollideWorldBounds(true);
     this.setScale(3.5, 3.5)
+
+
+    
+
   }
 
   public right(): void {
+    this._side = side.RIGHT;
     this.setVelocityX(Settings.PLAYER_SPEED);
+    this.anims.play('walk', true)
   }
 
   public jump(): void {
@@ -60,7 +68,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public left(): void {
+    this._side = side.LEFT;
+    this.flipX = true
     this.setVelocityX(-Settings.PLAYER_SPEED);
+    this.anims.play('walk', true)
   }
 
   public down(): void {
@@ -69,18 +80,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   protected preUpdate(time: number, delta: number): void {
     super.preUpdate(time, delta);
-    this.flipX = false
-    if (this._controls.left.isDown) {
-      this._side = side.LEFT;
-      this.flipX = true
-      this.left();
-      this.anims.play('walk', true)
-    } else if (this._controls.right.isDown) {
-      this._side = side.RIGHT;
-      this.right();
-      this.anims.play('walk', true)
+
+    if (this._side === side.RIGHT) {
+      this.flipX = false
     } else {
-      if (this.body.touching.down) {
+      this.flipX = true
+    }
+
+    if (this._left) {
+      this.left();
+    } else if (this._right) {
+      this.right();
+    } else {
+      // if (this.body.touching.down) {
         this.body.reset(this.x, this.y);
         if (this._side === side.RIGHT) {
           this.flipX = false
@@ -88,7 +100,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
           this.flipX = true
         }
         this.anims.play('stand', true)
-      }
+      // }
     }
   }
 

@@ -275,32 +275,43 @@ class GameActions {
     }
   }
   private _controls(): void {
-    const cursors = this._scene.input.keyboard.createCursorKeys();
-    cursors.space.on('down', (): void => {
-      this._scene.player.jump();
-    });
-    // cursors.down.on('down', (): void => {
-    //   this._scene.player.down();
-    // });
     if (Settings.isMobile()) {
       const UI = this._scene.game.scene.getScene('UI') as UI;
       const { centerX, centerY, width, height } = UI.cameras.main;
-      const controls = this._scene.input.keyboard.createCursorKeys();
-      const leftZone = new Zone(UI, centerX / 2, centerY, width / 2, height);
-      leftZone.downCallback = (): void => {
-        controls.left.isDown = true
-        console.log('left')
+      // const controls = this._scene.input.keyboard.createCursorKeys();
+      const leftZoneMove = new Zone(UI, centerX + centerX / 4, centerY, width / 4, height);
+      leftZoneMove.downCallback = (): void => {
+        this._scene.player._left = true;
       }
-      leftZone.upCallback = (): void => {
-        controls.left.isDown = false
-        controls.right.isDown = false
+      leftZoneMove.upCallback = (): void => {
+        this._scene.player._left = false;
       }
 
-      const rightZone = new Zone(UI, width - centerX / 2, centerY, width / 2, height);
-      rightZone.downCallback = (): void => {
-        console.log('right')
-        controls.right.isDown = true
+      const rightZoneMove = new Zone(UI, width - centerX / 4, centerY, width / 4, height);
+      rightZoneMove.downCallback = (): void => {
+        this._scene.player._right = true;
       }
+      rightZoneMove.upCallback = (): void => {
+        this._scene.player._right = false;
+      }
+    } else {
+      const cursors = this._scene.input.keyboard.createCursorKeys();
+      cursors.space.on('down', (): void => {
+        this._scene.player.jump();
+      });
+      cursors.left.on('down', (): void => {
+        this._scene.player._left = true;
+      });
+      cursors.right.on('down', (): void => {
+        this._scene.player._right = true;
+      });
+      cursors.left.on('up', (): void => {
+        this._scene.player._left = false;
+      });
+      cursors.right.on('up', (): void => {
+        this._scene.player._right = false;
+      });
+  
     }
   }
 
