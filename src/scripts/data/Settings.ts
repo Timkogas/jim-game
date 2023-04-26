@@ -13,7 +13,8 @@ class Settings {
   public readonly PUPPY_UP_Y = 220; // верхняя позиция по Y для анимации щенка
   public readonly PUPPY_DOWN_Y = 910; // нижняя позиция по Y для анимации щенка
   public readonly PUPPY_INCREASE_ANIMATION_DURATION = 800; // шаг добавления времени если step больше 0
-  public readonly PUPPY_BOMB_FLY_ANIMATION_DURATION = 2000; // шаг добавления времени если step больше 0
+  public readonly PUPPY_BOMB_FLY_ANIMATION_DURATION = 2000; // длительность полета бомбы от EndTower до StartTower
+  public readonly PUPPY_BOMB_FLY_ANIMATION_DELAY = 1000; // задержка перед полетом бомбы от EndTower до StartTower
 
   public readonly GAMEACTIONS_PUPPY_CREATE_DELAY = 880; // задержка между выпуском щенков в группе
   public readonly GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY = 2000; // задержка перед созданием новой группы щенков

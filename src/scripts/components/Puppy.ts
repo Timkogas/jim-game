@@ -124,7 +124,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
         break;
     }
   }
-  
+
   private _onCompleteFinalAnimation(): void {
     if (this._type === 1) {
       this.destroy()
@@ -133,15 +133,19 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
       UI.score.setText(Session.getScore().toString());
       this._scene.actions.checkPuppyLivesAndPlayerHealth()
     } else {
-      this._tween = this._scene.tweens.add({
-        targets: this,
-        x: { value: this._scene.startTower.getBounds().centerX},
-        y: { value: this.getBounds().y + 80},
-        duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,
-        onComplete: () => {
-          this.destroy()
-          this._scene.actions.bombExplosion(this)
-          this._scene.actions.checkPuppyLivesAndPlayerHealth()
+      this._scene.time.addEvent({
+        delay: Settings.PUPPY_BOMB_FLY_ANIMATION_DELAY, callback: (): void => {
+          this._tween = this._scene.tweens.add({
+            targets: this,
+            x: { value: this._scene.startTower.getBounds().centerX },
+            y: { value: this.getBounds().y + 80 },
+            duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,
+            onComplete: () => {
+              this.destroy()
+              this._scene.actions.bombExplosion(this)
+              this._scene.actions.checkPuppyLivesAndPlayerHealth()
+            }
+          });
         }
       });
     }
