@@ -121,7 +121,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
         this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 1
         break;
       case 4:
-        this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 2
+        this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 1.5
         break;
     }
   }

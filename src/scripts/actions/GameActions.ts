@@ -150,9 +150,9 @@ class GameActions {
     } else if (this._scene.difficulty >= 41 && this._scene.difficulty <= 60) {
       this._difficultyMedium()
     } else if (this._scene.difficulty >= 61 && this._scene.difficulty <= 80) {
-      this._difficultyMedium()
+      this._difficultyHard()
     } else if (this._scene.difficulty >= 81) {
-      this._difficultyMedium()
+      this._difficultyVeryHard()
     }
   }
 
@@ -196,15 +196,18 @@ class GameActions {
     const positions = [0, 2, 4];
     const random = Phaser.Math.Between(0, positions.length - 1);
     let step = positions[random];
-    let newStep: boolean = false
+    let stepOtherPuppy
+    let otherPuppyCheck: boolean = false
     for (let i = 1; i <= this._groupLength; i++) {
-      if (i === this._groupLength - 1 && !newStep) {
-        newStep = true
-        step = step >= 2 ? step - 2 : step + 2
-      }
       let type: puppies = puppies.PUPPY
       if (i === this._groupLength) {
         type = puppies.BOMB
+      }
+      if (i === 3 && !otherPuppyCheck) {
+        otherPuppyCheck = true
+        stepOtherPuppy = step >= 2 ? step - 2 : step + 2
+        this._createPuppy(i, stepOtherPuppy, type)
+        continue;
       }
       this._createPuppy(i, step, type)
     }
@@ -228,15 +231,48 @@ class GameActions {
         this._createPuppy(i, stepOtherPuppy, type)
         continue;
       }
-      if (i === 2) {
-        stepOtherPuppy = positions[Phaser.Math.Between(0, positions.length - 1)]
-        this._createPuppy(i, stepOtherPuppy, type)
-        continue;
-      }
       this._createPuppy(i, step, type)
     }
   }
 
+  private _difficultyHard(): void {
+    console.log('Hard')
+    this._groupLength = 5
+    const positions = [0, 2, 4];
+    const randomBomb = Phaser.Math.Between(1, this._groupLength)
+    let stepPrevBomb
+    let step
+    for (let i = 1; i <= this._groupLength; i++) {
+      const random = Phaser.Math.Between(0, positions.length - 1);
+      if (stepPrevBomb === positions[random]) {
+        i--
+        continue;
+      } else {
+        step = positions[random]
+        stepPrevBomb = step
+      }
+      let type: puppies = puppies.PUPPY
+      if (i === randomBomb) {
+        type = puppies.BOMB
+      }
+      this._createPuppy(i, step, type)
+    }
+  }
+  private _difficultyVeryHard(): void {
+    console.log('very hard')
+    this._groupLength = 5
+    const positions = [0, 2, 4];
+    const randomBomb = Phaser.Math.Between(1, this._groupLength)
+    for (let i = 1; i <= this._groupLength; i++) {
+      const random = Phaser.Math.Between(0, positions.length - 1);
+      const step = positions[random]
+      let type: puppies = puppies.PUPPY
+      if (i === randomBomb) {
+        type = puppies.BOMB
+      }
+      this._createPuppy(i, step, type)
+    }
+  }
   private _controls(): void {
     const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
