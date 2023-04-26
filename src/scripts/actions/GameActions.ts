@@ -35,7 +35,7 @@ class GameActions {
 
     this._collisions();
     this._controls();
-
+    this._drawAnimationPoints()
     this._createNewPuppyGroup()
   }
 
@@ -179,6 +179,19 @@ class GameActions {
     // cursors.down.on('down', (): void => {
     //   this._scene.player.down();
     // });
+  }
+
+  private _drawAnimationPoints():void {
+    for (let i = 1; i < 7; i++) {
+      const graphics = this._scene.add.graphics();
+      graphics.lineStyle(50, 0xffffff);
+      graphics.beginPath();
+      const x = this._scene.startTower.getBounds().right + Settings.PUPPY_STEP * i
+      const y = i % 2 !== 0 ? Settings.PUPPY_DOWN_Y : Settings.PUPPY_UP_Y
+      graphics.arc(x, y, 20, Phaser.Math.DegToRad(0), Phaser.Math.DegToRad(360), false, 0.02);
+      graphics.strokePath();
+      graphics.closePath();
+    }
   }
 }
 
