@@ -35,8 +35,10 @@ class GameActions {
 
     this._collisions();
     this._controls();
-    this._drawAnimationPoints()
     this._createNewPuppyGroup()
+    if (this._scene.game.config.physics.arcade.debug) {
+      this._drawAnimationPoints()
+    }
   }
 
   public checkPuppyLivesAndPlayerHealth(): void {
@@ -45,7 +47,7 @@ class GameActions {
     if (this._scene.puppies.getLength() === 0) {
       if (Session.getPuppyLives() > 0) this._createNewPuppyGroup()
       if (Session.getPuppyLives() === 0) {
-        Session.minusPlayerHealth(20)
+        Session.minusPlayerHealth(Settings.GAMEACTIONS_PUPPY_DAMAGE)
         UI.playerHealth.setText(Session.getPlayerHealth().toString());
         Session.resetPuppyLives()
         UI.puppyLives.setText(Session.getPuppyLives().toString());
@@ -103,13 +105,18 @@ class GameActions {
   private _platformPuppies(platform, puppy: Puppy): void {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
+      const UI = this._scene.game.scene.getScene('UI') as UI;
       if (puppy.getType() === 2) {
         this.bombExplosion(puppy)
+        Session.minusPlayerHealth(Settings.GAMEACTIONS_EXPLOSION_DAMAGE)
+        UI.playerHealth.setText(Session.getPlayerHealth().toString());
+        if (Session.getPlayerHealth() === 0) {
+          this.gameOver()
+        }
       } else {
         puppy.destroy()
       }
       Session.minusPuppyLives()
-      const UI = this._scene.game.scene.getScene('UI') as UI;
       UI.puppyLives.setText(Session.getPuppyLives().toString());
       this.checkPuppyLivesAndPlayerHealth()
     }
@@ -181,7 +188,7 @@ class GameActions {
     // });
   }
 
-  private _drawAnimationPoints():void {
+  private _drawAnimationPoints(): void {
     for (let i = 1; i < 7; i++) {
       const graphics = this._scene.add.graphics();
       graphics.lineStyle(50, 0xffffff);
