@@ -9,7 +9,7 @@ class Settings {
   public readonly PUPPY_UP_Y = 220; // верхняя позиция по Y для анимации щенка
   public readonly PUPPY_DOWN_Y = 910; // нижняя позиция по Y для анимации щенка
   public readonly PUPPY_INCREASE_ANIMATION_DURATION = 1400; // шаг добавления времени если step больше 0
-  public readonly PUPPY_BOMB_FLY_ANIMATION_DURATION = 2500; // длительность полета бомбы от EndTower до StartTower
+  public readonly PUPPY_BOMB_FLY_ANIMATION_DURATION = 1800; // длительность полета бомбы от EndTower до StartTower
   public readonly PUPPY_BOMB_FLY_ANIMATION_DELAY = 1000; // задержка перед полетом бомбы от EndTower до StartTower
 
   public readonly PLAYER_JUMP_POINTS = this.PUPPY_STEP * 2; // расстояние прыжка игрока

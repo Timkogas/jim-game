@@ -148,11 +148,11 @@ class GameActions {
     } else if (this._scene.difficulty >= 21 && this._scene.difficulty <= 40) {
       this._difficultyEasy()
     } else if (this._scene.difficulty >= 41 && this._scene.difficulty <= 60) {
-      this._difficultyEasy()
+      this._difficultyMedium()
     } else if (this._scene.difficulty >= 61 && this._scene.difficulty <= 80) {
-      this._difficultyEasy()
+      this._difficultyMedium()
     } else if (this._scene.difficulty >= 81) {
-      this._difficultyEasy()
+      this._difficultyMedium()
     }
   }
 
@@ -201,11 +201,37 @@ class GameActions {
       if (i === this._groupLength - 1 && !newStep) {
         newStep = true
         step = step >= 2 ? step - 2 : step + 2
-        console.log(step)
       }
       let type: puppies = puppies.PUPPY
       if (i === this._groupLength) {
         type = puppies.BOMB
+      }
+      this._createPuppy(i, step, type)
+    }
+  }
+
+  private _difficultyMedium(): void {
+    console.log('Medium')
+    this._groupLength = 5
+    const positions = [0, 2, 4];
+    const random = Phaser.Math.Between(0, positions.length - 1);
+    const randomBomb = Phaser.Math.Between(1, this._groupLength)
+    let step = positions[random];
+    let stepOtherPuppy
+    for (let i = 1; i <= this._groupLength; i++) {
+      let type: puppies = puppies.PUPPY
+      if (i === randomBomb) {
+        type = puppies.BOMB
+      }
+      if (i % 2 !== 0) {
+        stepOtherPuppy = positions[Phaser.Math.Between(0, positions.length - 1)]
+        this._createPuppy(i, stepOtherPuppy, type)
+        continue;
+      }
+      if (i === 2) {
+        stepOtherPuppy = positions[Phaser.Math.Between(0, positions.length - 1)]
+        this._createPuppy(i, stepOtherPuppy, type)
+        continue;
       }
       this._createPuppy(i, step, type)
     }
