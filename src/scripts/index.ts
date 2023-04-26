@@ -6,6 +6,7 @@ import UI from './scenes/UI';
 import Settings from './data/Settings';
 import Utils from './data/Utils';
 import Game from './scenes/Game';
+import * as platform from 'platform';
 
 window.onload = (): void => {
   setTimeout((): void => {
@@ -28,6 +29,10 @@ window.onload = (): void => {
     } else {
       width = clientHeight / y * x;
       height = clientHeight;
+    }
+
+    if (platform.os.family === 'iOS' || platform.os.family === 'Android') {
+      Settings.setMobile(true);
     }
     
     root.style.height = height + 'px';

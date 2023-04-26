@@ -39,7 +39,9 @@ class Zone extends Phaser.GameObjects.Zone {
     this.scene.add.existing(this);
     this.setInteractive({ cursor: 'pointer' });
     this._сlick();
-    // this._setGraphic();
+    if (this.scene.game.config.physics.arcade.debug) {
+      this._setGraphic();
+    }
   }
 
   private _setGraphic(): void {

@@ -4,6 +4,7 @@ import Player from '../components/Player';
 import Puppy from '../components/Puppy';
 import StartTower from '../components/StartTower';
 import Text from '../components/Text';
+import Zone from '../components/Zone';
 import Session from '../data/Session';
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
@@ -274,7 +275,6 @@ class GameActions {
     }
   }
   private _controls(): void {
-    const { centerX, centerY, width, height } = this._scene.cameras.main;
     const cursors = this._scene.input.keyboard.createCursorKeys();
     cursors.space.on('down', (): void => {
       this._scene.player.jump();
@@ -282,6 +282,26 @@ class GameActions {
     // cursors.down.on('down', (): void => {
     //   this._scene.player.down();
     // });
+    if (Settings.isMobile()) {
+      const UI = this._scene.game.scene.getScene('UI') as UI;
+      const { centerX, centerY, width, height } = UI.cameras.main;
+      const controls = this._scene.input.keyboard.createCursorKeys();
+      const leftZone = new Zone(UI, centerX / 2, centerY, width / 2, height);
+      leftZone.downCallback = (): void => {
+        controls.left.isDown = true
+        console.log('left')
+      }
+      leftZone.upCallback = (): void => {
+        controls.left.isDown = false
+        controls.right.isDown = false
+      }
+
+      const rightZone = new Zone(UI, width - centerX / 2, centerY, width / 2, height);
+      rightZone.downCallback = (): void => {
+        console.log('right')
+        controls.right.isDown = true
+      }
+    }
   }
 
   private _drawAnimationPoints(): void {

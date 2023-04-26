@@ -1,5 +1,7 @@
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
+import UI from '../scenes/UI';
+import Zone from './Zone';
 
 enum side {
   LEFT,
@@ -42,11 +44,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setScale(3.5, 3.5)
   }
 
-  public right():void {
+  public right(): void {
     this.setVelocityX(Settings.PLAYER_SPEED);
   }
 
-  public jump():void {
+  public jump(): void {
     const sign = this._side === side.RIGHT ? 1 : -1;
     this._scene.add.tween({
       targets: this,
@@ -57,14 +59,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  public left():void {
+  public left(): void {
     this.setVelocityX(-Settings.PLAYER_SPEED);
   }
 
-  public down():void {
+  public down(): void {
     this.setVelocityX(0);
   }
-  
+
   protected preUpdate(time: number, delta: number): void {
     super.preUpdate(time, delta);
     this.flipX = false
