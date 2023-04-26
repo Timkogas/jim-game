@@ -20,7 +20,7 @@ class Game extends Phaser.Scene {
   public platform: Phaser.GameObjects.TileSprite;
   public puppies: Phaser.Physics.Arcade.Group
   private _loading: boolean = false;
-  public isDamageAnimation: boolean = false
+  public difficulty: number = 20
 
   public init(): void {
     console.log('init');

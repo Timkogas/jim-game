@@ -8,6 +8,7 @@ import Session from '../data/Session';
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 import UI from '../scenes/UI';
+import { puppies } from '../types/enums';
 
 class GameActions {
   constructor(scene: Game) {
@@ -106,7 +107,7 @@ class GameActions {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
       const UI = this._scene.game.scene.getScene('UI') as UI;
-      if (puppy.getType() === 2) {
+      if (puppy.getType() === puppies.BOMB) {
         this.bombExplosion(puppy)
         Session.minusPlayerHealth(Settings.GAMEACTIONS_EXPLOSION_DAMAGE)
         UI.playerHealth.setText(Session.getPlayerHealth().toString());
@@ -115,9 +116,9 @@ class GameActions {
         }
       } else {
         puppy.destroy()
+        Session.minusPuppyLives()
+        UI.puppyLives.setText(Session.getPuppyLives().toString());
       }
-      Session.minusPuppyLives()
-      UI.puppyLives.setText(Session.getPuppyLives().toString());
       this.checkPuppyLivesAndPlayerHealth()
     }
   }
@@ -141,7 +142,7 @@ class GameActions {
     }
   }
 
-  private _createPuppy(i: number, step: number, type: number): void {
+  private _createPuppy(i: number, step: number, type: puppies): void {
     this._scene.time.addEvent({
       delay: Settings.GAMEACTIONS_PUPPY_CREATE_DELAY * i, callback: (): void => {
         new Puppy(this._scene, type, step)
@@ -151,14 +152,14 @@ class GameActions {
 
   private _createPuppyGroup(): void {
     // тут какая то логика
-    let type: number
+    let type: puppies
     for (let i = 1; i <= this._groupLength; i++) {
       const positions = [0, 2, 4];
       const random = Phaser.Math.Between(0, positions.length - 1);
       const step = positions[random];
-      type = 1
+      type = puppies.PUPPY
       if (i === this._groupLength) {
-        type = 2
+        type = puppies.BOMB
       }
       this._createPuppy(i, step, type)
     }

@@ -2,10 +2,11 @@ import Session from "../data/Session";
 import Settings from "../data/Settings";
 import Game from "../scenes/Game";
 import UI from "../scenes/UI";
+import { puppies } from "../types/enums";
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene: Game, type: number = 1, step: number = 0,) {
-    super(scene, scene.startTower.getBounds().x + 320, scene.startTower.getBounds().top, type === 1 ? 'puppy' : 'bomb');
+  constructor(scene: Game, type: puppies = puppies.PUPPY, step: number = 0,) {
+    super(scene, scene.startTower.getBounds().x + 320, scene.startTower.getBounds().top, type === puppies.PUPPY ? 'puppy' : 'bomb');
     this._step = step
     this._calculateIncreaseDuration()
     this._scene = scene;
@@ -14,7 +15,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private _scene: Game;
-  private _type: number;
+  private _type: puppies;
   private _bound: boolean = false;
   private _tween: Phaser.Tweens.Tween;
   private _step: number = 0;
@@ -39,7 +40,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._scene.physics.add.existing(this);
     this._scene.puppies.add(this);
     this._firstStepX = this._scene.startTower.getBounds().right + Settings.PUPPY_STEP
-    if (this._type === 1) this.anims.play('fall', true)
+    if (this._type === puppies.PUPPY) this.anims.play('fall', true)
     this.startStepAnimation();
   }
 
@@ -126,7 +127,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private _onCompleteFinalAnimation(): void {
-    if (this._type === 1) {
+    if (this._type === puppies.PUPPY) {
       this.destroy()
       Session.plusScore(1);
       const UI = this._scene.game.scene.getScene('UI') as UI;
@@ -151,7 +152,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  public getType(): number {
+  public getType(): puppies {
     return this._type;
   }
 

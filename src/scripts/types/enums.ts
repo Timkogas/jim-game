@@ -2,6 +2,12 @@ enum screen {
   MAIN
 }
 
+enum puppies {
+  PUPPY,
+  BOMB
+}
+
 export {
-  screen
+  screen,
+  puppies
 }
