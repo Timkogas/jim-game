@@ -4,7 +4,7 @@ import Game from "../scenes/Game";
 import UI from "../scenes/UI";
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene: Game, type: number = 1, step: number = 0,  ) {
+  constructor(scene: Game, type: number = 1, step: number = 0,) {
     super(scene, scene.startTower.getBounds().x + 320, scene.startTower.getBounds().top, type === 1 ? 'puppy' : 'bomb');
     this._step = step
     this._calculateIncreaseDuration()
@@ -38,7 +38,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
     this._scene.puppies.add(this);
-    this._firstStepX = this._scene.startTower.x + 320 + Settings.PUPPY_STEP
+    this._firstStepX = this._scene.startTower.getBounds().right + Settings.PUPPY_STEP
     if (this._type === 1) this.anims.play('fall', true)
     this.startStepAnimation();
   }
@@ -87,13 +87,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
       x: { value: x, ease: 'Quad.in' },
       y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
       duration: Settings.PUPPY_UP_DURATION,
-      onComplete: () => {
-        this.destroy()
-        Session.plusScore(1);
-        const UI = this._scene.game.scene.getScene('UI') as UI;
-        UI.score.setText(Session.getScore().toString());
-        this._scene.actions.checkPuppyLivesAndPlayerHealth()
-      }
+      onComplete: this._onCompleteFinalAnimation.bind(this)
     })
   }
 
@@ -118,7 +112,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private _calculateIncreaseDuration(): void {
-    switch(this._step) {
+    switch (this._step) {
       case 0:
         this._increaseDuration = 0
         break;
@@ -128,6 +122,28 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
       case 4:
         this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 2
         break;
+    }
+  }
+  
+  private _onCompleteFinalAnimation(): void {
+    if (this._type === 1) {
+      this.destroy()
+      Session.plusScore(1);
+      const UI = this._scene.game.scene.getScene('UI') as UI;
+      UI.score.setText(Session.getScore().toString());
+      this._scene.actions.checkPuppyLivesAndPlayerHealth()
+    } else {
+      this._tween = this._scene.tweens.add({
+        targets: this,
+        x: { value: this._scene.startTower.getBounds().centerX},
+        y: { value: this.getBounds().y + 80},
+        duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,
+        onComplete: () => {
+          this.destroy()
+          this._scene.actions.bombExplosion(this)
+          this._scene.actions.checkPuppyLivesAndPlayerHealth()
+        }
+      });
     }
   }
 

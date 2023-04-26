@@ -104,15 +104,7 @@ class GameActions {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
       if (puppy.getType() === 2) {
-        const { centerX, centerY } = puppy.getBounds()
-        const explosion = this._scene.add.sprite(centerX, centerY, 'bomb')
-        puppy.destroy()
-        explosion.anims.play('explosion', true)
-        this._scene.time.addEvent({
-          delay: Settings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION, callback: (): void => {
-            explosion.destroy
-          }
-        });
+        this.bombExplosion(puppy)
       } else {
         puppy.destroy()
       }
@@ -121,6 +113,18 @@ class GameActions {
       UI.puppyLives.setText(Session.getPuppyLives().toString());
       this.checkPuppyLivesAndPlayerHealth()
     }
+  }
+
+  public bombExplosion(puppy: Puppy): void {
+    const { centerX, centerY } = puppy.getBounds()
+    const explosion = this._scene.add.sprite(centerX, centerY, 'bomb')
+    puppy.destroy()
+    explosion.anims.play('explosion', true)
+    this._scene.time.addEvent({
+      delay: Settings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION, callback: (): void => {
+        explosion.destroy()
+      }
+    });
   }
 
   private _playerPuppies(player: Player, puppy: Puppy): void {
