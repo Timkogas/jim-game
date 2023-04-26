@@ -13,7 +13,7 @@ class Settings {
   public readonly PUPPY_BOMB_FLY_ANIMATION_DELAY = 1000; // задержка перед полетом бомбы от EndTower до StartTower
 
   public readonly PLAYER_JUMP_POINTS = this.PUPPY_STEP * 2; // расстояние прыжка игрока
-  public readonly PLAYER_SPEED = 500; // скорость игрока
+  public readonly PLAYER_SPEED = 1200; // скорость игрока
 
   public readonly GAMEACTIONS_PUPPY_CREATE_DELAY = 880; // задержка между выпуском щенков в группе
   public readonly GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY = 2000; // задержка перед созданием новой группы щенков

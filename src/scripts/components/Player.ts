@@ -8,7 +8,7 @@ enum side {
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, scene.startTower.getBounds().right + Settings.PUPPY_STEP, scene.platform.getBounds().top - Player.getSizes(scene).height , 'capybara-stand');
+    super(scene, scene.startTower.getBounds().right + Settings.PUPPY_STEP, scene.platform.getBounds().top - Player.getSizes(scene).height, 'capybara-stand');
     this._scene = scene;
     this._build();
   }
@@ -30,7 +30,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     });
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
-    this.body.setSize(this.width, this.height - 40);
+    this.body.setSize(this.width + 10, this.height - 35);
     this.setGravityY(600);
     this.setDepth(10)
     this.setBounce(0.2);
