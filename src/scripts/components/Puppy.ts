@@ -33,6 +33,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
       frames: this.scene.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
       frameRate: 8,
       repeat: 0,
+      hideOnComplete: true
     });
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);

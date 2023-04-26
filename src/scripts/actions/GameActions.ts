@@ -98,20 +98,19 @@ class GameActions {
       this._scene.player,
       this._scene.platform
     );
-    this._scene.physics.add.collider(
-      this._scene.platform,
-      this._scene.puppies
-    );
   }
 
   private _platformPuppies(platform, puppy: Puppy): void {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
       if (puppy.getType() === 2) {
-        puppy.anims.play('explosion', true)
+        const { centerX, centerY } = puppy.getBounds()
+        const explosion = this._scene.add.sprite(centerX, centerY, 'bomb')
+        puppy.destroy()
+        explosion.anims.play('explosion', true)
         this._scene.time.addEvent({
-          delay: 1500, callback: (): void => {
-            puppy.destroy()
+          delay: Settings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION, callback: (): void => {
+            explosion.destroy
           }
         });
       } else {

@@ -19,6 +19,7 @@ class Settings {
   public readonly GAMEACTIONS_DAMAGE_ANIMATION_DURATION = 6000; // длительность анимации урона
   public readonly GAMEACTIONS_MIN_GROUP_LENGTH = 3; // минимальное количество щенков в группе запуска
   public readonly GAMEACTIONS_MAX_GROUP_LENGTH = 5; // максимальное количество щенков в группе запуска
+  public readonly GAMEACTIONS_EXPLOSION_ANIMATION_DURATION = 1500; // максимальное количество щенков в группе запуска
 
 
   public readonly TOWER_PADDING = 850; // Расстояние для башен от края карты
