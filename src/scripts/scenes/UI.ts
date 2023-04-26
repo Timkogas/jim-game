@@ -1,7 +1,9 @@
+import Button from '../components/Button';
 import PlayerHelath from '../components/PlayerHelath';
 import PuppyLives from '../components/PuppyLives';
 import Score from '../components/Score';
 import Session from '../data/Session';
+import Game from './Game';
 
 class UI extends Phaser.Scene {
   constructor() {

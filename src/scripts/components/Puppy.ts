@@ -138,6 +138,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
         delay: Settings.PUPPY_BOMB_FLY_ANIMATION_DELAY, callback: (): void => {
           this._tween = this._scene.tweens.add({
             targets: this,
+            rotation: -2 * Math.PI,
             x: { value: this._scene.startTower.getBounds().centerX },
             y: { value: this.getBounds().y + 80 },
             duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,

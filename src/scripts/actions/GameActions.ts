@@ -148,11 +148,11 @@ class GameActions {
     } else if (this._scene.difficulty >= 21 && this._scene.difficulty <= 40) {
       this._difficultyEasy()
     } else if (this._scene.difficulty >= 41 && this._scene.difficulty <= 60) {
-
+      this._difficultyEasy()
     } else if (this._scene.difficulty >= 61 && this._scene.difficulty <= 80) {
-
+      this._difficultyEasy()
     } else if (this._scene.difficulty >= 81) {
-
+      this._difficultyEasy()
     }
   }
 
