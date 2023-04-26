@@ -8,14 +8,14 @@ class Settings {
   public readonly PUPPY_DOWN_DURATION = 1000; // длительность анимации щенка в нижнюю точку
   public readonly PUPPY_UP_Y = 220; // верхняя позиция по Y для анимации щенка
   public readonly PUPPY_DOWN_Y = 910; // нижняя позиция по Y для анимации щенка
-  public readonly PUPPY_INCREASE_ANIMATION_DURATION = 800; // шаг добавления времени если step больше 0
+  public readonly PUPPY_INCREASE_ANIMATION_DURATION = 1400; // шаг добавления времени если step больше 0
   public readonly PUPPY_BOMB_FLY_ANIMATION_DURATION = 2000; // длительность полета бомбы от EndTower до StartTower
   public readonly PUPPY_BOMB_FLY_ANIMATION_DELAY = 1000; // задержка перед полетом бомбы от EndTower до StartTower
 
   public readonly PLAYER_JUMP_POINTS = this.PUPPY_STEP * 2; // расстояние прыжка игрока
   public readonly PLAYER_SPEED = 1200; // скорость игрока
 
-  public readonly GAMEACTIONS_PUPPY_CREATE_DELAY = 880; // задержка между выпуском щенков в группе
+  public GAMEACTIONS_PUPPY_CREATE_DELAY = 280; // задержка между выпуском щенков в группе
   public readonly GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY = 2000; // задержка перед созданием новой группы щенков
   public readonly GAMEACTIONS_DAMAGE_ANIMATION_DURATION = 6000; // длительность анимации урона
   public readonly GAMEACTIONS_MIN_GROUP_LENGTH = 3; // минимальное количество щенков в группе запуска
@@ -41,6 +41,10 @@ class Settings {
   public setScreen(screen: screen): screen {
     this._screen = screen;
     return this._screen;
+  }
+
+  public setGameActionsPuppyCreateDelay(number: number) {
+    this.GAMEACTIONS_PUPPY_CREATE_DELAY = number;
   }
 
   public getScreen(): screen {

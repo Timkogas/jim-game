@@ -142,27 +142,26 @@ class GameActions {
     }
   }
 
+  private _createPuppyGroup(): void {
+    if (this._scene.difficulty <= 20) {
+      this._difficultyVeryEasy()
+    } else if (this._scene.difficulty >= 21 && this._scene.difficulty <= 40) {
+      this._difficultyEasy()
+    } else if (this._scene.difficulty >= 41 && this._scene.difficulty <= 60) {
+
+    } else if (this._scene.difficulty >= 61 && this._scene.difficulty <= 80) {
+
+    } else if (this._scene.difficulty >= 81) {
+
+    }
+  }
+
   private _createPuppy(i: number, step: number, type: puppies): void {
     this._scene.time.addEvent({
       delay: Settings.GAMEACTIONS_PUPPY_CREATE_DELAY * i, callback: (): void => {
         new Puppy(this._scene, type, step)
       }
     });
-  }
-
-  private _createPuppyGroup(): void {
-    // тут какая то логика
-    let type: puppies
-    for (let i = 1; i <= this._groupLength; i++) {
-      const positions = [0, 2, 4];
-      const random = Phaser.Math.Between(0, positions.length - 1);
-      const step = positions[random];
-      type = puppies.PUPPY
-      if (i === this._groupLength) {
-        type = puppies.BOMB
-      }
-      this._createPuppy(i, step, type)
-    }
   }
 
   private _randomizeLengthGroup(): void {
@@ -176,6 +175,40 @@ class GameActions {
         this._createPuppyGroup()
       }
     });
+  }
+
+  private _difficultyVeryEasy(): void {
+    console.log('very easy')
+    const positions = [0, 2, 4];
+    const random = Phaser.Math.Between(0, positions.length - 1);
+    const step = positions[random];
+    for (let i = 1; i <= this._groupLength; i++) {
+      let type: puppies = puppies.PUPPY
+      if (i === this._groupLength) {
+        type = puppies.BOMB
+      }
+      this._createPuppy(i, step, type)
+    }
+  }
+
+  private _difficultyEasy(): void {
+    console.log('easy')
+    const positions = [0, 2, 4];
+    const random = Phaser.Math.Between(0, positions.length - 1);
+    let step = positions[random];
+    let newStep: boolean = false
+    for (let i = 1; i <= this._groupLength; i++) {
+      if (i === this._groupLength - 1 && !newStep) {
+        newStep = true
+        step = step >= 2 ? step - 2 : step + 2
+        console.log(step)
+      }
+      let type: puppies = puppies.PUPPY
+      if (i === this._groupLength) {
+        type = puppies.BOMB
+      }
+      this._createPuppy(i, step, type)
+    }
   }
 
   private _controls(): void {
