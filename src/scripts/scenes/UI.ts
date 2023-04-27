@@ -19,6 +19,8 @@ class UI extends Phaser.Scene {
     this.score = new Score(this);
     this.puppyLives = new PuppyLives(this)
     this.playerHealth = new PlayerHelath(this)
+    const game = this.game.scene.getScene('Game') as Game;
+    game.actions.controls()
   }
 
   public setGradient(text: Phaser.GameObjects.Text): void {
