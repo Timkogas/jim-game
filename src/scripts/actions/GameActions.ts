@@ -16,12 +16,13 @@ class GameActions {
     this._scene = scene;
   }
 
+  public sceneUI: UI;
   private _scene: Game;
   private _groupLength: number = 0
 
   public build(): void {
     const { width, height, centerX } = this._scene.cameras.main;
-
+    this.sceneUI = this._scene.game.scene.getScene('UI') as UI;
     this._scene.platform = this._scene.add.tileSprite(0, height - 32, width * 2, 32, 'platform');
     this._scene.platform.body = new Phaser.Physics.Arcade.StaticBody(this._scene.physics.world, this._scene.platform);
 
@@ -46,14 +47,13 @@ class GameActions {
 
   public checkPuppyLivesAndPlayerHealth(): void {
     if (Session.getOver()) return;
-    const UI = this._scene.game.scene.getScene('UI') as UI;
     if (this._scene.puppies.getLength() === 0) {
       if (Session.getPuppyLives() > 0) this._createNewPuppyGroup()
       if (Session.getPuppyLives() === 0) {
         Session.minusPlayerHealth(Settings.GAMEACTIONS_PUPPY_DAMAGE)
-        UI.playerHealth.setText(Session.getPlayerHealth().toString());
+        this.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
         Session.resetPuppyLives()
-        UI.puppyLives.setText(Session.getPuppyLives().toString());
+        this.sceneUI.puppyLives.setText(Session.getPuppyLives().toString());
         if (Session.getPlayerHealth() === 0) {
           this.gameOver()
         }
@@ -68,13 +68,12 @@ class GameActions {
 
   public gameOver(): void {
     if (Session.getOver()) return;
-    const UI = this._scene.game.scene.getScene('UI') as UI;
-    const { width, height, centerX, centerY } = UI.cameras.main;
+    const { width, height, centerX, centerY } = this.sceneUI.cameras.main;
     Session.setOver(true);
-    UI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
-    new Text(UI, 'Game over', { x: centerX, y: centerY - 200, fontSize: 44 })
-    const btn = new Button(UI, centerX, centerY - 100, 'button').setDepth(10)
-    btn.text = UI.add.text(btn.x, btn.y, ('restart').toUpperCase(), {
+    this.sceneUI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
+    new Text(this.sceneUI, 'Game over', { x: centerX, y: centerY - 200, fontSize: 44 })
+    const btn = new Button(this.sceneUI, centerX, centerY - 100, 'button').setDepth(10)
+    btn.text = this.sceneUI.add.text(btn.x, btn.y, ('restart').toUpperCase(), {
       color: '#000000',
       fontSize: 32,
     }).setOrigin(.5, .5).setDepth(11);
@@ -83,7 +82,7 @@ class GameActions {
 
     btn.callback = (): void => {
       this._scene.sound.removeAll()
-      UI.scene.restart()
+      this.sceneUI.scene.restart()
       this._scene.scene.restart()
     };
     this._scene.player.destroy()
@@ -109,23 +108,37 @@ class GameActions {
   private _platformPuppies(platform, puppy: Puppy): void {
     if (puppy.getMarkBound() === false && puppy?.scene) {
       console.log('Упал на платформу', puppy.getType());
-      const UI = this._scene.game.scene.getScene('UI') as UI;
       if (puppy.getType() === puppies.BOMB) {
-        this.bombExplosion(puppy)
-        Session.minusPlayerHealth(Settings.GAMEACTIONS_EXPLOSION_DAMAGE)
-        UI.playerHealth.setText(Session.getPlayerHealth().toString());
-        if (Session.getPlayerHealth() === 0) {
-          this.gameOver()
-        }
-      } else {
-        puppy.destroy()
-        const sound = this._scene.sound.add('puppySmashSound')
-        sound.play()
-        Session.minusPuppyLives()
-        UI.puppyLives.setText(Session.getPuppyLives().toString());
+        this._platformPuppiesBomb(puppy)
+      } else if (puppy.getType() === puppies.PUPPY) {
+        this._platformPuppiesPuppy(puppy)
+      } else if (puppy.getType() === puppies.HEAL) {
+        this._platformPuppiesHeal(puppy)
       }
       this.checkPuppyLivesAndPlayerHealth()
     }
+  }
+
+  private _platformPuppiesBomb(puppy: Puppy): void {
+    this.bombExplosion(puppy)
+    Session.minusPlayerHealth(Settings.GAMEACTIONS_EXPLOSION_DAMAGE)
+    this.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
+    if (Session.getPlayerHealth() === 0) {
+      this.gameOver()
+    }
+  }
+
+  private _platformPuppiesPuppy(puppy: Puppy): void {
+    puppy.destroy()
+    const sound = this._scene.sound.add('puppySmashSound')
+    sound.play()
+    Session.minusPuppyLives()
+    this.sceneUI.puppyLives.setText(Session.getPuppyLives().toString());
+  }
+  private _platformPuppiesHeal(puppy: Puppy): void {
+    puppy.destroy()
+    const sound = this._scene.sound.add('healSmashSound')
+    sound.play()
   }
 
   public bombExplosion(puppy: Puppy): void {
@@ -163,6 +176,18 @@ class GameActions {
     } else if (this._scene.difficulty >= 81) {
       this._difficultyVeryHard()
     }
+
+    this._createHeal()
+  }
+
+  private _createHeal(): void {
+    const positions = [0, 2, 4];
+    const random = Phaser.Math.Between(0, positions.length - 1);
+    const step = positions[random];
+
+    if (Number(Phaser.Math.FloatBetween(0, 1).toFixed(2)) * 100 > 80) {
+      this._createPuppy(this._groupLength + 1, step, puppies.HEAL)
+    }
   }
 
   private _createPuppy(i: number, step: number, type: puppies): void {
@@ -180,7 +205,6 @@ class GameActions {
   private _createNewPuppyGroup(): void {
     this._scene.time.addEvent({
       delay: Settings.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY, callback: (): void => {
-        this._randomizeLengthGroup()
         this._createPuppyGroup()
       }
     });
@@ -188,6 +212,7 @@ class GameActions {
 
   private _difficultyVeryEasy(): void {
     console.log('very easy')
+    this._randomizeLengthGroup()
     const positions = [0, 2, 4];
     const random = Phaser.Math.Between(0, positions.length - 1);
     const step = positions[random];
@@ -202,6 +227,7 @@ class GameActions {
 
   private _difficultyEasy(): void {
     console.log('easy')
+    this._randomizeLengthGroup()
     const positions = [0, 2, 4];
     const random = Phaser.Math.Between(0, positions.length - 1);
     let step = positions[random];
@@ -224,7 +250,7 @@ class GameActions {
 
   private _difficultyMedium(): void {
     console.log('Medium')
-    this._groupLength = 5
+    this._groupLength = Settings.GAMEACTIONS_MAX_GROUP_LENGTH
     const positions = [0, 2, 4];
     const random = Phaser.Math.Between(0, positions.length - 1);
     const randomBomb = Phaser.Math.Between(1, this._groupLength)
@@ -246,7 +272,7 @@ class GameActions {
 
   private _difficultyHard(): void {
     console.log('Hard')
-    this._groupLength = 5
+    this._groupLength = Settings.GAMEACTIONS_MAX_GROUP_LENGTH
     const positions = [0, 2, 4];
     const randomBomb = Phaser.Math.Between(1, this._groupLength)
     let stepPrevBomb
@@ -270,7 +296,7 @@ class GameActions {
 
   private _difficultyVeryHard(): void {
     console.log('very hard')
-    this._groupLength = 5
+    this._groupLength = Settings.GAMEACTIONS_MAX_GROUP_LENGTH
     const positions = [0, 2, 4];
     const randomBomb = Phaser.Math.Between(1, this._groupLength)
     for (let i = 1; i <= this._groupLength; i++) {
@@ -296,73 +322,84 @@ class GameActions {
       frames: this._scene.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
       frameRate: 8,
       repeat: 0,
-      hideOnComplete: true
+    });
+    this._scene.anims.create({
+      key: 'heal',
+      frames: this._scene.anims.generateFrameNumbers('heal', { start: 3, end: 0 }),
+      frameRate: 8,
+      repeat: -1,
     });
   }
 
   public controls(): void {
     if (Settings.isMobile()) {
-      const UI = this._scene.game.scene.getScene('UI') as UI;
-      const { centerX, centerY, width, height } = UI.cameras.main;
-
-      const jumpZone = new Zone(UI, centerX / 2, centerY, width / 2, height).setDepth(5);
-      jumpZone.downClickCallback = (): void => {
-        this._scene.player.jump()
-      }
-
-      const jumpBtn = new Button(UI, centerX / 3, height - 137, 'button')
-      jumpBtn.text = UI.add.text(jumpBtn.x, jumpBtn.y, ('jump').toUpperCase(), {
-        color: '#000000',
-        fontSize: 32,
-      }).setOrigin(.5, .5)
-
-      const leftZoneMove = new Zone(UI, centerX + centerX / 4, centerY, width / 4, height).setDepth(5);
-      leftZoneMove.downCallback = (): void => {
-        this._scene.player.setLeft(true)
-      }
-      leftZoneMove.upCallback = (): void => {
-        this._scene.player.setLeft(false)
-      }
-
-      const leftBtnMove = new Button(UI, leftZoneMove.x + 70, height - 137, 'button')
-      leftBtnMove.text = UI.add.text(leftBtnMove.x, leftBtnMove.y, ('<-').toUpperCase(), {
-        color: '#000000',
-        fontSize: 32,
-      }).setOrigin(.5, .5)
-
-      const rightZoneMove = new Zone(UI, width - centerX / 4, centerY, width / 4, height).setDepth(5);;
-      rightZoneMove.downCallback = (): void => {
-        this._scene.player.setRight(true)
-      }
-      rightZoneMove.upCallback = (): void => {
-        this._scene.player.setRight(false)
-      }
-
-      const rightBtnMove = new Button(UI, rightZoneMove.x - 70, height - 137, 'button')
-      rightBtnMove.text = UI.add.text(rightBtnMove.x, rightBtnMove.y, ('->').toUpperCase(), {
-        color: '#000000',
-        fontSize: 32,
-      }).setOrigin(.5, .5)
-
+      this._controlsMobile()
     } else {
-      const cursors = this._scene.input.keyboard.createCursorKeys();
-      cursors.space.on('down', (): void => {
-        this._scene.player.jump();
-      });
-      cursors.left.on('down', (): void => {
-        this._scene.player.setLeft(true)
-      });
-      cursors.right.on('down', (): void => {
-        this._scene.player.setRight(true)
-      });
-      cursors.left.on('up', (): void => {
-        this._scene.player.setLeft(false)
-      });
-      cursors.right.on('up', (): void => {
-        this._scene.player.setRight(false)
-      });
-
+      this._controlsPC()
     }
+  }
+
+  private _controlsMobile(): void {
+    const UI = this._scene.game.scene.getScene('UI') as UI;
+    const { centerX, centerY, width, height } = UI.cameras.main;
+
+    const jumpZone = new Zone(UI, centerX / 2, centerY, width / 2, height).setDepth(5);
+    jumpZone.downClickCallback = (): void => {
+      this._scene.player.jump()
+    }
+
+    const jumpBtn = new Button(UI, centerX / 3, height - 137, 'button')
+    jumpBtn.text = UI.add.text(jumpBtn.x, jumpBtn.y, ('jump').toUpperCase(), {
+      color: '#000000',
+      fontSize: 32,
+    }).setOrigin(.5, .5)
+
+    const leftZoneMove = new Zone(UI, centerX + centerX / 4, centerY, width / 4, height).setDepth(5);
+    leftZoneMove.downCallback = (): void => {
+      this._scene.player.setLeft(true)
+    }
+    leftZoneMove.upCallback = (): void => {
+      this._scene.player.setLeft(false)
+    }
+
+    const leftBtnMove = new Button(UI, leftZoneMove.x + 70, height - 137, 'button')
+    leftBtnMove.text = UI.add.text(leftBtnMove.x, leftBtnMove.y, ('<-').toUpperCase(), {
+      color: '#000000',
+      fontSize: 32,
+    }).setOrigin(.5, .5)
+
+    const rightZoneMove = new Zone(UI, width - centerX / 4, centerY, width / 4, height).setDepth(5);;
+    rightZoneMove.downCallback = (): void => {
+      this._scene.player.setRight(true)
+    }
+    rightZoneMove.upCallback = (): void => {
+      this._scene.player.setRight(false)
+    }
+
+    const rightBtnMove = new Button(UI, rightZoneMove.x - 70, height - 137, 'button')
+    rightBtnMove.text = UI.add.text(rightBtnMove.x, rightBtnMove.y, ('->').toUpperCase(), {
+      color: '#000000',
+      fontSize: 32,
+    }).setOrigin(.5, .5)
+  }
+
+  private _controlsPC(): void {
+    const cursors = this._scene.input.keyboard.createCursorKeys();
+    cursors.space.on('down', (): void => {
+      this._scene.player.jump();
+    });
+    cursors.left.on('down', (): void => {
+      this._scene.player.setLeft(true)
+    });
+    cursors.right.on('down', (): void => {
+      this._scene.player.setRight(true)
+    });
+    cursors.left.on('up', (): void => {
+      this._scene.player.setLeft(false)
+    });
+    cursors.right.on('up', (): void => {
+      this._scene.player.setRight(false)
+    });
   }
 
   private _drawAnimationPoints(): void {

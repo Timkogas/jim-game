@@ -9,11 +9,14 @@ import capybaraStand from '../../assets/images/capybara-stand.png';
 import redPixel from '../../assets/images/red-pixel.png';
 import bomb from '../../assets/images/bomb.png';
 import explosion from '../../assets/images/explosion.png';
+import heal from '../../assets/images/heal.png';
+
 import explosionSound from '../../assets/audio/explosion.mp3';
 import bounceSound from '../../assets/audio/bounce.mp3';
 import backgroundSound from '../../assets/audio/background.mp3';
 import jumpSound from '../../assets/audio/jump.mp3';
 import puppySmashSound from '../../assets/audio/puppy-smash.mp3';
+import healSmashSound from '../../assets/audio/heal-smash.mp3';
 import bombFlySound from '../../assets/audio/bomb-fly.mp3';
 import puppyEndSound from '../../assets/audio/puppy-end.mp3';
 
@@ -61,6 +64,7 @@ class Loading {
     this._scene.load.spritesheet('capybara-stand', capybaraStand, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('puppy', puppy, { frameWidth: 80, frameHeight: 80 });
     this._scene.load.spritesheet('explosion', explosion, { frameWidth: 128, frameHeight: 128 });
+    this._scene.load.spritesheet('heal', heal, { frameWidth: 94, frameHeight: 80 });
     this._scene.load.image('bomb', bomb);
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);
@@ -74,6 +78,7 @@ class Loading {
     this._scene.load.audio('backgroundSound', backgroundSound);
     this._scene.load.audio('jumpSound', jumpSound);
     this._scene.load.audio('puppySmashSound', puppySmashSound);
+    this._scene.load.audio('healSmashSound', healSmashSound);
     this._scene.load.audio('bombFlySound', bombFlySound);
     this._scene.load.audio('puppyEndSound', puppyEndSound);
   }

@@ -4,7 +4,8 @@ enum screen {
 
 enum puppies {
   PUPPY,
-  BOMB
+  BOMB,
+  HEAL
 }
 
 export {

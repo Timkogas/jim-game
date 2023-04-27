@@ -28,6 +28,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._scene.puppies.add(this);
     this._firstStepX = this._scene.startTower.getBounds().right + Settings.PUPPY_STEP
     if (this._type === puppies.PUPPY) this.anims.play('fall', true)
+    if (this._type === puppies.HEAL) this.anims.play('heal', true)
     this.startStepAnimation();
   }
 
@@ -115,34 +116,54 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
 
   private _onCompleteFinalAnimation(): void {
     if (this._type === puppies.PUPPY) {
-      this.destroy()
-      Session.plusScore(1);
-      const sound = this._scene.sound.add('puppyEndSound', {volume: 0.2})
-      sound.play()
-      const UI = this._scene.game.scene.getScene('UI') as UI;
-      UI.score.setText(Session.getScore().toString());
-      this._scene.actions.checkPuppyLivesAndPlayerHealth()
-    } else {
-      this._scene.time.addEvent({
-        delay: Settings.PUPPY_BOMB_FLY_ANIMATION_DELAY, callback: (): void => {
-          const sound = this._scene.sound.add('bombFlySound')
-          sound.play()
-          this._tween = this._scene.tweens.add({
-            targets: this,
-            rotation: -10 * Math.PI,
-            x: { value: this._scene.startTower.getBounds().centerX },
-            y: { value: this.getBounds().y + 80 },
-            duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,
-            onComplete: () => {
-              this.destroy()
-              this._scene.cameras.main.shake(1100);
-              this._scene.actions.bombExplosion(this)
-              this._scene.actions.checkPuppyLivesAndPlayerHealth()
-            }
-          });
-        }
-      });
+      this._onCompleteFinalAnimationPuppy()
+    } else if (this._type === puppies.BOMB) {
+      this._onCompleteFinalAnimationBomb()
+    } else if (this._type === puppies.HEAL) {
+      this._onCompleteFinalAnimationHeal()
     }
+  }
+
+  private _onCompleteFinalAnimationHeal(): void {
+    Session.minusPlayerHealth(-20)
+    this._scene.actions.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
+    const sound = this._scene.sound.add('puppyEndSound', { volume: 0.2 })
+    sound.play()
+    this.destroy()
+    this._scene.actions.checkPuppyLivesAndPlayerHealth()
+  }
+
+  private _onCompleteFinalAnimationPuppy(): void {
+    this.destroy()
+    Session.plusScore(1);
+    const sound = this._scene.sound.add('puppyEndSound', { volume: 0.2 })
+    sound.play()
+    this._scene.actions.sceneUI.score.setText(Session.getScore().toString());
+    this._scene.actions.checkPuppyLivesAndPlayerHealth()
+  }
+
+  private _onCompleteFinalAnimationBomb(): void {
+    this._scene.time.addEvent({
+      delay: Settings.PUPPY_BOMB_FLY_ANIMATION_DELAY, callback: (): void => {
+        const sound = this._scene.sound.add('bombFlySound')
+        sound.play()
+        this._tween = this._scene.tweens.add({
+          targets: this,
+          rotation: -10 * Math.PI,
+          x: { value: this._scene.startTower.getBounds().centerX },
+          y: { value: this.getBounds().y + 80 },
+          duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,
+          onComplete: () => {
+            this.destroy()
+            this._scene.cameras.main.shake(1100);
+            this._scene.actions.bombExplosion(this)
+            Session.plusScore(5);
+            this._scene.actions.sceneUI.score.setText(Session.getScore().toString());
+            this._scene.actions.checkPuppyLivesAndPlayerHealth()
+          }
+        });
+      }
+    });
   }
 
   public getType(): puppies {

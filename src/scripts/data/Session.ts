@@ -22,6 +22,7 @@ class Session {
   public minusPlayerHealth(health: number): void {
     this._playerHealth -= health;
     if (this._playerHealth < 0) this._playerHealth = 0
+    if (this._playerHealth > 100) this._playerHealth = 100
   }
 
   public getPlayerHealth(): number {
