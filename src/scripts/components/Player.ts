@@ -52,6 +52,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   public jump(): void {
     const sign = this._side === side.RIGHT ? 1 : -1;
+    const sound = this._scene.sound.add('jumpSound', {volume: 0.3})
+    sound.play()
     this._scene.add.tween({
       targets: this,
       x: this.x + (Settings.PLAYER_JUMP_POINTS * sign),

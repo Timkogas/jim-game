@@ -34,6 +34,8 @@ class GameActions {
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
     this._scene.player = new Player(this._scene);
+    const sound = this._scene.sound.add('backgroundSound', { loop: true, volume: .2 })
+    sound.play()
     this._anims();
     this._collisions();
     this._controls();
@@ -81,6 +83,7 @@ class GameActions {
     this._scene.scene.pause()
 
     btn.callback = (): void => {
+      this._scene.sound.removeAll()
       UI.scene.restart()
       this._scene.scene.restart()
     };
@@ -117,6 +120,8 @@ class GameActions {
         }
       } else {
         puppy.destroy()
+        const sound = this._scene.sound.add('puppySmashSound')
+        sound.play()
         Session.minusPuppyLives()
         UI.puppyLives.setText(Session.getPuppyLives().toString());
       }
@@ -129,6 +134,8 @@ class GameActions {
     const explosion = this._scene.add.sprite(centerX, centerY, 'bomb')
     puppy.destroy()
     explosion.anims.play('explosion', true)
+    const sound = this._scene.sound.add('explosionSound')
+    sound.play()
     this._scene.time.addEvent({
       delay: Settings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION, callback: (): void => {
         explosion.destroy()
@@ -139,6 +146,8 @@ class GameActions {
   private _playerPuppies(player: Player, puppy: Puppy): void {
     if (puppy.getMarkBound() === false) {
       puppy.markBound();
+      const sound = this._scene.sound.add('bounceSound')
+      sound.play()
       puppy.startStepAnimation();
     }
   }
@@ -259,7 +268,7 @@ class GameActions {
       this._createPuppy(i, step, type)
     }
   }
-  
+
   private _difficultyVeryHard(): void {
     console.log('very hard')
     this._groupLength = 5
@@ -276,7 +285,7 @@ class GameActions {
     }
   }
 
-  private _anims():void {
+  private _anims(): void {
     this._scene.anims.create({
       key: 'fall',
       frames: this._scene.anims.generateFrameNumbers('puppy', { start: 3, end: 0 }),
@@ -340,7 +349,7 @@ class GameActions {
       cursors.right.on('up', (): void => {
         this._scene.player.setRight(false)
       });
-  
+
     }
   }
 

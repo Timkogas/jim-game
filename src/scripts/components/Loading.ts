@@ -9,6 +9,11 @@ import capybaraStand from '../../assets/images/capybara-stand.png';
 import redPixel from '../../assets/images/red-pixel.png';
 import bomb from '../../assets/images/bomb.png';
 import explosion from '../../assets/images/explosion.png';
+import explosionSound from '../../assets/audio/explosion.mp3';
+import bounceSound from '../../assets/audio/bounce.mp3';
+import backgroundSound from '../../assets/audio/background.mp3';
+import jumpSound from '../../assets/audio/jump.mp3';
+import puppySmashSound from '../../assets/audio/puppy-smash.mp3';
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -61,7 +66,11 @@ class Loading {
   }
 
   private _loadSounds(): void {
-    // this._scene.load.audio('sound', sound);
+    this._scene.load.audio('explosionSound', explosionSound);
+    this._scene.load.audio('bounceSound', bounceSound);
+    this._scene.load.audio('backgroundSound', backgroundSound);
+    this._scene.load.audio('jumpSound', jumpSound);
+    this._scene.load.audio('puppySmashSound', puppySmashSound);
   }
 }
 
