@@ -31,7 +31,7 @@ class Settings {
   public readonly sizes = {
     minWidth: 1920,
     maxWidth: 2500,
-    height: 1080,
+    height: 960,
   }
   private _screen: screen = screen.MAIN;
   private _mobile: boolean = false;

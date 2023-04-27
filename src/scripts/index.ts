@@ -13,12 +13,12 @@ window.onload = (): void => {
     const root: HTMLElement = document.querySelector('#root');
     const clientHeight = Math.round(document.body.clientHeight);
     const clientWidth = Math.round(document.body.clientWidth);
-    const canvasHeight = clientHeight;
-    let canvasWidth = clientWidth;
+    const canvasHeight = Settings.sizes.height;
+    let canvasWidth =  Settings.sizes.minWidth;
     let width = 0, height = 0;
 
-    if (canvasWidth > Settings.sizes.maxWidth) canvasWidth = Settings.sizes.maxWidth;
-    else if (canvasWidth < Settings.sizes.minWidth) canvasWidth = Settings.sizes.minWidth;
+    // if (canvasWidth > Settings.sizes.maxWidth) canvasWidth = Settings.sizes.maxWidth;
+    // else if (canvasWidth < Settings.sizes.minWidth) canvasWidth = Settings.sizes.minWidth;
  
     const x = canvasWidth / Utils.gcd(canvasHeight, canvasWidth);
     const y = canvasHeight / Utils.gcd(canvasHeight, canvasWidth);
@@ -45,7 +45,7 @@ window.onload = (): void => {
       physics: {
         default: 'arcade',
         arcade: {
-          // debug: true
+          debug: true
         }
       },
       render: { transparent: true },

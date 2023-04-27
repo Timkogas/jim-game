@@ -74,11 +74,11 @@ class GameActions {
     Session.setOver(true);
     UI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
     new Text(UI, 'Game over', { x: centerX, y: centerY - 200, fontSize: 44 })
-    const btn = new Button(UI, centerX, centerY - 100, 'button')
+    const btn = new Button(UI, centerX, centerY - 100, 'button').setDepth(10)
     btn.text = UI.add.text(btn.x, btn.y, ('restart').toUpperCase(), {
       color: '#000000',
       fontSize: 32,
-    }).setOrigin(.5, .5)
+    }).setOrigin(.5, .5).setDepth(11);
 
     this._scene.scene.pause()
 
@@ -304,8 +304,10 @@ class GameActions {
   private _controls(): void {
     if (Settings.isMobile()) {
       const UI = this._scene.game.scene.getScene('UI') as UI;
+      console.log(UI)
       const { centerX, centerY, width, height } = UI.cameras.main;
       // const controls = this._scene.input.keyboard.createCursorKeys();
+      console.log( centerX, centerY, width, height)
       const jumpBtn = new Button(UI, centerX / 3, height - 137, 'button')
       jumpBtn.text = UI.add.text(jumpBtn.x, jumpBtn.y, ('jump').toUpperCase(), {
         color: '#000000',
@@ -317,7 +319,13 @@ class GameActions {
         this._scene.player.jump()
       }
 
-      const leftZoneMove = new Zone(UI, centerX + centerX / 4, centerY, width / 4, height);
+      const leftZoneMove = new Zone(UI, centerX + centerX / 4, centerY, width / 4, height).setDepth(5);
+      const leftBtnMove = new Button(UI, leftZoneMove.x + 70, height - 137, 'button')
+      leftBtnMove.text = UI.add.text(leftBtnMove.x, leftBtnMove.y, ('<-').toUpperCase(), {
+        color: '#000000',
+        fontSize: 32,
+      }).setOrigin(.5, .5)
+
       leftZoneMove.downCallback = (): void => {
         this._scene.player.setLeft(true)
       }
@@ -325,13 +333,18 @@ class GameActions {
         this._scene.player.setLeft(false)
       }
 
-      const rightZoneMove = new Zone(UI, width - centerX / 4, centerY, width / 4, height);
+      const rightZoneMove = new Zone(UI, width - centerX / 4, centerY, width / 4, height).setDepth(5);;
       rightZoneMove.downCallback = (): void => {
         this._scene.player.setRight(true)
       }
       rightZoneMove.upCallback = (): void => {
         this._scene.player.setRight(false)
       }
+      const rightBtnMove = new Button(UI, rightZoneMove.x - 70, height - 137, 'button')
+      rightBtnMove.text = UI.add.text(rightBtnMove.x, rightBtnMove.y, ('->').toUpperCase(), {
+        color: '#000000',
+        fontSize: 32,
+      }).setOrigin(.5, .5)
     } else {
       const cursors = this._scene.input.keyboard.createCursorKeys();
       cursors.space.on('down', (): void => {
