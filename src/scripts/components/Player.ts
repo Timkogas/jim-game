@@ -16,10 +16,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   private _scene: Game;
-  private _controls: Phaser.Types.Input.Keyboard.CursorKeys;
   private _side: side = side.RIGHT;
-  public _left: boolean = false;
-  public _right: boolean = false;
+  private _left: boolean = false;
+  private _right: boolean = false;
 
   private _build(): void {
     this.scene.anims.create({
@@ -40,14 +39,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setBounce(0.2);
     // const y = this._scene.platform.getBounds().top - this.height / 2;
     // this.setPosition(200, y);
-    this._controls = this._scene.input.keyboard.createCursorKeys();
     this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
     this.setCollideWorldBounds(true);
     this.setScale(3.5, 3.5)
-
-
-    
-
   }
 
   public right(): void {
@@ -92,20 +86,31 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     } else if (this._right) {
       this.right();
     } else {
-      // if (this.body.touching.down) {
-        this.body.reset(this.x, this.y);
-        if (this._side === side.RIGHT) {
-          this.flipX = false
-        } else {
-          this.flipX = true
-        }
-        this.anims.play('stand', true)
-      // }
+      this.body.reset(this.x, this.y);
+      if (this._side === side.RIGHT) {
+        this.flipX = false
+      } else {
+        this.flipX = true
+      }
+      this.anims.play('stand', true)
     }
   }
 
   private static getSizes(scene: Phaser.Scene): Phaser.Geom.Rectangle {
     return scene.textures.list['capybara-stand'].frames.__BASE;
+  }
+
+  public getLeft(): boolean {
+    return this._left
+  }
+  public setLeft(left: boolean): void {
+    this._left = left
+  }
+  public getRight(): boolean {
+    return this._right
+  }
+  public setRight(right: boolean): void {
+    this._right = right
   }
 }
 

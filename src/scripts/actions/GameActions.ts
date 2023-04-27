@@ -34,7 +34,7 @@ class GameActions {
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
     this._scene.player = new Player(this._scene);
-
+    this._anims();
     this._collisions();
     this._controls();
     this._createNewPuppyGroup()
@@ -259,6 +259,7 @@ class GameActions {
       this._createPuppy(i, step, type)
     }
   }
+  
   private _difficultyVeryHard(): void {
     console.log('very hard')
     this._groupLength = 5
@@ -274,25 +275,53 @@ class GameActions {
       this._createPuppy(i, step, type)
     }
   }
+
+  private _anims():void {
+    this._scene.anims.create({
+      key: 'fall',
+      frames: this._scene.anims.generateFrameNumbers('puppy', { start: 3, end: 0 }),
+      frameRate: 10,
+      repeat: -1
+    });
+    this._scene.anims.create({
+      key: 'explosion',
+      frames: this._scene.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
+      frameRate: 8,
+      repeat: 0,
+      hideOnComplete: true
+    });
+  }
+
   private _controls(): void {
     if (Settings.isMobile()) {
       const UI = this._scene.game.scene.getScene('UI') as UI;
       const { centerX, centerY, width, height } = UI.cameras.main;
       // const controls = this._scene.input.keyboard.createCursorKeys();
+      const jumpBtn = new Button(UI, centerX / 3, height - 137, 'button')
+      jumpBtn.text = UI.add.text(jumpBtn.x, jumpBtn.y, ('jump').toUpperCase(), {
+        color: '#000000',
+        fontSize: 32,
+      }).setOrigin(.5, .5)
+
+      const jumpZone = new Zone(UI, centerX / 2, centerY, width / 2, height);
+      jumpZone.downClickCallback = (): void => {
+        this._scene.player.jump()
+      }
+
       const leftZoneMove = new Zone(UI, centerX + centerX / 4, centerY, width / 4, height);
       leftZoneMove.downCallback = (): void => {
-        this._scene.player._left = true;
+        this._scene.player.setLeft(true)
       }
       leftZoneMove.upCallback = (): void => {
-        this._scene.player._left = false;
+        this._scene.player.setLeft(false)
       }
 
       const rightZoneMove = new Zone(UI, width - centerX / 4, centerY, width / 4, height);
       rightZoneMove.downCallback = (): void => {
-        this._scene.player._right = true;
+        this._scene.player.setRight(true)
       }
       rightZoneMove.upCallback = (): void => {
-        this._scene.player._right = false;
+        this._scene.player.setRight(false)
       }
     } else {
       const cursors = this._scene.input.keyboard.createCursorKeys();
@@ -300,16 +329,16 @@ class GameActions {
         this._scene.player.jump();
       });
       cursors.left.on('down', (): void => {
-        this._scene.player._left = true;
+        this._scene.player.setLeft(true)
       });
       cursors.right.on('down', (): void => {
-        this._scene.player._right = true;
+        this._scene.player.setRight(true)
       });
       cursors.left.on('up', (): void => {
-        this._scene.player._left = false;
+        this._scene.player.setLeft(false)
       });
       cursors.right.on('up', (): void => {
-        this._scene.player._right = false;
+        this._scene.player.setRight(false)
       });
   
     }
