@@ -117,12 +117,16 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     if (this._type === puppies.PUPPY) {
       this.destroy()
       Session.plusScore(1);
+      const sound = this._scene.sound.add('puppyEndSound', {volume: 0.2})
+      sound.play()
       const UI = this._scene.game.scene.getScene('UI') as UI;
       UI.score.setText(Session.getScore().toString());
       this._scene.actions.checkPuppyLivesAndPlayerHealth()
     } else {
       this._scene.time.addEvent({
         delay: Settings.PUPPY_BOMB_FLY_ANIMATION_DELAY, callback: (): void => {
+          const sound = this._scene.sound.add('bombFlySound')
+          sound.play()
           this._tween = this._scene.tweens.add({
             targets: this,
             rotation: -10 * Math.PI,

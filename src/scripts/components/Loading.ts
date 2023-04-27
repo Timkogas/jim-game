@@ -14,6 +14,9 @@ import bounceSound from '../../assets/audio/bounce.mp3';
 import backgroundSound from '../../assets/audio/background.mp3';
 import jumpSound from '../../assets/audio/jump.mp3';
 import puppySmashSound from '../../assets/audio/puppy-smash.mp3';
+import bombFlySound from '../../assets/audio/bomb-fly.mp3';
+import puppyEndSound from '../../assets/audio/puppy-end.mp3';
+
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -71,6 +74,8 @@ class Loading {
     this._scene.load.audio('backgroundSound', backgroundSound);
     this._scene.load.audio('jumpSound', jumpSound);
     this._scene.load.audio('puppySmashSound', puppySmashSound);
+    this._scene.load.audio('bombFlySound', bombFlySound);
+    this._scene.load.audio('puppyEndSound', puppyEndSound);
   }
 }
 

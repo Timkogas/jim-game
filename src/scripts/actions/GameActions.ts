@@ -305,7 +305,7 @@ class GameActions {
       const UI = this._scene.game.scene.getScene('UI') as UI;
       const { centerX, centerY, width, height } = UI.cameras.main;
 
-      const jumpZone = new Zone(UI, centerX / 2, centerY, width / 2, height);
+      const jumpZone = new Zone(UI, centerX / 2, centerY, width / 2, height).setDepth(5);
       jumpZone.downClickCallback = (): void => {
         this._scene.player.jump()
       }
