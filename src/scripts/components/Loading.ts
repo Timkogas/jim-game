@@ -12,13 +12,15 @@ import explosion from '../../assets/images/explosion.png';
 import heal from '../../assets/images/heal.png';
 
 import explosionSound from '../../assets/audio/explosion.mp3';
-import bounceSound from '../../assets/audio/bounce.mp3';
+import puppyBounceSound from '../../assets/audio/puppy-bounce.mp3';
 import backgroundSound from '../../assets/audio/background.mp3';
 import jumpSound from '../../assets/audio/jump.mp3';
 import puppySmashSound from '../../assets/audio/puppy-smash.mp3';
-import healSmashSound from '../../assets/audio/heal-smash.mp3';
 import bombFlySound from '../../assets/audio/bomb-fly.mp3';
 import puppyEndSound from '../../assets/audio/puppy-end.mp3';
+import healSmashSound from '../../assets/audio/heal-smash.mp3';
+import healEndSound from '../../assets/audio/heal-end.mp3';
+import healBounceSound from '../../assets/audio/heal-bounce.mp3';
 
 
 class Loading {
@@ -74,13 +76,16 @@ class Loading {
 
   private _loadSounds(): void {
     this._scene.load.audio('explosionSound', explosionSound);
-    this._scene.load.audio('bounceSound', bounceSound);
+    this._scene.load.audio('puppyBounceSound', puppyBounceSound);
     this._scene.load.audio('backgroundSound', backgroundSound);
     this._scene.load.audio('jumpSound', jumpSound);
     this._scene.load.audio('puppySmashSound', puppySmashSound);
-    this._scene.load.audio('healSmashSound', healSmashSound);
     this._scene.load.audio('bombFlySound', bombFlySound);
     this._scene.load.audio('puppyEndSound', puppyEndSound);
+    
+    this._scene.load.audio('healSmashSound', healSmashSound);
+    this._scene.load.audio('healEndSound', healEndSound);
+    this._scene.load.audio('healBounceSound', healBounceSound);
   }
 }
 

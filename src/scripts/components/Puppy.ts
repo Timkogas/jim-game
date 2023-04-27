@@ -127,7 +127,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _onCompleteFinalAnimationHeal(): void {
     Session.minusPlayerHealth(-20)
     this._scene.actions.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
-    const sound = this._scene.sound.add('puppyEndSound', { volume: 0.2 })
+    const sound = this._scene.sound.add('healEndSound', { volume: 0.2 })
     sound.play()
     this.destroy()
     this._scene.actions.checkPuppyLivesAndPlayerHealth()

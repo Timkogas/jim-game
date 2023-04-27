@@ -135,6 +135,7 @@ class GameActions {
     Session.minusPuppyLives()
     this.sceneUI.puppyLives.setText(Session.getPuppyLives().toString());
   }
+
   private _platformPuppiesHeal(puppy: Puppy): void {
     puppy.destroy()
     const sound = this._scene.sound.add('healSmashSound')
@@ -158,7 +159,12 @@ class GameActions {
   private _playerPuppies(player: Player, puppy: Puppy): void {
     if (puppy.getMarkBound() === false) {
       puppy.markBound();
-      const sound = this._scene.sound.add('bounceSound')
+      let sound = this._scene.sound.add('puppyBounceSound')
+      if (puppy.getType() === puppies.PUPPY) {
+        sound = this._scene.sound.add('puppyBounceSound')
+      } else if (puppy.getType() === puppies.HEAL) {
+        sound = this._scene.sound.add('healBounceSound')
+      }
       sound.play()
       puppy.startStepAnimation();
     }
