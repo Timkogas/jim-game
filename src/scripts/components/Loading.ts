@@ -10,6 +10,7 @@ import redPixel from '../../assets/images/red-pixel.png';
 import bomb from '../../assets/images/bomb.png';
 import explosion from '../../assets/images/explosion.png';
 import heal from '../../assets/images/heal.png';
+import laser from '../../assets/images/laser.png';
 
 import explosionSound from '../../assets/audio/explosion.mp3';
 import puppyBounceSound from '../../assets/audio/puppy-bounce.mp3';
@@ -71,6 +72,7 @@ class Loading {
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);
     this._scene.load.image('end-tower', endTower);
+    this._scene.load.image('laser', laser);
     this._scene.load.image('red-pixel', redPixel);
   }
 

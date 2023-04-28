@@ -58,6 +58,7 @@ class GameActions {
         if (Session.getPlayerHealth() === 0) {
           this.gameOver()
         }
+        this._scene.endTower.shootLaser()
         this._scene.time.addEvent({
           delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION), callback: (): void => {
             this._createNewPuppyGroup()
