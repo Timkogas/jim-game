@@ -104,6 +104,8 @@ class GameActions {
       fontSize: 32,
     }).setOrigin(.5, .5).setDepth(11);
 
+    const timer = new Text(this.sceneUI, Session.getTimerSeconds().toString(), { x: centerX, y: centerY - 30, fontSize: 24 })
+
     this._scene.scene.pause()
     if (this._scene.game.config.physics.arcade.debug) {
       this._createTestHelperMenu()
@@ -114,6 +116,7 @@ class GameActions {
       bg.destroy()
       btn.destroy()
       text.destroy()
+      timer.destroy()
       if (this._scene.game.config.physics.arcade.debug) {
         this._testHelperTexts?.forEach((text) => {
           text[0].destroy()

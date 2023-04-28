@@ -11,6 +11,8 @@ class Settings {
   private PUPPY_INCREASE_ANIMATION_DURATION = 1400; // шаг добавления времени если step больше 0
   private PUPPY_BOMB_FLY_ANIMATION_DURATION = 1800; // длительность полета бомбы от EndTower до StartTower
   private PUPPY_BOMB_FLY_ANIMATION_DELAY = 1000; // задержка перед полетом бомбы от EndTower до StartTower
+  private PUPPY_SCORE_END = 1; // очки за то что щенок достиг конца
+  private PUPPY_SCORE_BOMB_TO_ENEMY = 5; // очки за то что бомба достигла конца
 
   private PLAYER_JUMP_POINTS = this.PUPPY_STEP * 2; // расстояние прыжка игрока
   private PLAYER_SPEED = 1200; // скорость игрока
@@ -57,6 +59,10 @@ class Settings {
         return this.PUPPY_BOMB_FLY_ANIMATION_DURATION
       case ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY:
         return this.PUPPY_BOMB_FLY_ANIMATION_DELAY
+      case ESettings.PUPPY_SCORE_END:
+        return this.PUPPY_SCORE_END
+      case ESettings.PUPPY_SCORE_BOMB_TO_ENEMY:
+        return this.PUPPY_SCORE_BOMB_TO_ENEMY
 
       case ESettings.PLAYER_JUMP_POINTS:
         return this.PLAYER_JUMP_POINTS
@@ -101,6 +107,8 @@ class Settings {
       PUPPY_INCREASE_ANIMATION_DURATION: this.PUPPY_INCREASE_ANIMATION_DURATION,
       PUPPY_BOMB_FLY_ANIMATION_DURATION: this.PUPPY_BOMB_FLY_ANIMATION_DURATION,
       PUPPY_BOMB_FLY_ANIMATION_DELAY: this.PUPPY_BOMB_FLY_ANIMATION_DELAY,
+      PUPPY_SCORE_END: this.PUPPY_SCORE_END,
+      PUPPY_SCORE_BOMB_TO_ENEMY: this.PUPPY_SCORE_BOMB_TO_ENEMY,
 
       PLAYER_JUMP_POINTS: this.PLAYER_JUMP_POINTS,
       PLAYER_SPEED: this.PLAYER_SPEED,
@@ -150,6 +158,12 @@ class Settings {
         break;
       case ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY:
         this.PUPPY_BOMB_FLY_ANIMATION_DELAY += valueHundred
+        break;
+      case ESettings.PUPPY_SCORE_END:
+        this.PUPPY_SCORE_END += valueOne
+        break;
+      case ESettings.PUPPY_SCORE_BOMB_TO_ENEMY:
+        this.PUPPY_SCORE_BOMB_TO_ENEMY += valueOne
         break;
 
       case ESettings.PLAYER_JUMP_POINTS:

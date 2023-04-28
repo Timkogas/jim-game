@@ -135,7 +135,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
 
   private _onCompleteFinalAnimationPuppy(): void {
     this.destroy()
-    Session.plusScore(1);
+    Session.plusScore(Settings.getSettingProperty(ESettings.PUPPY_SCORE_END));
     const sound = this._scene.sound.add('puppyEndSound', { volume: 0.2 })
     sound.play()
     this._scene.actions.sceneUI.score.setText(Session.getScore().toString());
@@ -157,7 +157,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
             this.destroy()
             this._scene.cameras.main.shake(1100);
             this._scene.actions.bombExplosion(this)
-            Session.plusScore(5);
+            Session.plusScore(Settings.getSettingProperty(ESettings.PUPPY_SCORE_BOMB_TO_ENEMY));
             this._scene.actions.sceneUI.score.setText(Session.getScore().toString());
             this._scene.actions.checkPuppyLivesAndPlayerHealth()
           }

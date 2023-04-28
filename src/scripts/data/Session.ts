@@ -3,12 +3,14 @@ class Session {
   private _puppyLives: number = 4;
   private _playerHealth: number = 100;
   private _over: boolean = false;
+  private _timerSeconds: number = 0
 
   public clear(): void {
     this._score = 0;
     this._puppyLives = 4
     this._playerHealth = 100
     this._over = false;
+    this._timerSeconds = 0
   }
 
   public plusScore(score: number): void {
@@ -54,6 +56,14 @@ class Session {
 
   public getOver(): boolean {
     return this._over;
+  }
+
+  public plusTimerSeconds(number: number): void {
+    this._timerSeconds += number;
+  }
+
+  public getTimerSeconds(): number {
+    return this._timerSeconds;
   }
 }
 

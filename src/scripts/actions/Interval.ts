@@ -1,3 +1,4 @@
+import Session from '../data/Session';
 import Boot from '../scenes/Boot';
 
 class Interval {
@@ -17,7 +18,7 @@ class Interval {
   }
 
   private _game(): void {
-    
+    Session.plusTimerSeconds(1)
   }
 }
 
