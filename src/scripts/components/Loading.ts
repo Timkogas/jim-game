@@ -66,7 +66,7 @@ class Loading {
     this._scene.load.spritesheet('capybara-stand', capybaraStand, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('puppy', puppy, { frameWidth: 80, frameHeight: 80 });
     this._scene.load.spritesheet('explosion', explosion, { frameWidth: 128, frameHeight: 128 });
-    this._scene.load.spritesheet('heal', heal, { frameWidth: 94, frameHeight: 80 });
+    this._scene.load.spritesheet('heal', heal, { frameWidth: 91, frameHeight: 80 });
     this._scene.load.image('bomb', bomb);
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);

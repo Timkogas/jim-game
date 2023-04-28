@@ -60,7 +60,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
       targets: this,
       x: { value: x, ease: 'Quad.in' },
       y: { value: Settings.getSettingProperty(ESettings.PUPPY_UP_Y), ease: 'Quad.out' },
-      duration: Settings.getSettingProperty(ESettings.PUPPY_DOWN_DURATION),
+      duration: Settings.getSettingProperty(ESettings.PUPPY_UP_DURATION),
       onComplete: () => {
         this._bound = false;
         this._increaseDuration = 0;

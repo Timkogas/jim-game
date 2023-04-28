@@ -22,7 +22,6 @@ class Game extends Phaser.Scene {
   public platform: Phaser.GameObjects.TileSprite;
   public puppies: Phaser.Physics.Arcade.Group
   private _loading: boolean = false;
-  public difficulty: number = Settings.getSettingProperty(ESettings.GAME_DIFFICULTY)
   private _isPaused: boolean = false
 
   public init(): void {

@@ -91,7 +91,7 @@ class Settings {
     }
   }
 
-  getSettingAllProperties(): {[key: string]: ESettings} {
+  getSettingAllProperties(): { [key: string]: ESettings } {
     return {
       PUPPY_STEP: this.PUPPY_STEP,
       PUPPY_UP_DURATION: this.PUPPY_UP_DURATION,
@@ -121,54 +121,80 @@ class Settings {
     }
   }
 
-  setSettingProperty(property: ESettings, value: number) {
+  setSettingProperty(property: ESettings, variant: 'minus' | 'plus') {
+    console.log(property)
+    const valueOne = variant === 'minus' ? -1 : 1
+    const valueTen = variant === 'minus' ? -10 : 10
+    const valueHundred = variant === 'minus' ? -100 : 100
     switch (property) {
       case ESettings.PUPPY_STEP:
+        this.PUPPY_STEP += valueOne
         break;
       case ESettings.PUPPY_UP_DURATION:
+        this.PUPPY_UP_DURATION += valueHundred
         break;
       case ESettings.PUPPY_DOWN_DURATION:
+        this.PUPPY_DOWN_DURATION += valueHundred
         break;
       case ESettings.PUPPY_UP_Y:
+        this.PUPPY_UP_Y += valueOne
         break;
       case ESettings.PUPPY_DOWN_Y:
+        this.PUPPY_DOWN_Y += valueOne
         break;
       case ESettings.PUPPY_INCREASE_ANIMATION_DURATION:
+        this.PUPPY_INCREASE_ANIMATION_DURATION += valueHundred
         break;
       case ESettings.PUPPY_BOMB_FLY_ANIMATION_DURATION:
+        this.PUPPY_BOMB_FLY_ANIMATION_DURATION += valueHundred
         break;
       case ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY:
+        this.PUPPY_BOMB_FLY_ANIMATION_DELAY += valueHundred
         break;
 
       case ESettings.PLAYER_JUMP_POINTS:
+        this.PLAYER_JUMP_POINTS += valueTen
         break;
       case ESettings.PLAYER_SPEED:
+        this.PLAYER_SPEED += valueTen
         break;
 
       case ESettings.GAMEACTIONS_HEAL_CHANCE:
+        this.GAMEACTIONS_HEAL_CHANCE += valueOne
         break;
       case ESettings.GAMEACTIONS_PUPPY_CREATE_DELAY:
+        this.GAMEACTIONS_PUPPY_CREATE_DELAY += valueTen
         break;
       case ESettings.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY:
+        this.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY += valueHundred
         break;
       case ESettings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION:
+        this.GAMEACTIONS_DAMAGE_ANIMATION_DURATION += valueHundred
         break;
       case ESettings.GAMEACTIONS_MIN_GROUP_LENGTH:
+        this.GAMEACTIONS_MIN_GROUP_LENGTH += valueOne
         break;
       case ESettings.GAMEACTIONS_MAX_GROUP_LENGTH:
+        this.GAMEACTIONS_MAX_GROUP_LENGTH += valueOne
         break;
       case ESettings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION:
+        this.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION += valueHundred
         break;
       case ESettings.GAMEACTIONS_EXPLOSION_DAMAGE:
+        this.GAMEACTIONS_EXPLOSION_DAMAGE += valueOne
         break;
       case ESettings.GAMEACTIONS_PUPPY_DAMAGE:
+        this.GAMEACTIONS_PUPPY_DAMAGE += valueOne
         break;
 
       case ESettings.TOWER_PADDING:
+        this.TOWER_PADDING += valueTen
         break;
       case ESettings.ZONE_SWIPE_OFFSET:
+        this.ZONE_SWIPE_OFFSET += valueTen
         break;
       case ESettings.GAME_DIFFICULTY:
+        this.GAME_DIFFICULTY += valueTen
         break;
     }
   }

@@ -18,6 +18,7 @@ class GameActions {
 
   public sceneUI: UI;
   private _scene: Game;
+  private _testHelperTexts: (Phaser.GameObjects.Text | Button)[][] = []
   private _groupLength: number = 0
 
   public build(): void {
@@ -104,9 +105,32 @@ class GameActions {
     }).setOrigin(.5, .5).setDepth(11);
 
     this._scene.scene.pause()
+    if (this._scene.game.config.physics.arcade.debug) {
+      this._createTestHelperMenu()
+    }
+    btn.callback = (): void => {
+      this._scene.setIsPaused(false)
+      this._scene.scene.resume()
+      bg.destroy()
+      btn.destroy()
+      text.destroy()
+      if (this._scene.game.config.physics.arcade.debug) {
+        this._testHelperTexts?.forEach((text) => {
+          text[0].destroy()
+          text[1].destroy()
+          text[2].destroy()
+          text[3].destroy()
+        })
+      }
+    };
+
+  }
+
+  private _createTestHelperMenu(): void {
+    const { centerY, x } = this.sceneUI.cameras.main;
     const allProperties = Object.entries(Settings.getSettingAllProperties())
     let column = 0
-    const allPropertiesText = allProperties.map((property, i) => {
+    this._testHelperTexts = allProperties.map((property, i) => {
       if (i % 9 === 0 && i !== 0) column++
       const xName = x + 150 + (650 * column)
       const yText = centerY + (50 * (i % 9))
@@ -119,6 +143,11 @@ class GameActions {
         color: '#000000',
         fontSize: 18,
       }).setOrigin(.5, .5).setDepth(11);
+      plusValueBtn.callback = (): void => {
+        Settings.setSettingProperty(i, 'plus')
+        const newValue = Settings.getSettingProperty(ESettings[`${property[0]}`]).toString()
+        value.setText(newValue);
+      }
 
       const minusValueBtn = new Button(this.sceneUI, plusValueBtn.getBounds().right + 10, yText + 10, 'button').setDepth(10)
       minusValueBtn.setDisplaySize(20, 20)
@@ -126,24 +155,14 @@ class GameActions {
         color: '#000000',
         fontSize: 18,
       }).setOrigin(.5, .5).setDepth(11);
+      minusValueBtn.callback = (): void => {
+        Settings.setSettingProperty(i, 'minus')
+        const newValue = Settings.getSettingProperty(ESettings[`${property[0]}`]).toString()
+        value.setText(newValue);
+      }
 
       return [name, value, plusValueBtn, minusValueBtn]
     })
-
-    btn.callback = (): void => {
-      this._scene.setIsPaused(false)
-      this._scene.scene.resume()
-      bg.destroy()
-      btn.destroy()
-      text.destroy()
-      allPropertiesText.forEach((text) => {
-        text[0].destroy()
-        text[1].destroy()
-        text[2].destroy()
-        text[3].destroy()
-      })
-    };
-
   }
 
   private _collisions(): void {
@@ -229,15 +248,16 @@ class GameActions {
   }
 
   private _createPuppyGroup(): void {
-    if (this._scene.difficulty <= 20) {
+    const difficulty = Settings.getSettingProperty(ESettings.GAME_DIFFICULTY)
+    if (difficulty <= 20) {
       this._difficultyVeryEasy()
-    } else if (this._scene.difficulty >= 21 && this._scene.difficulty <= 40) {
+    } else if (difficulty >= 21 && difficulty <= 40) {
       this._difficultyEasy()
-    } else if (this._scene.difficulty >= 41 && this._scene.difficulty <= 60) {
+    } else if (difficulty >= 41 && difficulty <= 60) {
       this._difficultyMedium()
-    } else if (this._scene.difficulty >= 61 && this._scene.difficulty <= 80) {
+    } else if (difficulty >= 61 && difficulty <= 80) {
       this._difficultyHard()
-    } else if (this._scene.difficulty >= 81) {
+    } else if (difficulty >= 81) {
       this._difficultyVeryHard()
     }
 
