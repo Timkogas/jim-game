@@ -7,6 +7,8 @@ import Puppy from '../components/Puppy';
 import EndTower from '../components/EndTower';
 import StartTower from '../components/StartTower';
 import Loading from '../components/Loading';
+import Settings from '../data/Settings';
+import { ESettings } from '../types/enums';
 
 class Game extends Phaser.Scene {
   constructor() {
@@ -20,7 +22,7 @@ class Game extends Phaser.Scene {
   public platform: Phaser.GameObjects.TileSprite;
   public puppies: Phaser.Physics.Arcade.Group
   private _loading: boolean = false;
-  public difficulty: number = 80
+  public difficulty: number = Settings.getSettingProperty(ESettings.GAME_DIFFICULTY)
 
   public init(): void {
     console.log('init');

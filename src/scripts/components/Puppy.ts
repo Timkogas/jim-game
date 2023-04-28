@@ -2,7 +2,7 @@ import Session from "../data/Session";
 import Settings from "../data/Settings";
 import Game from "../scenes/Game";
 import UI from "../scenes/UI";
-import { puppies } from "../types/enums";
+import { ESettings, puppies } from "../types/enums";
 
 class Puppy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game, type: puppies = puppies.PUPPY, step: number = 0,) {
@@ -26,7 +26,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     this._scene.add.existing(this);
     this._scene.physics.add.existing(this);
     this._scene.puppies.add(this);
-    this._firstStepX = this._scene.startTower.getBounds().right + Settings.PUPPY_STEP
+    this._firstStepX = this._scene.startTower.getBounds().right + Settings.getSettingProperty(ESettings.PUPPY_STEP)
     if (this._type === puppies.PUPPY) this.anims.play('fall', true)
     if (this._type === puppies.HEAL) this.anims.play('heal', true)
     this.startStepAnimation();
@@ -36,18 +36,18 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
     return ({
       targets: this,
       x: { value: this._firstStepX, ease: 'Quad.out' },
-      y: { value: Settings.PUPPY_DOWN_Y, ease: 'Quad.in' },
-      duration: Settings.PUPPY_DOWN_DURATION,
+      y: { value: Settings.getSettingProperty(ESettings.PUPPY_DOWN_Y), ease: 'Quad.in' },
+      duration: Settings.getSettingProperty(ESettings.PUPPY_DOWN_DURATION),
     });
   }
 
   private animationPuppyDownConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    const x = (this._step - 1) * Settings.PUPPY_STEP + this._firstStepX
+    const x = (this._step - 1) * Settings.getSettingProperty(ESettings.PUPPY_STEP) + this._firstStepX
     return ({
       targets: this,
       x: { value: x, ease: 'Quad.out' },
-      y: { value: Settings.PUPPY_DOWN_Y, ease: 'Quad.in' },
-      duration: Settings.PUPPY_DOWN_DURATION + this._increaseDuration,
+      y: { value: Settings.getSettingProperty(ESettings.PUPPY_DOWN_Y), ease: 'Quad.in' },
+      duration: Settings.getSettingProperty(ESettings.PUPPY_DOWN_DURATION) + this._increaseDuration,
       onComplete: () => {
         this._increaseDuration = 0;
       }
@@ -55,12 +55,12 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyUpConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    const x = (this._step - 1) * Settings.PUPPY_STEP + this._firstStepX
+    const x = (this._step - 1) * Settings.getSettingProperty(ESettings.PUPPY_STEP) + this._firstStepX
     return ({
       targets: this,
       x: { value: x, ease: 'Quad.in' },
-      y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
-      duration: Settings.PUPPY_DOWN_DURATION,
+      y: { value: Settings.getSettingProperty(ESettings.PUPPY_UP_Y), ease: 'Quad.out' },
+      duration: Settings.getSettingProperty(ESettings.PUPPY_DOWN_DURATION),
       onComplete: () => {
         this._bound = false;
         this._increaseDuration = 0;
@@ -70,12 +70,12 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   }
 
   private animationPuppyUpEndConfig(): Phaser.Types.Tweens.TweenBuilderConfig {
-    const x = (this._step - 1) * Settings.PUPPY_STEP + this._firstStepX
+    const x = (this._step - 1) * Settings.getSettingProperty(ESettings.PUPPY_STEP) + this._firstStepX
     return ({
       targets: this,
       x: { value: x, ease: 'Quad.in' },
-      y: { value: Settings.PUPPY_UP_Y, ease: 'Quad.out' },
-      duration: Settings.PUPPY_UP_DURATION,
+      y: { value: Settings.getSettingProperty(ESettings.PUPPY_UP_Y), ease: 'Quad.out' },
+      duration: Settings.getSettingProperty(ESettings.PUPPY_UP_DURATION),
       onComplete: this._onCompleteFinalAnimation.bind(this)
     })
   }
@@ -106,10 +106,10 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
         this._increaseDuration = 0
         break;
       case 2:
-        this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 1
+        this._increaseDuration = Settings.getSettingProperty(ESettings.PUPPY_INCREASE_ANIMATION_DURATION) * 1
         break;
       case 4:
-        this._increaseDuration = Settings.PUPPY_INCREASE_ANIMATION_DURATION * 1.5
+        this._increaseDuration = Settings.getSettingProperty(ESettings.PUPPY_INCREASE_ANIMATION_DURATION) * 1.5
         break;
     }
   }
@@ -144,7 +144,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
 
   private _onCompleteFinalAnimationBomb(): void {
     this._scene.time.addEvent({
-      delay: Settings.PUPPY_BOMB_FLY_ANIMATION_DELAY, callback: (): void => {
+      delay: Settings.getSettingProperty(ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY), callback: (): void => {
         const sound = this._scene.sound.add('bombFlySound')
         sound.play()
         this._tween = this._scene.tweens.add({
@@ -152,7 +152,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
           rotation: -10 * Math.PI,
           x: { value: this._scene.startTower.getBounds().centerX },
           y: { value: this.getBounds().y + 80 },
-          duration: Settings.PUPPY_BOMB_FLY_ANIMATION_DURATION,
+          duration: Settings.getSettingProperty(ESettings.PUPPY_BOMB_FLY_ANIMATION_DURATION),
           onComplete: () => {
             this.destroy()
             this._scene.cameras.main.shake(1100);

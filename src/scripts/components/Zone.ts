@@ -1,4 +1,5 @@
 import Settings from "../data/Settings";
+import { ESettings } from "../types/enums";
 
 class Zone extends Phaser.GameObjects.Zone {
   constructor(
@@ -77,13 +78,13 @@ class Zone extends Phaser.GameObjects.Zone {
       this.hoverOn();
     });
     this.on('pointerup', (e: Phaser.Input.Pointer): void => {
-      if (this._currentX - e.position.x > Settings.ZONE_SWIPE_OFFSET) {
+      if (this._currentX - e.position.x > Settings.getSettingProperty(ESettings.ZONE_SWIPE_OFFSET)) {
         this.leftSwipe();
-      } else if (this._currentX - e.position.x < -Settings.ZONE_SWIPE_OFFSET) {
+      } else if (this._currentX - e.position.x < -Settings.getSettingProperty(ESettings.ZONE_SWIPE_OFFSET)) {
         this.rightSwipe();
-      } else if (this._currentY - e.position.y > Settings.ZONE_SWIPE_OFFSET) {
+      } else if (this._currentY - e.position.y > Settings.getSettingProperty(ESettings.ZONE_SWIPE_OFFSET)) {
         this.topSwipe();
-      } else if (this._currentY - e.position.y < -Settings.ZONE_SWIPE_OFFSET) {
+      } else if (this._currentY - e.position.y < -Settings.getSettingProperty(ESettings.ZONE_SWIPE_OFFSET)) {
         this.bottomSwipe();
       }
       let x: number, y: number;

@@ -9,7 +9,7 @@ import Session from '../data/Session';
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 import UI from '../scenes/UI';
-import { puppies } from '../types/enums';
+import { ESettings, puppies } from '../types/enums';
 
 class GameActions {
   constructor(scene: Game) {
@@ -50,7 +50,7 @@ class GameActions {
     if (this._scene.puppies.getLength() === 0) {
       if (Session.getPuppyLives() > 0) this._createNewPuppyGroup()
       if (Session.getPuppyLives() === 0) {
-        Session.minusPlayerHealth(Settings.GAMEACTIONS_PUPPY_DAMAGE)
+        Session.minusPlayerHealth(Settings.getSettingProperty(ESettings.GAMEACTIONS_PUPPY_DAMAGE))
         this.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
         Session.resetPuppyLives()
         this.sceneUI.puppyLives.setText(Session.getPuppyLives().toString());
@@ -58,7 +58,7 @@ class GameActions {
           this.gameOver()
         }
         this._scene.time.addEvent({
-          delay: Settings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION, callback: (): void => {
+          delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION), callback: (): void => {
             this._createNewPuppyGroup()
           }
         });
@@ -121,7 +121,7 @@ class GameActions {
 
   private _platformPuppiesBomb(puppy: Puppy): void {
     this.bombExplosion(puppy)
-    Session.minusPlayerHealth(Settings.GAMEACTIONS_EXPLOSION_DAMAGE)
+    Session.minusPlayerHealth(Settings.getSettingProperty(ESettings.GAMEACTIONS_EXPLOSION_DAMAGE))
     this.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
     if (Session.getPlayerHealth() === 0) {
       this.gameOver()
@@ -150,7 +150,7 @@ class GameActions {
     const sound = this._scene.sound.add('explosionSound')
     sound.play()
     this._scene.time.addEvent({
-      delay: Settings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION, callback: (): void => {
+      delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION), callback: (): void => {
         explosion.destroy()
       }
     });
@@ -191,26 +191,26 @@ class GameActions {
     const random = Phaser.Math.Between(0, positions.length - 1);
     const step = positions[random];
 
-    if (Number(Phaser.Math.FloatBetween(0, 1).toFixed(2)) * 100 > 80) {
+    if (Number(Phaser.Math.FloatBetween(0, 1).toFixed(2)) * 100 > Settings.getSettingProperty(ESettings.GAMEACTIONS_HEAL_CHANCE)) {
       this._createPuppy(this._groupLength + 1, step, puppies.HEAL)
     }
   }
 
   private _createPuppy(i: number, step: number, type: puppies): void {
     this._scene.time.addEvent({
-      delay: Settings.GAMEACTIONS_PUPPY_CREATE_DELAY * i, callback: (): void => {
+      delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_PUPPY_CREATE_DELAY) * i, callback: (): void => {
         new Puppy(this._scene, type, step)
       }
     });
   }
 
   private _randomizeLengthGroup(): void {
-    this._groupLength = Phaser.Math.Between(Settings.GAMEACTIONS_MIN_GROUP_LENGTH, Settings.GAMEACTIONS_MAX_GROUP_LENGTH);
+    this._groupLength = Phaser.Math.Between(Settings.getSettingProperty(ESettings.GAMEACTIONS_MIN_GROUP_LENGTH), Settings.getSettingProperty(ESettings.GAMEACTIONS_MAX_GROUP_LENGTH));
   }
 
   private _createNewPuppyGroup(): void {
     this._scene.time.addEvent({
-      delay: Settings.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY, callback: (): void => {
+      delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY), callback: (): void => {
         this._createPuppyGroup()
       }
     });
@@ -256,7 +256,7 @@ class GameActions {
 
   private _difficultyMedium(): void {
     console.log('Medium')
-    this._groupLength = Settings.GAMEACTIONS_MAX_GROUP_LENGTH
+    this._groupLength = Settings.getSettingProperty(ESettings.GAMEACTIONS_MAX_GROUP_LENGTH)
     const positions = [0, 2, 4];
     const random = Phaser.Math.Between(0, positions.length - 1);
     const randomBomb = Phaser.Math.Between(1, this._groupLength)
@@ -278,7 +278,7 @@ class GameActions {
 
   private _difficultyHard(): void {
     console.log('Hard')
-    this._groupLength = Settings.GAMEACTIONS_MAX_GROUP_LENGTH
+    this._groupLength = Settings.getSettingProperty(ESettings.GAMEACTIONS_MAX_GROUP_LENGTH)
     const positions = [0, 2, 4];
     const randomBomb = Phaser.Math.Between(1, this._groupLength)
     let stepPrevBomb
@@ -302,7 +302,7 @@ class GameActions {
 
   private _difficultyVeryHard(): void {
     console.log('very hard')
-    this._groupLength = Settings.GAMEACTIONS_MAX_GROUP_LENGTH
+    this._groupLength = Settings.getSettingProperty(ESettings.GAMEACTIONS_MAX_GROUP_LENGTH)
     const positions = [0, 2, 4];
     const randomBomb = Phaser.Math.Between(1, this._groupLength)
     for (let i = 1; i <= this._groupLength; i++) {
@@ -413,8 +413,8 @@ class GameActions {
       const graphics = this._scene.add.graphics();
       graphics.lineStyle(50, 0xffffff);
       graphics.beginPath();
-      const x = this._scene.startTower.getBounds().right + Settings.PUPPY_STEP * i
-      const y = i % 2 !== 0 ? Settings.PUPPY_DOWN_Y : Settings.PUPPY_UP_Y
+      const x = this._scene.startTower.getBounds().right + Settings.getSettingProperty(ESettings.PUPPY_STEP) * i
+      const y = i % 2 !== 0 ? Settings.getSettingProperty(ESettings.PUPPY_DOWN_Y) : Settings.getSettingProperty(ESettings.PUPPY_UP_Y)
       graphics.arc(x, y, 20, Phaser.Math.DegToRad(0), Phaser.Math.DegToRad(360), false, 0.02);
       graphics.strokePath();
       graphics.closePath();

@@ -1,6 +1,7 @@
 import Settings from '../data/Settings';
 import Game from '../scenes/Game';
 import UI from '../scenes/UI';
+import { ESettings } from '../types/enums';
 import Zone from './Zone';
 
 enum side {
@@ -10,7 +11,7 @@ enum side {
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, scene.startTower.getBounds().right + Settings.PUPPY_STEP, scene.platform.getBounds().top - Player.getSizes(scene).height, 'capybara-stand');
+    super(scene, scene.startTower.getBounds().right + Settings.getSettingProperty(ESettings.PUPPY_STEP), scene.platform.getBounds().top - Player.getSizes(scene).height, 'capybara-stand');
     this._scene = scene;
     this._build();
   }
@@ -46,7 +47,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   public right(): void {
     this._side = side.RIGHT;
-    this.setVelocityX(Settings.PLAYER_SPEED);
+    this.setVelocityX(Settings.getSettingProperty(ESettings.PLAYER_SPEED));
     this.anims.play('walk', true)
   }
 
@@ -56,7 +57,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     sound.play()
     this._scene.add.tween({
       targets: this,
-      x: this.x + (Settings.PLAYER_JUMP_POINTS * sign),
+      x: this.x + (Settings.getSettingProperty(ESettings.PLAYER_JUMP_POINTS) * sign),
       duration: 200,
 
       ease: ''
@@ -66,7 +67,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   public left(): void {
     this._side = side.LEFT;
     this.flipX = true
-    this.setVelocityX(-Settings.PLAYER_SPEED);
+    this.setVelocityX(-Settings.getSettingProperty(ESettings.PLAYER_SPEED));
     this.anims.play('walk', true)
   }
 
