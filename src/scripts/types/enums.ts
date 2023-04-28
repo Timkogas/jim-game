@@ -33,7 +33,8 @@ enum ESettings {
 
   TOWER_PADDING,
   ZONE_SWIPE_OFFSET,
-  GAME_DIFFICULTY
+  GAME_DIFFICULTY,
+
 }
 
 export {

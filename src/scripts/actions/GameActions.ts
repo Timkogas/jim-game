@@ -88,6 +88,64 @@ class GameActions {
     this._scene.player.destroy()
   }
 
+  public gamePause(): void {
+    const { width, height, centerX, centerY, x } = this.sceneUI.cameras.main;
+
+    if (!this._scene.getIsPaused()) {
+      this._scene.setIsPaused(true)
+    }
+
+    const bg = this.sceneUI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
+    const text = new Text(this.sceneUI, 'PAUSE', { x: centerX, y: centerY - 200, fontSize: 44 })
+    const btn = new Button(this.sceneUI, centerX, centerY - 100, 'button').setDepth(10)
+    btn.text = this.sceneUI.add.text(btn.x, btn.y, ('resume').toUpperCase(), {
+      color: '#000000',
+      fontSize: 32,
+    }).setOrigin(.5, .5).setDepth(11);
+
+    this._scene.scene.pause()
+    const allProperties = Object.entries(Settings.getSettingAllProperties())
+    let column = 0
+    const allPropertiesText = allProperties.map((property, i) => {
+      if (i % 9 === 0 && i !== 0) column++
+      const xName = x + 150 + (650 * column)
+      const yText = centerY + (50 * (i % 9))
+      const name = this.sceneUI.add.text(xName, yText, property[0], { align: 'left', fontSize: 18 })
+      const value = this.sceneUI.add.text(name.getBounds().right + 30, yText, property[1].toString(), { align: 'left', fontSize: 18 })
+
+      const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 15, yText + 10, 'button').setDepth(10)
+      plusValueBtn.setDisplaySize(20, 20)
+      plusValueBtn.text = this.sceneUI.add.text(plusValueBtn.x, plusValueBtn.y, ('+').toUpperCase(), {
+        color: '#000000',
+        fontSize: 18,
+      }).setOrigin(.5, .5).setDepth(11);
+
+      const minusValueBtn = new Button(this.sceneUI, plusValueBtn.getBounds().right + 10, yText + 10, 'button').setDepth(10)
+      minusValueBtn.setDisplaySize(20, 20)
+      minusValueBtn.text = this.sceneUI.add.text(minusValueBtn.x, minusValueBtn.y, ('-').toUpperCase(), {
+        color: '#000000',
+        fontSize: 18,
+      }).setOrigin(.5, .5).setDepth(11);
+
+      return [name, value, plusValueBtn, minusValueBtn]
+    })
+
+    btn.callback = (): void => {
+      this._scene.setIsPaused(false)
+      this._scene.scene.resume()
+      bg.destroy()
+      btn.destroy()
+      text.destroy()
+      allPropertiesText.forEach((text) => {
+        text[0].destroy()
+        text[1].destroy()
+        text[2].destroy()
+        text[3].destroy()
+      })
+    };
+
+  }
+
   private _collisions(): void {
     this._scene.physics.add.collider(
       this._scene.platform,
@@ -338,6 +396,7 @@ class GameActions {
   }
 
   public controls(): void {
+    this._scene.input.keyboard.on('keydown-ESC', this.gamePause, this)
     if (Settings.isMobile()) {
       this._controlsMobile()
     } else {

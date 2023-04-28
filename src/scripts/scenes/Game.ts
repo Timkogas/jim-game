@@ -23,6 +23,7 @@ class Game extends Phaser.Scene {
   public puppies: Phaser.Physics.Arcade.Group
   private _loading: boolean = false;
   public difficulty: number = Settings.getSettingProperty(ESettings.GAME_DIFFICULTY)
+  private _isPaused: boolean = false
 
   public init(): void {
     console.log('init');
@@ -51,6 +52,14 @@ class Game extends Phaser.Scene {
       new Puppy(this, 2)
       console.log(this.puppies.getLength())
     });
+  }
+
+  public getIsPaused(): boolean {
+    return this._isPaused
+  }
+
+  public setIsPaused(pause: boolean) {
+    this._isPaused = pause
   }
 }
 

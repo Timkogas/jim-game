@@ -39,8 +39,8 @@ class Settings {
   public sounds: Isounds;
   public interval: Interval;
 
-  getSettingProperty(property: ESettings) {
-    switch(property) {
+  getSettingProperty(property: ESettings): ESettings {
+    switch (property) {
       case ESettings.PUPPY_STEP:
         return this.PUPPY_STEP
       case ESettings.PUPPY_UP_DURATION:
@@ -57,12 +57,12 @@ class Settings {
         return this.PUPPY_BOMB_FLY_ANIMATION_DURATION
       case ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY:
         return this.PUPPY_BOMB_FLY_ANIMATION_DELAY
-    
+
       case ESettings.PLAYER_JUMP_POINTS:
         return this.PLAYER_JUMP_POINTS
       case ESettings.PLAYER_SPEED:
         return this.PLAYER_SPEED
-    
+
       case ESettings.GAMEACTIONS_HEAL_CHANCE:
         return this.GAMEACTIONS_HEAL_CHANCE
       case ESettings.GAMEACTIONS_PUPPY_CREATE_DELAY:
@@ -81,7 +81,7 @@ class Settings {
         return this.GAMEACTIONS_EXPLOSION_DAMAGE
       case ESettings.GAMEACTIONS_PUPPY_DAMAGE:
         return this.GAMEACTIONS_PUPPY_DAMAGE
-    
+
       case ESettings.TOWER_PADDING:
         return this.TOWER_PADDING
       case ESettings.ZONE_SWIPE_OFFSET:
@@ -91,8 +91,38 @@ class Settings {
     }
   }
 
+  getSettingAllProperties(): {[key: string]: ESettings} {
+    return {
+      PUPPY_STEP: this.PUPPY_STEP,
+      PUPPY_UP_DURATION: this.PUPPY_UP_DURATION,
+      PUPPY_DOWN_DURATION: this.PUPPY_DOWN_DURATION,
+      PUPPY_UP_Y: this.PUPPY_UP_Y,
+      PUPPY_DOWN_Y: this.PUPPY_DOWN_Y,
+      PUPPY_INCREASE_ANIMATION_DURATION: this.PUPPY_INCREASE_ANIMATION_DURATION,
+      PUPPY_BOMB_FLY_ANIMATION_DURATION: this.PUPPY_BOMB_FLY_ANIMATION_DURATION,
+      PUPPY_BOMB_FLY_ANIMATION_DELAY: this.PUPPY_BOMB_FLY_ANIMATION_DELAY,
+
+      PLAYER_JUMP_POINTS: this.PLAYER_JUMP_POINTS,
+      PLAYER_SPEED: this.PLAYER_SPEED,
+
+      GAMEACTIONS_HEAL_CHANCE: this.GAMEACTIONS_HEAL_CHANCE,
+      GAMEACTIONS_PUPPY_CREATE_DELAY: this.GAMEACTIONS_PUPPY_CREATE_DELAY,
+      GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY: this.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY,
+      GAMEACTIONS_DAMAGE_ANIMATION_DURATION: this.GAMEACTIONS_DAMAGE_ANIMATION_DURATION,
+      GAMEACTIONS_MIN_GROUP_LENGTH: this.GAMEACTIONS_MIN_GROUP_LENGTH,
+      GAMEACTIONS_MAX_GROUP_LENGTH: this.GAMEACTIONS_MAX_GROUP_LENGTH,
+      GAMEACTIONS_EXPLOSION_ANIMATION_DURATION: this.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION,
+      GAMEACTIONS_EXPLOSION_DAMAGE: this.GAMEACTIONS_EXPLOSION_DAMAGE,
+      GAMEACTIONS_PUPPY_DAMAGE: this.GAMEACTIONS_PUPPY_DAMAGE,
+
+      TOWER_PADDING: this.TOWER_PADDING,
+      ZONE_SWIPE_OFFSET: this.ZONE_SWIPE_OFFSET,
+      GAME_DIFFICULTY: this.GAME_DIFFICULTY,
+    }
+  }
+
   setSettingProperty(property: ESettings, value: number) {
-    switch(property) {
+    switch (property) {
       case ESettings.PUPPY_STEP:
         break;
       case ESettings.PUPPY_UP_DURATION:
@@ -109,12 +139,12 @@ class Settings {
         break;
       case ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY:
         break;
-    
+
       case ESettings.PLAYER_JUMP_POINTS:
         break;
       case ESettings.PLAYER_SPEED:
         break;
-    
+
       case ESettings.GAMEACTIONS_HEAL_CHANCE:
         break;
       case ESettings.GAMEACTIONS_PUPPY_CREATE_DELAY:
@@ -133,7 +163,7 @@ class Settings {
         break;
       case ESettings.GAMEACTIONS_PUPPY_DAMAGE:
         break;
-    
+
       case ESettings.TOWER_PADDING:
         break;
       case ESettings.ZONE_SWIPE_OFFSET:
