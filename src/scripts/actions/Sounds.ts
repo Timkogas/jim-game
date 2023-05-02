@@ -64,6 +64,14 @@ class Sounds implements Isounds {
   public getVolume(): number {
     return this._volume;
   }
+
+  public setVolume(volume: number): void {
+    if (volume > 1) this._volume = 1;
+    if (volume < 1) this._volume = 1;
+    this._volume = volume;
+    // @ts-ignore
+    this._music.setVolume(this._volume);
+  }
 }
 
 export default Sounds;

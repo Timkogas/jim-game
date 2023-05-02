@@ -36,8 +36,8 @@ class GameActions {
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
     this._scene.player = new Player(this._scene);
-    const sound = this._scene.sound.add('backgroundSound', { loop: true, volume: .2 })
-    sound.play()
+    Settings.sounds.playMusic('backgroundSound')
+    Settings.sounds.setVolume(0.2)
     this._anims();
     this._collisions();
     this._createNewPuppyGroup()
@@ -211,16 +211,14 @@ class GameActions {
 
   private _platformPuppiesPuppy(puppy: Puppy): void {
     puppy.destroy()
-    const sound = this._scene.sound.add('puppySmashSound')
-    sound.play()
+    Settings.sounds.play('puppySmashSound')
     Session.minusPuppyLives()
     this.sceneUI.puppyLives.setText(Session.getPuppyLives().toString());
   }
 
   private _platformPuppiesHeal(puppy: Puppy): void {
     puppy.destroy()
-    const sound = this._scene.sound.add('healSmashSound')
-    sound.play()
+    Settings.sounds.play('healSmashSound')
   }
 
   public bombExplosion(puppy: Puppy): void {
@@ -228,8 +226,7 @@ class GameActions {
     const explosion = this._scene.add.sprite(centerX, centerY, 'bomb')
     puppy.destroy()
     explosion.anims.play('explosion', true)
-    const sound = this._scene.sound.add('explosionSound')
-    sound.play()
+    Settings.sounds.play('explosionSound')
     this._scene.time.addEvent({
       delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_EXPLOSION_ANIMATION_DURATION), callback: (): void => {
         explosion.destroy()
@@ -240,13 +237,11 @@ class GameActions {
   private _playerPuppies(player: Player, puppy: Puppy): void {
     if (puppy.getMarkBound() === false) {
       puppy.markBound();
-      let sound = this._scene.sound.add('puppyBounceSound')
       if (puppy.getType() === puppies.PUPPY) {
-        sound = this._scene.sound.add('puppyBounceSound')
+        Settings.sounds.play('puppyBounceSound')
       } else if (puppy.getType() === puppies.HEAL) {
-        sound = this._scene.sound.add('healBounceSound')
+        Settings.sounds.play('healBounceSound')
       }
-      sound.play()
       puppy.startStepAnimation();
     }
   }

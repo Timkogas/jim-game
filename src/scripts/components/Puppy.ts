@@ -127,8 +127,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _onCompleteFinalAnimationHeal(): void {
     Session.minusPlayerHealth(-20)
     this._scene.actions.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
-    const sound = this._scene.sound.add('healEndSound', { volume: 0.2 })
-    sound.play()
+    Settings.sounds.play('healEndSound')
     this.destroy()
     this._scene.actions.checkPuppyLivesAndPlayerHealth()
   }
@@ -136,8 +135,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _onCompleteFinalAnimationPuppy(): void {
     this.destroy()
     Session.plusScore(Settings.getSettingProperty(ESettings.PUPPY_SCORE_END));
-    const sound = this._scene.sound.add('puppyEndSound', { volume: 0.2 })
-    sound.play()
+    Settings.sounds.play('puppyEndSound')
     this._scene.actions.sceneUI.score.setText(Session.getScore().toString());
     this._scene.actions.checkPuppyLivesAndPlayerHealth()
   }
@@ -145,8 +143,7 @@ class Puppy extends Phaser.Physics.Arcade.Sprite {
   private _onCompleteFinalAnimationBomb(): void {
     this._scene.time.addEvent({
       delay: Settings.getSettingProperty(ESettings.PUPPY_BOMB_FLY_ANIMATION_DELAY), callback: (): void => {
-        const sound = this._scene.sound.add('bombFlySound')
-        sound.play()
+        Settings.sounds.play('bombFlySound')
         this._tween = this._scene.tweens.add({
           targets: this,
           rotation: -10 * Math.PI,

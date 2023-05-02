@@ -11,4 +11,5 @@ interface Isounds {
   mute: () => void;
   unmute: () => void;
   getVolume: () => number;
+  setVolume: (volume: number) => void;
 }
