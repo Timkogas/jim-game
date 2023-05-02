@@ -37,7 +37,6 @@ class GameActions {
 
     this._scene.player = new Player(this._scene);
     Settings.sounds.playMusic('backgroundSound')
-    Settings.sounds.setVolume(0.2)
     this._anims();
     this._collisions();
     this._createNewPuppyGroup()
@@ -81,15 +80,22 @@ class GameActions {
     }).setOrigin(.5, .5).setDepth(11);
 
     this._scene.scene.pause()
-
+    this._createSoundSettings(btn)
     btn.callback = (): void => {
       this._scene.sound.removeAll()
       this.sceneUI.scene.restart()
       this._scene.scene.restart()
     };
-    const name = this.sceneUI.add.text(btn.getBounds().left, centerY, 'music', { align: 'left', fontSize: 18 })
+
+    this._scene.player.destroy()
+  }
+
+  private _createSoundSettings(restartBtn: Phaser.GameObjects.Sprite):void {
+    const { width, height, centerX, centerY } = this.sceneUI.cameras.main;
+
+    const name = this.sceneUI.add.text(restartBtn.getBounds().left, centerY, 'music', { align: 'left', fontSize: 18 })
     const value = this.sceneUI.add.text(name.getBounds().right + 30, centerY, Settings.sounds.getVolume().toString(), { align: 'left', fontSize: 18 })
-    const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 15, centerY + 10, 'button').setDepth(10)
+    const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 45, centerY + 10, 'button').setDepth(10)
     plusValueBtn.setDisplaySize(20, 20)
     plusValueBtn.text = this.sceneUI.add.text(plusValueBtn.x, plusValueBtn.y, ('+').toUpperCase(), {
       color: '#000000',
@@ -114,7 +120,29 @@ class GameActions {
       const newValue = Settings.sounds.getVolume().toString()
       value.setText(newValue);
     }
-    this._scene.player.destroy()
+
+    const muteBtn = new Button(this.sceneUI, centerX + 40, centerY + 50, 'button').setDepth(10)
+    muteBtn.setDisplaySize(60, 40)
+    muteBtn.text = this.sceneUI.add.text(muteBtn.x, muteBtn.y, ('mute').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    muteBtn.callback = (): void => {
+      Settings.sounds.mute()
+      const newValue = Settings.sounds.getVolume().toString()
+      value.setText(newValue);
+    }
+    const unmuteBtn = new Button(this.sceneUI, centerX - 40, centerY + 50, 'button').setDepth(10)
+    unmuteBtn.setDisplaySize(60, 40)
+    unmuteBtn.text = this.sceneUI.add.text(unmuteBtn.x, unmuteBtn.y, ('unmute').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    unmuteBtn.callback = (): void => {
+      Settings.sounds.unmute()
+      const newValue = Settings.sounds.getVolume().toString()
+      value.setText(newValue);
+    }
   }
 
   public gamePause(): void {

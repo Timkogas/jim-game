@@ -25,7 +25,7 @@ class EndTower extends Phaser.Physics.Arcade.Sprite {
       targets: laser,
       x: { value: this._scene.player.getBounds().centerX },
       y: { value: this._scene.player.getBounds().centerY },
-      duration:  1000,
+      duration:  250,
       onComplete: () => {
         laser.destroy()
       }
