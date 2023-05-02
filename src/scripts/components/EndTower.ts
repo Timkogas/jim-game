@@ -18,15 +18,14 @@ class EndTower extends Phaser.Physics.Arcade.Sprite {
 
   public shootLaser(): void {
     const laser = this._scene.add.sprite(this.getBounds().centerX, this.getBounds().top, 'laser')
-    laser.setRotation(-1.57)
     const {centerX, centerY} = this._scene.player.getBounds()
     const angle = Phaser.Math.Angle.Between(laser.getBounds().left, laser.getBounds().centerY, centerX, centerY)
-    laser.setRotation(-angle)
+    laser.setRotation(-1.57 - -angle)
     this._scene.tweens.add({
       targets: laser,
       x: { value: this._scene.player.getBounds().centerX },
       y: { value: this._scene.player.getBounds().centerY },
-      duration: 1000,
+      duration:  1000,
       onComplete: () => {
         laser.destroy()
       }
