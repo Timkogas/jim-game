@@ -87,6 +87,33 @@ class GameActions {
       this.sceneUI.scene.restart()
       this._scene.scene.restart()
     };
+    const name = this.sceneUI.add.text(btn.getBounds().left, centerY, 'music', { align: 'left', fontSize: 18 })
+    const value = this.sceneUI.add.text(name.getBounds().right + 30, centerY, Settings.sounds.getVolume().toString(), { align: 'left', fontSize: 18 })
+    const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 15, centerY + 10, 'button').setDepth(10)
+    plusValueBtn.setDisplaySize(20, 20)
+    plusValueBtn.text = this.sceneUI.add.text(plusValueBtn.x, plusValueBtn.y, ('+').toUpperCase(), {
+      color: '#000000',
+      fontSize: 18,
+    }).setOrigin(.5, .5).setDepth(11);
+    plusValueBtn.callback = (): void => {
+      const newVolume = Number((Settings.sounds.getVolume() + 0.1).toFixed(2))
+      Settings.sounds.setVolume( newVolume)
+      const newValue = Settings.sounds.getVolume().toString()
+      value.setText(newValue);
+    }
+
+    const minusValueBtn = new Button(this.sceneUI, plusValueBtn.getBounds().right + 10, centerY + 10, 'button').setDepth(10)
+    minusValueBtn.setDisplaySize(20, 20)
+    minusValueBtn.text = this.sceneUI.add.text(minusValueBtn.x, minusValueBtn.y, ('-').toUpperCase(), {
+      color: '#000000',
+      fontSize: 18,
+    }).setOrigin(.5, .5).setDepth(11);
+    minusValueBtn.callback = (): void => {
+      const newVolume = Number((Settings.sounds.getVolume() - 0.1).toFixed(2))
+      Settings.sounds.setVolume(newVolume)
+      const newValue = Settings.sounds.getVolume().toString()
+      value.setText(newValue);
+    }
     this._scene.player.destroy()
   }
 
