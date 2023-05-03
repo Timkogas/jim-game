@@ -9,6 +9,7 @@ import StartTower from '../components/StartTower';
 import Loading from '../components/Loading';
 import Settings from '../data/Settings';
 import { ESettings } from '../types/enums';
+import GameActionsUI from '../actions/GameActionsUI';
 
 class Game extends Phaser.Scene {
   constructor() {

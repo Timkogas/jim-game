@@ -18,7 +18,6 @@ class GameActions {
 
   public sceneUI: UI;
   private _scene: Game;
-  private _testHelperTexts: (Phaser.GameObjects.Text | Button)[][] = []
   private _groupLength: number = 0
 
   public build(): void {
@@ -55,7 +54,7 @@ class GameActions {
         Session.resetPuppyLives()
         this.sceneUI.puppyLives.setText(Session.getPuppyLives().toString());
         if (Session.getPlayerHealth() === 0) {
-          this.gameOver()
+          this.sceneUI.actionsUI.gameOver()
         }
         this._scene.endTower.shootLaser()
         this._scene.time.addEvent({
@@ -65,140 +64,6 @@ class GameActions {
         });
       }
     }
-  }
-
-  public gameOver(): void {
-    if (Session.getOver()) return;
-    const { width, height, centerX, centerY } = this.sceneUI.cameras.main;
-    Session.setOver(true);
-    this.sceneUI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
-    new Text(this.sceneUI, 'Game over', { x: centerX, y: centerY - 200, fontSize: 44 })
-    const btn = new Button(this.sceneUI, centerX, centerY - 100, 'button').setDepth(10)
-    btn.text = this.sceneUI.add.text(btn.x, btn.y, ('restart').toUpperCase(), {
-      color: '#000000',
-      fontSize: 32,
-    }).setOrigin(.5, .5).setDepth(11);
-
-    this._scene.scene.pause()
-    this._createSoundSettings(btn)
-    btn.callback = (): void => {
-      this._scene.sound.removeAll()
-      this.sceneUI.scene.restart()
-      this._scene.scene.restart()
-    };
-
-    this._scene.player.destroy()
-  }
-
-  private _createSoundSettings(restartBtn: Phaser.GameObjects.Sprite):void {
-    const { width, height, centerX, centerY } = this.sceneUI.cameras.main;
-
-    const name = this.sceneUI.add.text(restartBtn.getBounds().left, centerY, 'music', { align: 'left', fontSize: 18 })
-    const value = this.sceneUI.add.text(name.getBounds().right + 30, centerY, Settings.sounds.getVolume().music.toString(), { align: 'left', fontSize: 18 })
-    const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 45, centerY + 10, 'button').setDepth(10)
-    plusValueBtn.setDisplaySize(20, 20)
-    plusValueBtn.text = this.sceneUI.add.text(plusValueBtn.x, plusValueBtn.y, ('+').toUpperCase(), {
-      color: '#000000',
-      fontSize: 18,
-    }).setOrigin(.5, .5).setDepth(11);
-    plusValueBtn.callback = (): void => {
-      const newVolume = Number((Settings.sounds.getVolume().music + 0.1).toFixed(2))
-      Settings.sounds.setVolume(newVolume)
-      const newValue = Settings.sounds.getVolume().music.toString()
-      value.setText(newValue);
-    }
-
-    const minusValueBtn = new Button(this.sceneUI, plusValueBtn.getBounds().right + 10, centerY + 10, 'button').setDepth(10)
-    minusValueBtn.setDisplaySize(20, 20)
-    minusValueBtn.text = this.sceneUI.add.text(minusValueBtn.x, minusValueBtn.y, ('-').toUpperCase(), {
-      color: '#000000',
-      fontSize: 18,
-    }).setOrigin(.5, .5).setDepth(11);
-    minusValueBtn.callback = (): void => {
-      const newVolume = Number((Settings.sounds.getVolume().music - 0.1).toFixed(2))
-      Settings.sounds.setVolume(newVolume)
-      const newValue = Settings.sounds.getVolume().music.toString()
-      value.setText(newValue);
-    }
-  }
-
-  public gamePause(): void {
-    const { width, height, centerX, centerY, x } = this.sceneUI.cameras.main;
-
-    if (!this._scene.getIsPaused()) {
-      this._scene.setIsPaused(true)
-    }
-
-    const bg = this.sceneUI.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
-    const text = new Text(this.sceneUI, 'PAUSE', { x: centerX, y: centerY - 200, fontSize: 44 })
-    const btn = new Button(this.sceneUI, centerX, centerY - 100, 'button').setDepth(10)
-    btn.text = this.sceneUI.add.text(btn.x, btn.y, ('resume').toUpperCase(), {
-      color: '#000000',
-      fontSize: 32,
-    }).setOrigin(.5, .5).setDepth(11);
-
-    const timer = new Text(this.sceneUI, Session.getTimerSeconds().toString(), { x: centerX, y: centerY - 30, fontSize: 24 })
-
-    this._scene.scene.pause()
-    if (this._scene.game.config.physics.arcade.debug) {
-      this._createTestHelperMenu()
-    }
-    btn.callback = (): void => {
-      this._scene.setIsPaused(false)
-      this._scene.scene.resume()
-      bg.destroy()
-      btn.destroy()
-      text.destroy()
-      timer.destroy()
-      if (this._scene.game.config.physics.arcade.debug) {
-        this._testHelperTexts?.forEach((text) => {
-          text[0].destroy()
-          text[1].destroy()
-          text[2].destroy()
-          text[3].destroy()
-        })
-      }
-    };
-
-  }
-
-  private _createTestHelperMenu(): void {
-    const { centerY, x } = this.sceneUI.cameras.main;
-    const allProperties = Object.entries(Settings.getSettingAllProperties())
-    let column = 0
-    this._testHelperTexts = allProperties.map((property, i) => {
-      if (i % 9 === 0 && i !== 0) column++
-      const xName = x + 150 + (650 * column)
-      const yText = centerY + (50 * (i % 9))
-      const name = this.sceneUI.add.text(xName, yText, property[0], { align: 'left', fontSize: 18 })
-      const value = this.sceneUI.add.text(name.getBounds().right + 30, yText, property[1].toString(), { align: 'left', fontSize: 18 })
-
-      const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 15, yText + 10, 'button').setDepth(10)
-      plusValueBtn.setDisplaySize(20, 20)
-      plusValueBtn.text = this.sceneUI.add.text(plusValueBtn.x, plusValueBtn.y, ('+').toUpperCase(), {
-        color: '#000000',
-        fontSize: 18,
-      }).setOrigin(.5, .5).setDepth(11);
-      plusValueBtn.callback = (): void => {
-        Settings.setSettingProperty(i, 'plus')
-        const newValue = Settings.getSettingProperty(ESettings[`${property[0]}`]).toString()
-        value.setText(newValue);
-      }
-
-      const minusValueBtn = new Button(this.sceneUI, plusValueBtn.getBounds().right + 10, yText + 10, 'button').setDepth(10)
-      minusValueBtn.setDisplaySize(20, 20)
-      minusValueBtn.text = this.sceneUI.add.text(minusValueBtn.x, minusValueBtn.y, ('-').toUpperCase(), {
-        color: '#000000',
-        fontSize: 18,
-      }).setOrigin(.5, .5).setDepth(11);
-      minusValueBtn.callback = (): void => {
-        Settings.setSettingProperty(i, 'minus')
-        const newValue = Settings.getSettingProperty(ESettings[`${property[0]}`]).toString()
-        value.setText(newValue);
-      }
-
-      return [name, value, plusValueBtn, minusValueBtn]
-    })
   }
 
   private _collisions(): void {
@@ -237,7 +102,7 @@ class GameActions {
     Session.minusPlayerHealth(Settings.getSettingProperty(ESettings.GAMEACTIONS_EXPLOSION_DAMAGE))
     this.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
     if (Session.getPlayerHealth() === 0) {
-      this.gameOver()
+      this.sceneUI.actionsUI.gameOver()
     }
   }
 
@@ -449,7 +314,7 @@ class GameActions {
   }
 
   public controls(): void {
-    this._scene.input.keyboard.on('keydown-ESC', this.gamePause, this)
+    this._scene.input.keyboard.on('keydown-ESC', ()=>{this.sceneUI.actionsUI.gamePause()}, this.sceneUI)
     if (Settings.isMobile()) {
       this._controlsMobile()
     } else {

@@ -80,7 +80,7 @@ class Sounds implements Isounds {
     if (volume > 1) this._volumeMusic = 1; this._volumeSounds = 1
     if (volume < 0) this._volumeMusic = 0; this._volumeSounds = 0
     // @ts-ignore
-    this._music.setVolume(this._volume);
+    this._music.setVolume(this._volumeMusic);
   }
 }
 
