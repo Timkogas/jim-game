@@ -28,6 +28,11 @@ class EndTower extends Phaser.Physics.Arcade.Sprite {
       duration:  250,
       onComplete: () => {
         laser.destroy()
+        this._scene.time.addEvent({
+          delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION), callback: (): void => {
+            this._scene.actions.createNewPuppyGroup()
+          }
+        });
       }
     })
   }

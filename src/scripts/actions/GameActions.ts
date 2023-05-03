@@ -38,7 +38,7 @@ class GameActions {
     Settings.sounds.playMusic('backgroundSound')
     this._anims();
     this._collisions();
-    this._createNewPuppyGroup()
+    this.createNewPuppyGroup()
     if (this._scene.game.config.physics.arcade.debug) {
       this._drawAnimationPoints()
     }
@@ -47,7 +47,7 @@ class GameActions {
   public checkPuppyLivesAndPlayerHealth(): void {
     if (Session.getOver()) return;
     if (this._scene.puppies.getLength() === 0) {
-      if (Session.getPuppyLives() > 0) this._createNewPuppyGroup()
+      if (Session.getPuppyLives() > 0) this.createNewPuppyGroup()
       if (Session.getPuppyLives() === 0) {
         Session.minusPlayerHealth(Settings.getSettingProperty(ESettings.GAMEACTIONS_PUPPY_DAMAGE))
         this.sceneUI.playerHealth.setText(Session.getPlayerHealth().toString());
@@ -57,11 +57,6 @@ class GameActions {
           this.sceneUI.actionsUI.gameOver()
         }
         this._scene.endTower.shootLaser()
-        this._scene.time.addEvent({
-          delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_DAMAGE_ANIMATION_DURATION), callback: (): void => {
-            this._createNewPuppyGroup()
-          }
-        });
       }
     }
   }
@@ -184,7 +179,7 @@ class GameActions {
     this._groupLength = Phaser.Math.Between(Settings.getSettingProperty(ESettings.GAMEACTIONS_MIN_GROUP_LENGTH), Settings.getSettingProperty(ESettings.GAMEACTIONS_MAX_GROUP_LENGTH));
   }
 
-  private _createNewPuppyGroup(): void {
+  public createNewPuppyGroup(): void {
     this._scene.time.addEvent({
       delay: Settings.getSettingProperty(ESettings.GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY), callback: (): void => {
         this._createPuppyGroup()

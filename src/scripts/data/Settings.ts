@@ -20,7 +20,7 @@ class Settings {
   private GAMEACTIONS_HEAL_CHANCE = 80 // проценты для сравнения 0-100 > healchance, чтобы запустить хилку
   private GAMEACTIONS_PUPPY_CREATE_DELAY = 280; // задержка между выпуском щенков в группе
   private GAMEACTIONS_PUPPY_NEW_GROUP_CREATE_DELAY = 2000; // задержка перед созданием новой группы щенков
-  private GAMEACTIONS_DAMAGE_ANIMATION_DURATION = 6000; // длительность анимации урона
+  private GAMEACTIONS_DAMAGE_ANIMATION_DURATION = 1000; // длительность анимации урона
   private GAMEACTIONS_MIN_GROUP_LENGTH = 3; // минимальное количество щенков в группе запуска
   private GAMEACTIONS_MAX_GROUP_LENGTH = 5; // максимальное количество щенков в группе запуска
   private GAMEACTIONS_EXPLOSION_ANIMATION_DURATION = 1500; // длительность анимации взрыва
