@@ -3,6 +3,7 @@ import PlayerHelath from '../components/PlayerHelath';
 import PuppyLives from '../components/PuppyLives';
 import Score from '../components/Score';
 import Session from '../data/Session';
+import Settings from '../data/Settings';
 import Game from './Game';
 
 class UI extends Phaser.Scene {
@@ -21,6 +22,28 @@ class UI extends Phaser.Scene {
     this.playerHealth = new PlayerHelath(this)
     const game = this.game.scene.getScene('Game') as Game;
     game.actions.controls()
+    const muteBtn = new Button(this, this.playerHealth.getBounds().x + 30, this.playerHealth.y + 100, 'button').setDepth(10)
+    muteBtn.setDisplaySize(60, 40)
+    muteBtn.text = this.add.text(muteBtn.x, muteBtn.y, ('mute').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    muteBtn.callback = (): void => {
+      Settings.sounds.mute()
+    }
+    const unmuteBtn = new Button(this, muteBtn.x + 80, this.playerHealth.y + 100, 'button').setDepth(10)
+    unmuteBtn.setDisplaySize(60, 40)
+    unmuteBtn.text = this.add.text(unmuteBtn.x, unmuteBtn.y, ('unmute').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    unmuteBtn.callback = (): void => {
+      Settings.sounds.unmute()
+    }
+  }
+
+  private _createMuteButtons(): void {
+
   }
 
   public setGradient(text: Phaser.GameObjects.Text): void {

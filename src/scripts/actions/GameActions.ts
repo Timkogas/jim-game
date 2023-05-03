@@ -120,29 +120,6 @@ class GameActions {
       const newValue = Settings.sounds.getVolume().toString()
       value.setText(newValue);
     }
-
-    const muteBtn = new Button(this.sceneUI, centerX + 40, centerY + 50, 'button').setDepth(10)
-    muteBtn.setDisplaySize(60, 40)
-    muteBtn.text = this.sceneUI.add.text(muteBtn.x, muteBtn.y, ('mute').toUpperCase(), {
-      color: '#000000',
-      fontSize: 14,
-    }).setOrigin(.5, .5).setDepth(11);
-    muteBtn.callback = (): void => {
-      Settings.sounds.mute()
-      const newValue = Settings.sounds.getVolume().toString()
-      value.setText(newValue);
-    }
-    const unmuteBtn = new Button(this.sceneUI, centerX - 40, centerY + 50, 'button').setDepth(10)
-    unmuteBtn.setDisplaySize(60, 40)
-    unmuteBtn.text = this.sceneUI.add.text(unmuteBtn.x, unmuteBtn.y, ('unmute').toUpperCase(), {
-      color: '#000000',
-      fontSize: 14,
-    }).setOrigin(.5, .5).setDepth(11);
-    unmuteBtn.callback = (): void => {
-      Settings.sounds.unmute()
-      const newValue = Settings.sounds.getVolume().toString()
-      value.setText(newValue);
-    }
   }
 
   public gamePause(): void {
@@ -524,6 +501,18 @@ class GameActions {
 
   private _controlsPC(): void {
     const cursors = this._scene.input.keyboard.createCursorKeys();
+    this._scene.input.keyboard.on('keydown-A', ()=>{
+      this._scene.player.setLeft(true)
+    }, this)
+    this._scene.input.keyboard.on('keyup-A', ()=>{
+      this._scene.player.setLeft(false)
+    }, this)
+    this._scene.input.keyboard.on('keydown-D', ()=>{
+      this._scene.player.setRight(true)
+    }, this)
+    this._scene.input.keyboard.on('keyup-D', ()=>{
+      this._scene.player.setRight(false)
+    }, this)
     cursors.space.on('down', (): void => {
       this._scene.player.jump();
     });
