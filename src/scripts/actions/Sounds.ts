@@ -6,7 +6,8 @@ class Sounds implements Isounds {
   private _scene: Phaser.Scene;
   private _track: string;
   private _music: Phaser.Sound.BaseSound;
-  private _volume: number = 1;
+  private _volumeMusic: number = 1;
+  private _volumeSounds: number = 1;
 
   public resumeMusic(): void {
     if (this._scene.sound.get(this._track)) {
@@ -24,7 +25,7 @@ class Sounds implements Isounds {
     }
     this._track = sound;
     this._music = this._scene.sound.add(this._track, {
-      volume: this._volume,
+      volume: this._volumeMusic,
       loop: true
     });
     this._music.play();
@@ -44,31 +45,40 @@ class Sounds implements Isounds {
 
   public play(sound: string): void {
     this._scene.sound.add(sound, {
-      volume: this._volume,
+      volume: this._volumeSounds,
       loop: false
     }).play();
   }
 
-  public mute(): void {
-    this._volume = 0;
-    // @ts-ignore
-    this._music.setVolume(this._volume);
+  public muteSounds(): void {
+    this._volumeSounds = 0;
   }
 
-  public unmute(): void {
-    this._volume = 1;
+  public muteMusic(): void {
+    this._volumeMusic = 0;
     // @ts-ignore
-    this._music.setVolume(this._volume);
+    this._music.setVolume(this._volumeMusic);
   }
 
-  public getVolume(): number {
-    return this._volume;
+  public unmuteSounds(): void {
+    this._volumeSounds = 1;
+  }
+
+  public unmuteMusic(): void {
+    this._volumeMusic = 1;
+    // @ts-ignore
+    this._music.setVolume(this._volumeMusic);
+  }
+
+  public getVolume(): {sounds: number, music: number} {
+    return {sounds: this._volumeSounds, music: this._volumeMusic};
   }
 
   public setVolume(volume: number): void {
-    this._volume = volume;
-    if (volume > 1) this._volume = 1;
-    if (volume < 0) this._volume = 0;
+    this._volumeMusic = volume;
+    this._volumeSounds = volume
+    if (volume > 1) this._volumeMusic = 1; this._volumeSounds = 1
+    if (volume < 0) this._volumeMusic = 0; this._volumeSounds = 0
     // @ts-ignore
     this._music.setVolume(this._volume);
   }

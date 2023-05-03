@@ -22,28 +22,50 @@ class UI extends Phaser.Scene {
     this.playerHealth = new PlayerHelath(this)
     const game = this.game.scene.getScene('Game') as Game;
     game.actions.controls()
+    this._createMuteButtonsMusic()
+    this._createMuteButtonsSounds()
+  }
+
+  private _createMuteButtonsMusic(): void {
     const muteBtn = new Button(this, this.playerHealth.getBounds().x + 30, this.playerHealth.y + 100, 'button').setDepth(10)
-    muteBtn.setDisplaySize(60, 40)
-    muteBtn.text = this.add.text(muteBtn.x, muteBtn.y, ('mute').toUpperCase(), {
+    muteBtn.setDisplaySize(70, 40)
+    muteBtn.text = this.add.text(muteBtn.x, muteBtn.y, ('mute M').toUpperCase(), {
       color: '#000000',
       fontSize: 14,
     }).setOrigin(.5, .5).setDepth(11);
     muteBtn.callback = (): void => {
-      Settings.sounds.mute()
+      Settings.sounds.muteMusic()
     }
-    const unmuteBtn = new Button(this, muteBtn.x + 80, this.playerHealth.y + 100, 'button').setDepth(10)
-    unmuteBtn.setDisplaySize(60, 40)
-    unmuteBtn.text = this.add.text(unmuteBtn.x, unmuteBtn.y, ('unmute').toUpperCase(), {
+    const unmuteBtn = new Button(this, muteBtn.x + 90, this.playerHealth.y + 100, 'button').setDepth(10)
+    unmuteBtn.setDisplaySize(70, 40)
+    unmuteBtn.text = this.add.text(unmuteBtn.x, unmuteBtn.y, ('unmute M').toUpperCase(), {
       color: '#000000',
       fontSize: 14,
     }).setOrigin(.5, .5).setDepth(11);
     unmuteBtn.callback = (): void => {
-      Settings.sounds.unmute()
+      Settings.sounds.unmuteMusic()
     }
   }
 
-  private _createMuteButtons(): void {
-
+  private _createMuteButtonsSounds(): void {
+    const muteBtn = new Button(this, this.playerHealth.getBounds().x + 30, this.playerHealth.y + 150, 'button').setDepth(10)
+    muteBtn.setDisplaySize(70, 40)
+    muteBtn.text = this.add.text(muteBtn.x, muteBtn.y, ('mute S').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    muteBtn.callback = (): void => {
+      Settings.sounds.muteSounds()
+    }
+    const unmuteBtn = new Button(this, muteBtn.x + 90, this.playerHealth.y + 150, 'button').setDepth(10)
+    unmuteBtn.setDisplaySize(70, 40)
+    unmuteBtn.text = this.add.text(unmuteBtn.x, unmuteBtn.y, ('unmute S').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    unmuteBtn.callback = (): void => {
+      Settings.sounds.unmuteSounds()
+    }
   }
 
   public setGradient(text: Phaser.GameObjects.Text): void {

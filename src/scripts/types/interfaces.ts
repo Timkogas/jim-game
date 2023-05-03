@@ -8,8 +8,10 @@ interface Isounds {
   playMusic: (sound: string) => void;
   stopMusic: () => void;
   play: (sound: string) => void;
-  mute: () => void;
-  unmute: () => void;
-  getVolume: () => number;
+  muteSounds: () => void;
+  unmuteSounds: () => void;
+  muteMusic: () => void;
+  unmuteMusic: () => void;
+  getVolume: () =>  {sounds: number, music: number};
   setVolume: (volume: number) => void;
 }

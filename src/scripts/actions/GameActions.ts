@@ -94,7 +94,7 @@ class GameActions {
     const { width, height, centerX, centerY } = this.sceneUI.cameras.main;
 
     const name = this.sceneUI.add.text(restartBtn.getBounds().left, centerY, 'music', { align: 'left', fontSize: 18 })
-    const value = this.sceneUI.add.text(name.getBounds().right + 30, centerY, Settings.sounds.getVolume().toString(), { align: 'left', fontSize: 18 })
+    const value = this.sceneUI.add.text(name.getBounds().right + 30, centerY, Settings.sounds.getVolume().music.toString(), { align: 'left', fontSize: 18 })
     const plusValueBtn = new Button(this.sceneUI, value.getBounds().right + 45, centerY + 10, 'button').setDepth(10)
     plusValueBtn.setDisplaySize(20, 20)
     plusValueBtn.text = this.sceneUI.add.text(plusValueBtn.x, plusValueBtn.y, ('+').toUpperCase(), {
@@ -102,9 +102,9 @@ class GameActions {
       fontSize: 18,
     }).setOrigin(.5, .5).setDepth(11);
     plusValueBtn.callback = (): void => {
-      const newVolume = Number((Settings.sounds.getVolume() + 0.1).toFixed(2))
-      Settings.sounds.setVolume( newVolume)
-      const newValue = Settings.sounds.getVolume().toString()
+      const newVolume = Number((Settings.sounds.getVolume().music + 0.1).toFixed(2))
+      Settings.sounds.setVolume(newVolume)
+      const newValue = Settings.sounds.getVolume().music.toString()
       value.setText(newValue);
     }
 
@@ -115,9 +115,9 @@ class GameActions {
       fontSize: 18,
     }).setOrigin(.5, .5).setDepth(11);
     minusValueBtn.callback = (): void => {
-      const newVolume = Number((Settings.sounds.getVolume() - 0.1).toFixed(2))
+      const newVolume = Number((Settings.sounds.getVolume().music - 0.1).toFixed(2))
       Settings.sounds.setVolume(newVolume)
-      const newValue = Settings.sounds.getVolume().toString()
+      const newValue = Settings.sounds.getVolume().music.toString()
       value.setText(newValue);
     }
   }
@@ -273,6 +273,8 @@ class GameActions {
         Settings.sounds.play('puppyBounceSound')
       } else if (puppy.getType() === puppies.HEAL) {
         Settings.sounds.play('healBounceSound')
+      } else if (puppy.getType() === puppies.BOMB) {
+        Settings.sounds.play('puppyBounceSound')
       }
       puppy.startStepAnimation();
     }
