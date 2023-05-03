@@ -6,8 +6,8 @@ class Settings {
   private PUPPY_STEP = 280; // следующий шаг анимации по Х для щенков
   private PUPPY_UP_DURATION = 1300; // длительность анимации щенка в верхнюю точку
   private PUPPY_DOWN_DURATION = 1000; // длительность анимации щенка в нижнюю точку
-  private PUPPY_UP_Y = 220; // верхняя позиция по Y для анимации щенка
-  private PUPPY_DOWN_Y = 910; // нижняя позиция по Y для анимации щенка
+  private PUPPY_UP_Y = 520; // верхняя позиция по Y для анимации щенка
+  private PUPPY_DOWN_Y = 1230; // нижняя позиция по Y для анимации щенка
   private PUPPY_INCREASE_ANIMATION_DURATION = 1400; // шаг добавления времени если step больше 0
   private PUPPY_BOMB_FLY_ANIMATION_DURATION = 1800; // длительность полета бомбы от EndTower до StartTower
   private PUPPY_BOMB_FLY_ANIMATION_DELAY = 1000; // задержка перед полетом бомбы от EndTower до StartTower
@@ -33,8 +33,9 @@ class Settings {
 
   public readonly sizes = {
     minWidth: 1920,
-    maxWidth: 2500,
-    height: 960,
+    maxWidth: 2560,
+    minHeight: 1080,
+    maxHeight: 1440
   }
   private _screen: screen = screen.MAIN;
   private _mobile: boolean = false;

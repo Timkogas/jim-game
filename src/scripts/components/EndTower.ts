@@ -4,7 +4,7 @@ import { ESettings } from '../types/enums';
 
 class EndTower extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Game) {
-    super(scene, -scene.platform.getBounds().x - Settings.getSettingProperty(ESettings.TOWER_PADDING), scene.platform.getBounds().top - 350, 'end-tower');
+    super(scene, scene.startTower.getBounds().right + Settings.getSettingProperty(ESettings.PUPPY_STEP) * 6, scene.platform.getBounds().top - 350, 'end-tower');
     this._scene = scene;
     this._build();
   }

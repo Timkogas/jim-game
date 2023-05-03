@@ -21,12 +21,12 @@ class GameActions {
   private _groupLength: number = 0
 
   public build(): void {
-    const { width, height, centerX } = this._scene.cameras.main;
+    const { width, height } = this._scene.cameras.main;
     this.sceneUI = this._scene.game.scene.getScene('UI') as UI;
     this._scene.platform = this._scene.add.tileSprite(0, height - 32, width * 2, 32, 'platform');
     this._scene.platform.body = new Phaser.Physics.Arcade.StaticBody(this._scene.physics.world, this._scene.platform);
 
-    const bg = this._scene.add.sprite(this._scene.platform.body.x, -100, 'bg').setOrigin(0, 0);
+    const bg = this._scene.add.sprite(this._scene.platform.body.x, this._scene.platform.getBounds().top + 240, 'bg').setOrigin(0, 1);
     bg.setDisplaySize(this._scene.platform.body.width + 200, height + 280)
 
     this._scene.startTower = StartTower.create(this._scene);
