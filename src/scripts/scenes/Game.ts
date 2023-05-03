@@ -42,8 +42,8 @@ class Game extends Phaser.Scene {
     console.log('create');
     this.puppies = this.physics.add.group();
     this.actions.build();
-    this._spaceButton();
     this.scene.launch('UI');
+    this._spaceButton();
   }
   
   private _spaceButton(): void {

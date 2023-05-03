@@ -6,6 +6,13 @@ import Game from "../scenes/Game";
 import UI from "../scenes/UI";
 import { ESettings } from "../types/enums";
 
+interface IPauseElements {
+  bg: Phaser.GameObjects.TileSprite
+  text: Text
+  timer: Text
+  btn: Button
+}
+
 class GameActionsUI {
   constructor(scene: UI) {
     this._scene = scene;
@@ -16,10 +23,15 @@ class GameActionsUI {
   private _sceneGame: Game
   private _testHelperTexts: (Phaser.GameObjects.Text | Button)[][] = []
 
+  private _pauseElements: IPauseElements = { bg: null, text: null, timer: null, btn: null }
+
   public build(): void {
     this._createMuteButtonsMusic()
     this._createMuteButtonsSounds()
     this._sceneGame = this._scene.game.scene.getScene('Game') as Game;
+    if (Settings.isMobile()) {
+      this._createMobilePauseButton()
+    }
   }
 
   private _createMuteButtonsMusic(): void {
@@ -82,11 +94,11 @@ class GameActionsUI {
       this._sceneGame.scene.restart()
       this._scene.scene.restart()
     };
-    
+
     this._sceneGame.player.destroy()
   }
 
-  private _createSoundSettings(restartBtn: Phaser.GameObjects.Sprite):void {
+  private _createSoundSettings(restartBtn: Phaser.GameObjects.Sprite): void {
     const { centerY } = this._scene.cameras.main;
 
     const name = this._scene.add.text(restartBtn.getBounds().left, centerY, 'music', { align: 'left', fontSize: 18 })
@@ -119,42 +131,57 @@ class GameActionsUI {
     }
   }
 
+  private _createMobilePauseButton(): void {
+    const pauseBtn = new Button(this._scene, this._scene.playerHealth.getBounds().right + 50, this._scene.playerHealth.getBounds().centerY, 'button').setDepth(6)
+    pauseBtn.setDisplaySize(60, 40)
+    pauseBtn.text = this._scene.add.text(pauseBtn.x, pauseBtn.y, ('pause').toUpperCase(), {
+      color: '#000000',
+      fontSize: 14,
+    }).setOrigin(.5, .5).setDepth(11);
+    pauseBtn.callback = (): void => {
+      this.gamePause()
+    }
+  }
+
   public gamePause(): void {
-    const { width, height, centerX, centerY, x } = this._scene.cameras.main;
+    const { width, height, centerX, centerY } = this._scene.cameras.main;
     if (!this._sceneGame.getIsPaused()) {
       this._sceneGame.setIsPaused(true)
-    }
-
-    const bg = this._scene.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
-    const text = new Text(this._scene, 'PAUSE', { x: centerX, y: centerY - 200, fontSize: 44 })
-    const btn = new Button(this._scene, centerX, centerY - 100, 'button').setDepth(10)
-    btn.text = this._scene.add.text(btn.x, btn.y, ('resume').toUpperCase(), {
-      color: '#000000',
-      fontSize: 32,
-    }).setOrigin(.5, .5).setDepth(11);
-
-    const timer = new Text(this._scene, Session.getTimerSeconds().toString(), { x: centerX, y: centerY - 30, fontSize: 24 })
-
-    this._sceneGame.scene.pause()
-    if (this._scene.game.config.physics.arcade.debug) {
-      this._createTestHelperMenu()
-    }
-    btn.callback = (): void => {
-      this._sceneGame.setIsPaused(false)
-      this._sceneGame.scene.resume()
-      bg.destroy()
-      btn.destroy()
-      text.destroy()
-      timer.destroy()
+      this._pauseElements.bg = this._scene.add.tileSprite(0, 0, width, height, 'red-pixel').setAlpha(.5).setOrigin(0, 0);
+      this._pauseElements.text = new Text(this._scene, 'PAUSE', { x: centerX, y: centerY - 200, fontSize: 44 })
+      this._pauseElements.btn = new Button(this._scene, centerX, centerY - 100, 'button').setDepth(10)
+      this._pauseElements.btn.text = this._scene.add.text(this._pauseElements.btn.x, this._pauseElements.btn.y, ('resume').toUpperCase(), {
+        color: '#000000',
+        fontSize: 32,
+      }).setOrigin(.5, .5).setDepth(11);
+      this._pauseElements.timer = new Text(this._scene, Session.getTimerSeconds().toString(), { x: centerX, y: centerY - 30, fontSize: 24 })
+      this._sceneGame.scene.pause()
       if (this._scene.game.config.physics.arcade.debug) {
-        this._testHelperTexts?.forEach((text) => {
-          text[0].destroy()
-          text[1].destroy()
-          text[2].destroy()
-          text[3].destroy()
-        })
+        this._createTestHelperMenu()
       }
-    };
+      this._pauseElements.btn.callback = (): void => {
+        this._pauseClose()
+      };
+    } else {
+      this._pauseClose()
+    }
+  }
+
+  private _pauseClose(): void {
+    this._sceneGame.setIsPaused(false)
+    this._sceneGame.scene.resume()
+    this._pauseElements.bg.destroy()
+    this._pauseElements.btn.destroy()
+    this._pauseElements.text.destroy()
+    this._pauseElements.timer.destroy()
+    if (this._scene.game.config.physics.arcade.debug) {
+      this._testHelperTexts?.forEach((text) => {
+        text[0].destroy()
+        text[1].destroy()
+        text[2].destroy()
+        text[3].destroy()
+      })
+    }
   }
 
   private _createTestHelperMenu(): void {

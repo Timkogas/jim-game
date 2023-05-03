@@ -314,7 +314,7 @@ class GameActions {
   }
 
   public controls(): void {
-    this._scene.input.keyboard.on('keydown-ESC', ()=>{this.sceneUI.actionsUI.gamePause()}, this.sceneUI)
+    this.sceneUI.input.keyboard.on('keydown-ESC', ()=>{this.sceneUI.actionsUI.gamePause(); console.log('sd')}, this.sceneUI)
     if (Settings.isMobile()) {
       this._controlsMobile()
     } else {
