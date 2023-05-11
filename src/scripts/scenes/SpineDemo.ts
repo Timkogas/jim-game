@@ -1,8 +1,14 @@
 import 'phaser'
 import spineboyAtlas from '../../assets/spine/spineboy.atlas';
 import spineboyJson from '../../assets/spine/spineboy.json'
+import spineboyPng from '../../assets/spine/spineboy.png'
+
 
 const SPINEBOY_KEY = 'spineboy'
+console.log({ spineboyPng })
+
+
+
 
 export default class SpineDemo extends Phaser.Scene
 {
@@ -21,12 +27,15 @@ export default class SpineDemo extends Phaser.Scene
 	preload() {
 		console.log('sd')
 		// this.load.atlas('spineboy', spineboyAtlas)
-		// this.load.json('spineboy', spineboyJson)
+		this.load.image('spineboy', spineboyPng)
+		// this.customLoad = new CustomLoaderPlugin(this);
+		// this.customLoad.spine()
+
 		console.log(spineboyAtlas)
 		console.log(spineboyJson)
-		//@ts-ignore
+
 		this.load.spine(SPINEBOY_KEY, spineboyJson, spineboyAtlas)
-		console.log('11111')
+		console.log('22222')
 	}
 
 	create() {

@@ -12,7 +12,8 @@ module.exports = {
   entry: './src/scripts/index.ts',
   output: {
     path: path.resolve(__dirname, '../build'),
-    publicPath: '/'
+    publicPath: '/',
+    assetModuleFilename: 'assets/spine/[name][ext]',
   },
   mode: "development",
   devtool: "eval-source-map",
