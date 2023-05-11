@@ -23,6 +23,10 @@ import healSmashSound from '../../assets/audio/heal-smash.mp3';
 import healEndSound from '../../assets/audio/heal-end.mp3';
 import healBounceSound from '../../assets/audio/heal-bounce.mp3';
 
+import spineboyAtlas from '../../assets/spine/spineboy.atlas';
+import spineboyJson from '../../assets/spine/spineboy.json'
+import spineboyPng from '../../assets/spine/spineboy.png'
+
 
 class Loading {
   constructor(scene: Phaser.Scene) {
@@ -74,6 +78,9 @@ class Loading {
     this._scene.load.image('end-tower', endTower);
     this._scene.load.image('laser', laser);
     this._scene.load.image('red-pixel', redPixel);
+
+    this._scene.load.image('spineboy', spineboyPng)
+		this._scene.load.spine('spineboy', spineboyJson, spineboyAtlas)
   }
 
   private _loadSounds(): void {

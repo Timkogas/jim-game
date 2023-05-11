@@ -2,7 +2,7 @@ import 'phaser'
 import spineboyAtlas from '../../assets/spine/spineboy.atlas';
 import spineboyJson from '../../assets/spine/spineboy.json'
 import spineboyPng from '../../assets/spine/spineboy.png'
-
+/// <reference path="../../../phaser/types/SpinePlugin.d.ts" />
 
 const SPINEBOY_KEY = 'spineboy'
 console.log({ spineboyPng })
@@ -12,7 +12,7 @@ console.log({ spineboyPng })
 
 export default class SpineDemo extends Phaser.Scene
 {
-	//@ts-ignore
+
 	private spineBoy!: SpineGameObject
 	private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
 	private animNameLabel!: Phaser.GameObjects.Text
@@ -73,14 +73,13 @@ export default class SpineDemo extends Phaser.Scene
 	}
 
 	private createSpineBoy(startAnim = 'idle') {
-		//@ts-ignore
 		const spineBoy = this.add.spine(400, 600, SPINEBOY_KEY, startAnim, true)
 
 		spineBoy.scaleX = 0.5
 		spineBoy.scaleY = 0.5
 		return spineBoy
 	}
-	//@ts-ignore
+
 	private initializeAnimationsState(spineGO: any) {
 		const startAnim = spineGO.getCurrentAnimation().name
 

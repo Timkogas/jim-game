@@ -1,6 +1,7 @@
 import Button from '../components/Button';
 import EndTower from '../components/EndTower';
 import Player from '../components/Player';
+import PlayerSpine from '../components/PlayerSpine';
 import Puppy from '../components/Puppy';
 import StartTower from '../components/StartTower';
 import Text from '../components/Text';
@@ -34,6 +35,7 @@ class GameActions {
 
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
+    const spineBoy = this._scene.add.spine(400, 600, 'spineboy', 'idle', true)
     this._scene.player = new Player(this._scene);
     Settings.sounds.playMusic('backgroundSound')
     this._anims();

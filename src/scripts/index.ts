@@ -81,7 +81,7 @@ window.onload = (): void => {
         }
       },
       render: { transparent: true },
-      scene: [SpineDemo],
+      scene: [ Boot, Game, UI ],
       plugins: {
         scene: [
           { key: 'SpinePlugin', plugin: window.SpinePlugin, mapping: 'spine' }

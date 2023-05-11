@@ -1,11 +1,10 @@
+import 'phaser'
 import loading from '../../assets/images/loading.png';
 import Interval from '../actions/Interval';
 import Sounds from '../actions/Sounds';
 import Settings from '../data/Settings';
 import User from '../data/User';
-//@ts-ignore
 import * as Webfont from 'webfontloader';
-
 
 class Boot extends Phaser.Scene {
   constructor() {
