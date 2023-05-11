@@ -1,3 +1,7 @@
+import 'phaser'
+import spineboyJson from '../../../public/spine/spineboy.json'
+import spineboyAtlas from '../../../public/spine/spineboy.atlas'
+
 const SPINEBOY_KEY = 'spineboy'
 
 export default class SpineDemo extends Phaser.Scene
@@ -6,24 +10,22 @@ export default class SpineDemo extends Phaser.Scene
 	private spineBoy!: SpineGameObject
 	private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
 	private animNameLabel!: Phaser.GameObjects.Text
-	
+
 	private animationNames: string[] = []
 	private animationIndex = 0
 
-	constructor()
-	{
+	constructor() {
 		super('spine-demo')
 	}
 
-	preload()
-	{
-		this.load.setPath('assets/spine/')
-			//@ts-ignore
+	preload() {
+		this.load.setPath('/spine')
+		//@ts-ignore
 		this.load.spine(SPINEBOY_KEY, 'spineboy.json', 'spineboy.atlas')
+		console.log('asdasd')
 	}
 
-	create()
-	{
+	create() {
 		const startAnim = 'idle'
 
 		this.spineBoy = this.createSpineBoy(startAnim)
@@ -33,30 +35,23 @@ export default class SpineDemo extends Phaser.Scene
 		this.initializeAnimationsState(this.spineBoy)
 	}
 
-	update()
-	{
+	update() {
 		const size = this.animationNames.length
-		if (Phaser.Input.Keyboard.JustDown(this.cursors.right!))
-		{
-			if (this.animationIndex >= size - 1)
-			{
+		if (Phaser.Input.Keyboard.JustDown(this.cursors.right!)) {
+			if (this.animationIndex >= size - 1) {
 				this.animationIndex = 0
 			}
-			else
-			{
+			else {
 				++this.animationIndex
 			}
 
 			this.changeAnimation(this.animationIndex)
 		}
-		else if (Phaser.Input.Keyboard.JustDown(this.cursors.left!))
-		{
-			if (this.animationIndex <= 0)
-			{
+		else if (Phaser.Input.Keyboard.JustDown(this.cursors.left!)) {
+			if (this.animationIndex <= 0) {
 				this.animationIndex = size - 1
 			}
-			else
-			{
+			else {
 				--this.animationIndex
 			}
 
@@ -64,32 +59,27 @@ export default class SpineDemo extends Phaser.Scene
 		}
 	}
 
-	private createSpineBoy(startAnim = 'idle')
-	{
-
+	private createSpineBoy(startAnim = 'idle') {
+		//@ts-ignore
 		const spineBoy = this.add.spine(400, 600, SPINEBOY_KEY, startAnim, true)
 
 		spineBoy.scaleX = 0.5
 		spineBoy.scaleY = 0.5
-
 		return spineBoy
 	}
-
-	private initializeAnimationsState(spineGO: SpineGameObject)
-	{
+	//@ts-ignore
+	private initializeAnimationsState(spineGO: any) {
 		const startAnim = spineGO.getCurrentAnimation().name
 
 		spineGO.getAnimationList().forEach((name, idx) => {
 			this.animationNames.push(name)
-			if (name === startAnim)
-			{
+			if (name === startAnim) {
 				this.animationIndex = idx
 			}
 		})
 	}
 
-	private changeAnimation(index: number)
-	{
+	private changeAnimation(index: number) {
 		const name = this.animationNames[index]
 		this.spineBoy.play(name, true)
 		this.animNameLabel.text = name

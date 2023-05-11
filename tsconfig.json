@@ -8,8 +8,11 @@
   "exclude": ["node_modules"],
   "include": [ "src", "tsconfig.d.ts" ],
   "typeRoots": [
-		"@types",
-		"node_modules/@types",
-		"node_module/phaser/types"
+    "@types",
+    "node_modules/@types",
+    "node_module/phaser/types"
+  ],
+  "types": [
+    "Phaser"
   ]
 }
