@@ -12,11 +12,12 @@ module.exports = {
   entry: './src/scripts/index.ts',
   output: {
     path: path.resolve(__dirname, '../build'),
+    publicPath: '/'
   },
   mode: "development",
   devtool: "eval-source-map",
   resolve: {
-    extensions: [ '.ts', '.tsx', '.js' ]
+    extensions: [ '.ts', '.tsx', '.js', '.json' ],
   },
   module: {
     rules: [
@@ -44,7 +45,16 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      }
+      },
+      {
+        test: /\.(json)$/,
+        loader: 'file-loader',
+        type: 'javascript/auto'
+      },
+      {
+        test: /\.(atlas)$/,
+        loader: 'file-loader',
+      },
     ],
   },
   plugins: [
