@@ -7,6 +7,9 @@ import Settings from './data/Settings';
 import Utils from './data/Utils';
 import Game from './scenes/Game';
 import * as platform from 'platform';
+import SpineDemo from './scenes/SpineDemo';
+import 'phaser/plugins/spine/dist/SpinePlugin'
+
 
 window.onload = (): void => {
   setTimeout((): void => {
@@ -78,7 +81,12 @@ window.onload = (): void => {
         }
       },
       render: { transparent: true },
-      scene: [ Boot, Game, UI ]
+      scene: [ SpineDemo ],
+      plugins: {
+        scene: [
+          { key: 'SpinePlugin', plugin: window.SpinePlugin, mapping: 'spine' }
+        ]
+      }
     }
     const game = new Phaser.Game(config);
 
