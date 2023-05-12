@@ -20,6 +20,7 @@ export default class PlayerSpine extends SpineContainer {
     this.setPhysicsSize(this.body.width * 0.5, this.body.height * 0.9)
     this.body.setGravityY(200);
     this.body.setBounce(0.2);
+    this.setScale(0.5)
   }
 
   public right(): void {

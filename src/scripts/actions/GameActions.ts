@@ -40,8 +40,6 @@ class GameActions {
     this._scene.cameras.main.startFollow(this._scene.player, false, 1, 1, 0, 330);
 
 
-    this._scene.player.setScale(0.5)
-
     Settings.sounds.playMusic('backgroundSound')
     this._anims();
     this._collisions();
