@@ -36,8 +36,8 @@ export default class PlayerSpine extends SpineContainer {
       targets: this,
       x: this.x + (Settings.getSettingProperty(ESettings.PLAYER_JUMP_POINTS) * sign * 2),
       duration: 1300,
-      onStart: () => { this._animationStart('jump') },
-      onComplete: () => { this._animationStart('idle') },
+      onStart: () => { this._animationStart('jump'); this.setPhysicsSize(this.width + 200, this.spine.height + 400) },
+      onComplete: () => { this._animationStart('idle'); this.setPhysicsSize(this.width + 200, this.spine.height - 50) },
       ease: ''
     });
   }
@@ -69,9 +69,13 @@ export default class PlayerSpine extends SpineContainer {
   protected preUpdate(time: number, delta: number): void {
     super.update(time, delta);
     if (this._left) {
-      this.left();
+      if (this._animation !== 'jump') {
+        this.left();
+      }
     } else if (this._right) {
-      this.right();
+      if (this._animation !== 'jump') {
+        this.right();
+      }
     } else {
       if (this._side === side.RIGHT) {
         this.faceDirection(1)
