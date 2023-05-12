@@ -17,7 +17,8 @@ interface Isounds {
 }
 
 interface ISpineContainer extends Phaser.GameObjects.Container {
-  readonly spine: SpineGameObject
-  faceDirection(dir: 1 | -1)
-  setPhysicsSize(width: number, height: number)
+  spine: SpineGameObject
+  body: Phaser.Physics.Arcade.Body
+  faceDirection(dir: 1 | -1): number
+  setPhysicsSize(width: number, height: number): void
 }
