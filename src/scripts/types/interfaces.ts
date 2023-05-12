@@ -15,3 +15,9 @@ interface Isounds {
   getVolume: () =>  {sounds: number, music: number};
   setVolume: (volume: number) => void;
 }
+
+interface ISpineContainer extends Phaser.GameObjects.Container {
+  readonly spine: SpineGameObject
+  faceDirection(dir: 1 | -1)
+  setPhysicsSize(width: number, height: number)
+}

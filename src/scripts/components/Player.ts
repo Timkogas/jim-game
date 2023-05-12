@@ -40,7 +40,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setBounce(0.2);
     // const y = this._scene.platform.getBounds().top - this.height / 2;
     // this.setPosition(200, y);
-    this._scene.cameras.main.startFollow(this, false, 1, 1, 0, 330);
     this.setCollideWorldBounds(true);
     this.setScale(3.5, 3.5)
   }

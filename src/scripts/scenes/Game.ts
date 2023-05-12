@@ -18,7 +18,7 @@ class Game extends Phaser.Scene {
   }
 
   public actions: GameActions = new GameActions(this);
-  public player: Player ;
+  public player: Player | PlayerSpine ;
   public endTower: EndTower;
   public startTower: StartTower;
   public platform: Phaser.GameObjects.TileSprite;

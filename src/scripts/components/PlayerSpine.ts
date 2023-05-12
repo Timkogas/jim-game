@@ -1,33 +1,69 @@
-import Settings from '../data/Settings';
-import Game from '../scenes/Game';
-import UI from '../scenes/UI';
-import { ESettings } from '../types/enums';
-import Zone from './Zone';
+import Settings from "../data/Settings";
+import Game from "../scenes/Game"
+import { ESettings } from "../types/enums";
+import Player from "./Player"
 enum side {
   LEFT,
   RIGHT
 }
 
-class PlayerSpine  {
-  public player: SpineGameObject
+export default class PlayerSpine extends Phaser.GameObjects.Container implements ISpineContainer {
 
-  constructor(scene: Game) {
-    // super(scene, window.SpinePlugin, 600, 600, 'spineboy', 'idle')
-    this._scene = scene;
-    this._build();
-  }
-
+  private sgo: SpineGameObject
   private _scene: Game;
+  private _animation: 'run' | 'idle' | 'jump' = 'idle'
   private _side: side = side.RIGHT;
   private _left: boolean = false;
   private _right: boolean = false;
 
-  private _build(): void {
-    this.player = this._scene.add.spine(400, 600, 'spineboy', 'idle', true)
+  get spine() {
+    return this.sgo
+  }
+
+
+  constructor(scene: Game, key: string, anim: string, loop = false) {
+    super(scene, scene.startTower.getBounds().right + Settings.getSettingProperty(ESettings.PUPPY_STEP), scene.platform.getBounds().top - PlayerSpine.getSizes(scene).height + 15)
+
+    this._scene = scene
+
+    this.sgo = scene.add.spine(0, 0, key, anim, loop)
+    const bounds = this.sgo.getBounds()
+    const width = bounds.size.x
+    const height = bounds.size.y
+
+    this.add(this.sgo)
+    scene.physics.add.existing(this)
+    scene.add.existing(this)
+    this.setPhysicsSize(width, height)
+
+    this.sgo.update(0)
+
+    const body = this.body as Phaser.Physics.Arcade.Body
+    body.setCollideWorldBounds(true)
+    this.setPhysicsSize(body.width * 0.5, body.height * 0.9)
+    body.setGravityY(200);
+    body.setBounce(0.2);
+  }
+
+  faceDirection(dir: 1 | -1) {
+    if (this.sgo.scaleX === dir) {
+      return
+    }
+
+    this.sgo.scaleX = dir
+  }
+
+  setPhysicsSize(width: number, height: number) {
+    const body = this.body as Phaser.Physics.Arcade.Body
+    body.setOffset(width * -0.5, -height)
+    body.setSize(width, height)
   }
 
   public right(): void {
     this._side = side.RIGHT;
+    this.faceDirection(1)
+    this._animationStart('run')
+    this.body.velocity.x = Settings.getSettingProperty(ESettings.PLAYER_SPEED)
   }
 
   public jump(): void {
@@ -35,23 +71,19 @@ class PlayerSpine  {
     Settings.sounds.play('jumpSound')
     this._scene.add.tween({
       targets: this,
-      // x: this.x + (Settings.getSettingProperty(ESettings.PLAYER_JUMP_POINTS) * sign),
-      duration: 200,
-
+      x: this.x + (Settings.getSettingProperty(ESettings.PLAYER_JUMP_POINTS) * sign * 2),
+      duration: 1300,
+      onStart: ()=>{this._animationStart('jump')},
+      onComplete: ()=>{this._animationStart('idle')},
       ease: ''
     });
   }
 
   public left(): void {
     this._side = side.LEFT;
-    // this.flipX = true
-  }
-
-  public down(): void {
-  }
-
-  protected preUpdate(time: number, delta: number): void {
-
+    this.faceDirection(-1)
+    this._animationStart('run')
+    this.body.velocity.x = -Settings.getSettingProperty(ESettings.PLAYER_SPEED)
   }
 
   private static getSizes(scene: Phaser.Scene): Phaser.Geom.Rectangle {
@@ -70,7 +102,30 @@ class PlayerSpine  {
   public setRight(right: boolean): void {
     this._right = right
   }
+
+  protected preUpdate(time: number, delta: number): void {
+    super.update(time, delta);
+    if (this._left) {
+      this.left();
+    } else if (this._right) {
+      this.right();
+    } else {
+      if (this._side === side.RIGHT) {
+        this.faceDirection(1)
+      } else {
+        this.faceDirection(-1)
+      }
+      if (this._animation !== 'jump') { 
+        this._animationStart('idle')
+      }
+      this.body.velocity.x = 0
+    }
+  }
+
+  private _animationStart(animationName: 'run' | 'idle' | 'jump') {
+    if (this._animation !== animationName) {
+        this.sgo.play(animationName, true)
+        this._animation = animationName
+    }
+  }
 }
-
-export default PlayerSpine;
-

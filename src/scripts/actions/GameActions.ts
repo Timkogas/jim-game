@@ -22,7 +22,7 @@ class GameActions {
   private _groupLength: number = 0
 
   public build(): void {
-    const { width, height, y} = this._scene.cameras.main;
+    const { width, height, y } = this._scene.cameras.main;
     this.sceneUI = this._scene.game.scene.getScene('UI') as UI;
     this._scene.platform = this._scene.add.tileSprite(0, 1200, width * 2, 32, 'platform');
     this._scene.platform.body = new Phaser.Physics.Arcade.StaticBody(this._scene.physics.world, this._scene.platform);
@@ -35,8 +35,12 @@ class GameActions {
 
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
-    const spineBoyC = new PlayerSpine(this._scene)
-    this._scene.player = new Player(this._scene);
+
+    this._scene.player = new PlayerSpine(this._scene, 'spineboy', 'idle', true)
+    this._scene.cameras.main.startFollow(this._scene.player, false, 1, 1, 0, 330);
+
+
+    this._scene.player.setScale(0.5)
 
     Settings.sounds.playMusic('backgroundSound')
     this._anims();
@@ -312,7 +316,7 @@ class GameActions {
   }
 
   public controls(): void {
-    this.sceneUI.input.keyboard.on('keydown-ESC', ()=>{this.sceneUI.actionsUI.gamePause(); console.log('sd')}, this.sceneUI)
+    this.sceneUI.input.keyboard.on('keydown-ESC', () => { this.sceneUI.actionsUI.gamePause(); console.log('sd') }, this.sceneUI)
     if (Settings.isMobile()) {
       this._controlsMobile()
     } else {
@@ -366,16 +370,16 @@ class GameActions {
 
   private _controlsPC(): void {
     const cursors = this._scene.input.keyboard.createCursorKeys();
-    this._scene.input.keyboard.on('keydown-A', ()=>{
+    this._scene.input.keyboard.on('keydown-A', () => {
       this._scene.player.setLeft(true)
     }, this)
-    this._scene.input.keyboard.on('keyup-A', ()=>{
+    this._scene.input.keyboard.on('keyup-A', () => {
       this._scene.player.setLeft(false)
     }, this)
-    this._scene.input.keyboard.on('keydown-D', ()=>{
+    this._scene.input.keyboard.on('keydown-D', () => {
       this._scene.player.setRight(true)
     }, this)
-    this._scene.input.keyboard.on('keyup-D', ()=>{
+    this._scene.input.keyboard.on('keyup-D', () => {
       this._scene.player.setRight(false)
     }, this)
     cursors.space.on('down', (): void => {
