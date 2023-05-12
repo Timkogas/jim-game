@@ -10,6 +10,7 @@ import Loading from '../components/Loading';
 import Settings from '../data/Settings';
 import { ESettings } from '../types/enums';
 import GameActionsUI from '../actions/GameActionsUI';
+import PlayerSpine from '../components/PlayerSpine';
 
 class Game extends Phaser.Scene {
   constructor() {
@@ -17,7 +18,7 @@ class Game extends Phaser.Scene {
   }
 
   public actions: GameActions = new GameActions(this);
-  public player: Player;
+  public player: Player ;
   public endTower: EndTower;
   public startTower: StartTower;
   public platform: Phaser.GameObjects.TileSprite;

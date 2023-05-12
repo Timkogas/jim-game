@@ -35,8 +35,9 @@ class GameActions {
 
     this._scene.physics.world.setBounds(this._scene.startTower.getBounds().centerX, 0, this._scene.endTower.getBounds().centerX - this._scene.startTower.getBounds().centerX, bg.height)
 
-    const spineBoy = this._scene.add.spine(400, 600, 'spineboy', 'idle', true)
+    const spineBoyC = new PlayerSpine(this._scene)
     this._scene.player = new Player(this._scene);
+
     Settings.sounds.playMusic('backgroundSound')
     this._anims();
     this._collisions();

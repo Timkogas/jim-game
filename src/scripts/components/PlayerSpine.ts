@@ -3,15 +3,16 @@ import Game from '../scenes/Game';
 import UI from '../scenes/UI';
 import { ESettings } from '../types/enums';
 import Zone from './Zone';
-
 enum side {
   LEFT,
   RIGHT
 }
 
-class PlayerSpine extends SpineGameObject {
+class PlayerSpine  {
+  public player: SpineGameObject
+
   constructor(scene: Game) {
-    super(scene, window.SpinePlugin, 400, 600, 'spineboy', 'idle', true);
+    // super(scene, window.SpinePlugin, 600, 600, 'spineboy', 'idle')
     this._scene = scene;
     this._build();
   }
@@ -22,7 +23,7 @@ class PlayerSpine extends SpineGameObject {
   private _right: boolean = false;
 
   private _build(): void {
-    this._scene.add.spine(400, 600, 'spineboy', 'idle', true)
+    this.player = this._scene.add.spine(400, 600, 'spineboy', 'idle', true)
   }
 
   public right(): void {
@@ -34,7 +35,7 @@ class PlayerSpine extends SpineGameObject {
     Settings.sounds.play('jumpSound')
     this._scene.add.tween({
       targets: this,
-      x: this.x + (Settings.getSettingProperty(ESettings.PLAYER_JUMP_POINTS) * sign),
+      // x: this.x + (Settings.getSettingProperty(ESettings.PLAYER_JUMP_POINTS) * sign),
       duration: 200,
 
       ease: ''
@@ -43,7 +44,7 @@ class PlayerSpine extends SpineGameObject {
 
   public left(): void {
     this._side = side.LEFT;
-    this.flipX = true
+    // this.flipX = true
   }
 
   public down(): void {
@@ -72,3 +73,4 @@ class PlayerSpine extends SpineGameObject {
 }
 
 export default PlayerSpine;
+
