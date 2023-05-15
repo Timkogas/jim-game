@@ -11,6 +11,7 @@ import bomb from '../../assets/images/bomb.png';
 import explosion from '../../assets/images/explosion.png';
 import heal from '../../assets/images/heal.png';
 import laser from '../../assets/images/laser.png';
+import preloadSprite from '../../assets/images/preload-sprite.png'
 
 import explosionSound from '../../assets/audio/explosion.mp3';
 import puppyBounceSound from '../../assets/audio/puppy-bounce.mp3';
@@ -67,17 +68,21 @@ class Loading {
   private _loadImages(): void {
     this._scene.load.image('platform', platform);
     this._scene.load.image('button', button);
+    
     this._scene.load.spritesheet('capybara-walk', capybaraWalk, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('capybara-stand', capybaraStand, { frameWidth: 64, frameHeight: 64 });
     this._scene.load.spritesheet('puppy', puppy, { frameWidth: 80, frameHeight: 80 });
     this._scene.load.spritesheet('explosion', explosion, { frameWidth: 128, frameHeight: 128 });
     this._scene.load.spritesheet('heal', heal, { frameWidth: 91, frameHeight: 80 });
+
     this._scene.load.image('bomb', bomb);
     this._scene.load.image('bg', bg);
     this._scene.load.image('start-tower', startTower);
     this._scene.load.image('end-tower', endTower);
     this._scene.load.image('laser', laser);
     this._scene.load.image('red-pixel', redPixel);
+
+    this._scene.load.image('preload-sprite', preloadSprite);
 
     this._scene.load.image('spineboy', spineboyPng)
 		this._scene.load.spine('spineboy', spineboyJson, spineboyAtlas)

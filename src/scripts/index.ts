@@ -6,7 +6,6 @@ import Settings from './data/Settings';
 import Utils from './data/Utils';
 import Game from './scenes/Game';
 import * as platform from 'platform';
-import SpineDemo from './scenes/SpineDemo';
 import 'phaser/plugins/spine/dist/SpinePlugin'
 import 'phaser'
 

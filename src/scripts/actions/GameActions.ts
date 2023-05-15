@@ -2,6 +2,7 @@ import Button from '../components/Button';
 import EndTower from '../components/EndTower';
 import Player from '../components/Player';
 import PlayerSpine from '../components/PlayerSpine';
+import PreloadSprite from '../components/PreloadSprite';
 import Puppy from '../components/Puppy';
 import StartTower from '../components/StartTower';
 import Text from '../components/Text';
@@ -38,7 +39,6 @@ class GameActions {
 
     this._scene.player = new PlayerSpine(this._scene, 'spineboy', 'idle', true)
     this._scene.cameras.main.startFollow(this._scene.player, false, 1, 1, 0, 330);
-
 
     Settings.sounds.playMusic('backgroundSound')
     this._anims();
